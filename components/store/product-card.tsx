@@ -24,11 +24,11 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { ConditionBadge } from "@/components/store/condition-badge";
 import { BatteryHealthIndicator } from "@/components/store/battery-health-indicator";
 import { PriceDisplay } from "@/components/store/price-display";
+import { AddToCartButton } from "@/components/store/add-to-cart-button";
 import { ShieldCheckIcon, WrenchIcon, CheckCircleIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { resolveLocalizedField } from "@/lib/i18n/resolve-localized-field";
@@ -173,20 +173,14 @@ export function ProductCard({ product, locale, className }: ProductCardProps) {
         </div>
       </CardContent>
 
-      {/* CTA — wired to cart in Sprint 3 */}
       <CardFooter className="p-3 pt-0">
-        <Button
-          className="w-full"
+        <AddToCartButton
+          productId={product.id ?? ""}
+          outOfStock={(product.quantity ?? 0) === 0}
           size="sm"
-          disabled={product.quantity === 0}
-          aria-label={
-            product.quantity === 0
-              ? t("outOfStock")
-              : `${t("addToCart")}: ${title}`
-          }
-        >
-          {product.quantity === 0 ? t("outOfStock") : t("addToCart")}
-        </Button>
+          label={t("addToCart")}
+          outOfStockLabel={t("outOfStock")}
+        />
       </CardFooter>
     </Card>
   );

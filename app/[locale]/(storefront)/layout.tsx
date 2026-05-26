@@ -1,13 +1,16 @@
 /**
  * Storefront route group layout.
  *
- * All storefront pages (/, /shop, /product/[slug], /cart, /checkout, etc.)
- * share this layout which wraps them with the standard Header + Footer.
+ * Fetches the initial cart server-side and passes it to CartProvider,
+ * so all client components (Header, ProductCard, CartPage) share cart state
+ * without redundant fetches.
  *
  * The <main> element receives id="main-content" for the skip-to-content link
  * in the Header (keyboard accessibility / WCAG 2.1 §2.4.1).
  */
 
+import { getCart } from "@/lib/cart/cart-queries";
+import { CartProvider } from "@/context/cart-context";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 
@@ -15,17 +18,21 @@ interface StorefrontLayoutProps {
   children: React.ReactNode;
 }
 
-export default function StorefrontLayout({ children }: StorefrontLayoutProps) {
+export default async function StorefrontLayout({ children }: StorefrontLayoutProps) {
+  // Fetch cart server-side — null for new visitors (no cookie yet)
+  const cart = await getCart();
+
   return (
-    <div className="flex min-h-screen flex-col">
-      {/* Cart count will be wired to cart state in Sprint 3 */}
-      <Header cartCount={0} />
+    <CartProvider initialCart={cart}>
+      <div className="flex min-h-screen flex-col">
+        <Header />
 
-      <main id="main-content" className="flex-1" tabIndex={-1}>
-        {children}
-      </main>
+        <main id="main-content" className="flex-1" tabIndex={-1}>
+          {children}
+        </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </CartProvider>
   );
 }

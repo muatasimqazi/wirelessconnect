@@ -20,6 +20,7 @@ import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { CartProvider } from "@/context/cart-context";
 import { SearchXIcon } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -30,8 +31,9 @@ export default async function NotFoundPage() {
   const t = await getTranslations("errors");
 
   return (
+    <CartProvider initialCart={null}>
     <div className="flex min-h-screen flex-col">
-      <Header cartCount={0} />
+      <Header />
 
       <main
         id="main-content"
@@ -59,5 +61,6 @@ export default async function NotFoundPage() {
 
       <Footer />
     </div>
+    </CartProvider>
   );
 }

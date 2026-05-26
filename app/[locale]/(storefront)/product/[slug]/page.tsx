@@ -27,9 +27,9 @@ import { TrustBadge } from "@/components/store/trust-badge";
 import { Breadcrumb } from "@/components/store/breadcrumb";
 import { ProductImageGallery } from "@/components/store/product-image-gallery";
 import { ProductGrid } from "@/components/store/product-grid";
-import { Button } from "@/components/ui/button";
+import { AddToCartButton } from "@/components/store/add-to-cart-button";
 import { Separator } from "@/components/ui/separator";
-import { ShoppingCartIcon, StoreIcon, TruckIcon } from "lucide-react";
+import { StoreIcon, TruckIcon } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
 
 interface ProductPageProps {
@@ -218,18 +218,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
           <Separator />
 
-          {/* Add to Cart — wired in Sprint 3 */}
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button
-              size="lg"
-              className="flex-1"
-              disabled={isOutOfStock}
-              aria-label={isOutOfStock ? t("outOfStock") : `${t("addToCart")}: ${title}`}
-            >
-              <ShoppingCartIcon className="me-2 h-4 w-4" aria-hidden="true" />
-              {isOutOfStock ? t("outOfStock") : t("addToCart")}
-            </Button>
-          </div>
+          {/* Add to Cart */}
+          <AddToCartButton
+            productId={product.id ?? ""}
+            outOfStock={isOutOfStock}
+            size="lg"
+            label={t("addToCart")}
+            outOfStockLabel={t("outOfStock")}
+          />
 
           {/* Fulfillment options */}
           <div className="flex flex-col gap-2 rounded-lg border border-border bg-muted/30 p-4 text-sm">

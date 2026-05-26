@@ -21,6 +21,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { mergeGuestCart } from "@/lib/cart/cart-actions";
 
 export async function GET(
   request: NextRequest,
@@ -51,6 +52,17 @@ export async function GET(
       return NextResponse.redirect(
         `${origin}/${locale}/sign-in?error=code_exchange_failed`,
       );
+    }
+
+    // Merge any guest cart into the now-authenticated user's cart
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      try {
+        await mergeGuestCart(user.id);
+      } catch (mergeErr) {
+        // Non-fatal — log and continue. Cart merge failure should not block sign-in.
+        console.error("[auth/callback] Cart merge failed:", mergeErr);
+      }
     }
 
     // Successful exchange — redirect to intended destination

@@ -24,11 +24,10 @@ import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { Separator } from "@/components/ui/separator";
 import { MenuIcon, SearchIcon, ShoppingCartIcon, UserIcon, XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/context/cart-context";
 
-interface HeaderProps {
-  /** Number of items in cart — shown as badge on cart icon. */
-  cartCount?: number;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface HeaderProps {}
 
 const NAV_LINKS = [
   { href: "/shop", labelKey: "shop" },
@@ -38,9 +37,10 @@ const NAV_LINKS = [
   { href: "/contact", labelKey: "contact" },
 ] as const;
 
-export function Header({ cartCount = 0 }: HeaderProps) {
+export function Header(_props: HeaderProps) {
   const t = useTranslations("navigation");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { itemCount: cartCount } = useCart();
 
   return (
     <header
