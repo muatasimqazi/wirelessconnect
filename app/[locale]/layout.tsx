@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { Inter } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
 import { Suspense } from "react";
-import { PostHogProvider } from "@/components/analytics/posthog-provider";
+import { PostHogInit, PostHogPageview } from "@/components/analytics/posthog-provider";
 import { routing, localeConfig, type Locale } from "@/i18n/routing";
 
 const inter = Inter({
@@ -26,6 +26,11 @@ interface LocaleLayoutProps {
  * - Accessibility (screen readers, browser language detection)
  * - RTL support (future Arabic, Urdu, Dari, Pashto)
  *   Uses logical CSS properties throughout — no layout rewrite needed when RTL is added.
+ *
+ * Analytics pattern: PostHogInit and PostHogPageview are null-rendering client
+ * components — they do NOT wrap {children}, which would break Next.js App Router's
+ * html/body tree detection. PostHogPageview is wrapped in Suspense because it uses
+ * useSearchParams (Next.js 15 requirement).
  *
  * See Localization Strategy §4 and §5.
  */
@@ -49,14 +54,14 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     >
       <body className="min-h-screen bg-background font-sans antialiased">
         <NextIntlClientProvider messages={messages} locale={locale}>
-          {/* PostHog — Suspense required because PostHogPageview uses useSearchParams */}
-          <Suspense>
-            <PostHogProvider>
-              {children}
-            </PostHogProvider>
-          </Suspense>
+          {children}
         </NextIntlClientProvider>
-        {/* Vercel Analytics — zero config, no env var needed */}
+
+        {/* Analytics — null-rendering client components, no children wrapping */}
+        <PostHogInit />
+        <Suspense>
+          <PostHogPageview />
+        </Suspense>
         <Analytics />
       </body>
     </html>

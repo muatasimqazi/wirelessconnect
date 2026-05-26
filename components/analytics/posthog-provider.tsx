@@ -1,35 +1,33 @@
 "use client";
 
 /**
- * PostHogProvider — wraps the app with PostHog analytics.
+ * PostHog analytics — two null-rendering client components.
  *
- * Initializes PostHog on the client side with:
- *  - Autocapture disabled (explicit events only)
- *  - Pageview capture on route changes via `usePathname`
- *  - Respects Do Not Track header
+ * PostHogInit    — initializes posthog once on mount. Renders nothing.
+ * PostHogPageview — captures pageview on route changes. Renders nothing.
+ *                   Must be wrapped in <Suspense> in the layout because it
+ *                   uses useSearchParams (Next.js 15 requirement).
  *
- * Only initializes when NEXT_PUBLIC_POSTHOG_KEY is set.
+ * We intentionally do NOT use PHProvider or wrap {children} with a context
+ * provider — that pattern breaks Next.js App Router's html/body tree detection
+ * when combined with Suspense. Direct posthog.capture() calls work fine without
+ * the context provider since we have no client-side posthog hooks in the app.
  */
 
 import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
-import { PostHogProvider as PHProvider } from "posthog-js/react";
 
-interface PostHogProviderProps {
-  children: React.ReactNode;
-}
+// ─── Initializer ──────────────────────────────────────────────────────────────
 
-export function PostHogProvider({ children }: PostHogProviderProps) {
-  const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-  const host = process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://us.posthog.com";
-
+export function PostHogInit() {
   useEffect(() => {
+    const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
     if (!key) return;
 
     posthog.init(key, {
-      api_host: host,
-      capture_pageview: false, // Managed manually below
+      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://us.posthog.com",
+      capture_pageview: false, // Managed by PostHogPageview below
       capture_pageleave: true,
       autocapture: false,
       persistence: "localStorage",
@@ -40,25 +38,22 @@ export function PostHogProvider({ children }: PostHogProviderProps) {
         }
       },
     });
-  }, [key, host]);
+  }, []);
 
-  if (!key) return <>{children}</>;
-
-  return <PHProvider client={posthog}>{children}<PostHogPageview /></PHProvider>;
+  return null;
 }
 
 // ─── Pageview tracker ─────────────────────────────────────────────────────────
 
-function PostHogPageview() {
+export function PostHogPageview() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   useEffect(() => {
     if (!process.env.NEXT_PUBLIC_POSTHOG_KEY) return;
-    const url =
-      searchParams.toString()
-        ? `${pathname}?${searchParams.toString()}`
-        : pathname;
+    const url = searchParams.toString()
+      ? `${pathname}?${searchParams.toString()}`
+      : pathname;
     posthog.capture("$pageview", { $current_url: url });
   }, [pathname, searchParams]);
 
