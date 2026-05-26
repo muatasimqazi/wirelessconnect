@@ -2,17 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { Suspense } from "react";
 import { PostHogInit, PostHogPageview } from "@/components/analytics/posthog-provider";
+import { LocaleHtmlAttributes } from "@/components/layout/locale-html-attributes";
 import { routing, localeConfig, type Locale } from "@/i18n/routing";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
 
 interface LocaleLayoutProps {
   children: React.ReactNode;
@@ -22,17 +16,15 @@ interface LocaleLayoutProps {
 /**
  * Locale-aware layout.
  *
- * Sets the correct lang and dir attributes on <html> for:
- * - Accessibility (screen readers, browser language detection)
- * - RTL support (future Arabic, Urdu, Dari, Pashto)
- *   Uses logical CSS properties throughout — no layout rewrite needed when RTL is added.
+ * Next.js 15 requires <html> and <body> in the root layout (app/layout.tsx).
+ * Lang and dir are applied client-side by LocaleHtmlAttributes immediately
+ * after hydration using suppressHydrationWarning on the root html/body tags.
  *
- * Analytics pattern: PostHogInit and PostHogPageview are null-rendering client
- * components — they do NOT wrap {children}, which would break Next.js App Router's
- * html/body tree detection. PostHogPageview is wrapped in Suspense because it uses
- * useSearchParams (Next.js 15 requirement).
+ * RTL support (future Arabic, Urdu, Dari, Pashto) is architecturally ready —
+ * LocaleHtmlAttributes sets dir correctly on the <html> element.
  *
- * See Localization Strategy §4 and §5.
+ * Analytics uses null-rendering client components that do NOT wrap {children},
+ * which would break Next.js App Router's html/body tree detection.
  */
 export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   const { locale } = await params;
@@ -46,25 +38,22 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   const config = localeConfig[locale as Locale];
 
   return (
-    <html
-      lang={locale}
-      dir={config.direction}
-      className={inter.variable}
-      suppressHydrationWarning
-    >
-      <body className="min-h-screen bg-background font-sans antialiased">
-        <NextIntlClientProvider messages={messages} locale={locale}>
-          {children}
-        </NextIntlClientProvider>
+    <>
+      {/* Set correct lang/dir on <html> immediately after hydration.
+          The root layout defaults to lang="en"; this corrects it for other locales. */}
+      <LocaleHtmlAttributes locale={locale} dir={config.direction} />
 
-        {/* Analytics — null-rendering client components, no children wrapping */}
-        <PostHogInit />
-        <Suspense>
-          <PostHogPageview />
-        </Suspense>
-        <Analytics />
-      </body>
-    </html>
+      <NextIntlClientProvider messages={messages} locale={locale}>
+        {children}
+      </NextIntlClientProvider>
+
+      {/* Analytics — null-rendering client components; do NOT wrap children */}
+      <PostHogInit />
+      <Suspense>
+        <PostHogPageview />
+      </Suspense>
+      <Analytics />
+    </>
   );
 }
 
