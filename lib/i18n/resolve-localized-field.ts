@@ -1,4 +1,4 @@
-import type { SupportedLocale } from "@/types/database.types";
+import type { Locale as SupportedLocale } from "@/i18n/routing";
 
 /**
  * Resolves a localized field from a JSONB translations object.
