@@ -1,0 +1,246 @@
+{
+  "navigation": {
+    "shop": "Tienda",
+    "repairs": "Reparaciones",
+    "tradeIn": "Intercambio",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "account": "Mi Cuenta",
+    "cart": "Carrito",
+    "signIn": "Iniciar Sesión",
+    "signUp": "Crear Cuenta",
+    "signOut": "Cerrar Sesión"
+  },
+  "footer": {
+    "storeInfo": "Información de la Tienda",
+    "address": "14723 Aurora Ave N\nSeattle, WA 98133",
+    "navigation": "Navegación",
+    "legal": "Legal",
+    "doNotSell": "No Vender Mi Información Personal",
+    "copyright": "© {year} Wireless Connect. Todos los derechos reservados."
+  },
+  "legal": {
+    "terms": "Términos de Servicio",
+    "privacy": "Política de Privacidad",
+    "returns": "Política de Devoluciones",
+    "warranty": "Política de Garantía",
+    "shipping": "Política de Envío"
+  },
+  "home": {
+    "hero": {
+      "headline": "Teléfonos Certificados de Segunda Mano",
+      "subheadline": "Probados Profesionalmente. Recogida Local Disponible. Garantía de 30 Días Incluida.",
+      "cta": "Ver Teléfonos"
+    },
+    "trustBar": {
+      "cleanImei": "IMEI Limpio",
+      "testedDevices": "Dispositivos Probados",
+      "warranty": "Garantía de 30 Días",
+      "shipsNationwide": "Envíos a Todo EE.UU."
+    },
+    "featuredCategories": "Categorías Destacadas",
+    "featuredProducts": "Productos Destacados"
+  },
+  "shop": {
+    "title": "Tienda",
+    "search": "Buscar productos...",
+    "filters": "Filtros",
+    "sort": {
+      "label": "Ordenar por",
+      "featured": "Destacados",
+      "newest": "Más Recientes",
+      "priceLow": "Precio: Menor a Mayor",
+      "priceHigh": "Precio: Mayor a Menor",
+      "bestCondition": "Mejor Estado"
+    },
+    "filters_by": {
+      "brand": "Marca",
+      "storage": "Almacenamiento",
+      "carrier": "Operadora",
+      "condition": "Estado",
+      "price": "Rango de Precio",
+      "fulfillment": "Método de Entrega"
+    },
+    "noResults": "No se encontraron productos.",
+    "clearFilters": "Limpiar filtros"
+  },
+  "product": {
+    "addToCart": "Agregar al Carrito",
+    "buyNow": "Comprar Ahora",
+    "outOfStock": "Sin Stock",
+    "condition": "Estado",
+    "batteryHealth": "Salud de la Batería",
+    "warranty": "Garantía",
+    "warrantyDays": "Garantía de {days} Días",
+    "carrier": "Operadora",
+    "storage": "Almacenamiento",
+    "color": "Color",
+    "network": "Compatibilidad de Red",
+    "includes": "Qué Incluye",
+    "trustIndicators": {
+      "cleanImei": "IMEI Limpio",
+      "tested": "Completamente Probado",
+      "warrantyIncluded": "Garantía Incluida",
+      "pickupAvailable": "Recogida Local Disponible",
+      "shipsNationwide": "Envíos a Todo EE.UU.",
+      "factoryReset": "Restauración de Fábrica Verificada",
+      "activationReady": "Listo para Activar",
+      "professionallyTested": "Probado Profesionalmente"
+    },
+    "helpers": {
+      "unlocked": "Funciona con la mayoría de las compañías telefónicas.",
+      "batteryHealth": "Una mayor salud de la batería significa una mayor duración.",
+      "cleanImei": "Verificado y listo para activar.",
+      "imei": "Identificador único utilizado para verificar la activación del teléfono.",
+      "networkCompatibility": "Compatible con: AT&T, T-Mobile, Verizon y la mayoría de las compañías en EE.UU."
+    },
+    "condition_grades": {
+      "like_new": "Como Nuevo",
+      "excellent": "Excelente",
+      "good": "Bueno",
+      "fair": "Regular"
+    },
+    "pickup": "Recogida Local — Shoreline, WA",
+    "shipping": "Envíos a Todo EE.UU.",
+    "whatsapp": "¿Necesita ayuda? Chatee por WhatsApp"
+  },
+  "cart": {
+    "title": "Carrito de Compras",
+    "empty": "Tu carrito está vacío.",
+    "emptyAction": "Empezar a comprar",
+    "item": "Producto",
+    "quantity": "Cantidad",
+    "price": "Precio",
+    "remove": "Eliminar",
+    "subtotal": "Subtotal",
+    "discount": "Descuento",
+    "shipping": "Envío",
+    "tax": "Impuesto Estimado",
+    "total": "Total",
+    "checkout": "Proceder al Pago",
+    "continueShopping": "Seguir Comprando",
+    "coupon": "Código de Cupón",
+    "applyCoupon": "Aplicar",
+    "removeCoupon": "Eliminar",
+    "couponApplied": "¡Cupón aplicado!",
+    "whatsapp": "¿Necesita ayuda? Chatee por WhatsApp"
+  },
+  "checkout": {
+    "title": "Pago",
+    "contact": "Información de Contacto",
+    "fulfillment": "Método de Entrega",
+    "pickup": "Recogida Local — Shoreline, WA",
+    "shipping": "Enviar a mi dirección",
+    "shippingAddress": "Dirección de Envío",
+    "review": "Revisar Pedido",
+    "payment": "Pago",
+    "placeOrder": "Realizar Pedido",
+    "backToCart": "Volver al Carrito",
+    "fields": {
+      "email": "Correo Electrónico",
+      "name": "Nombre Completo",
+      "phone": "Número de Teléfono",
+      "address1": "Dirección",
+      "address2": "Apartamento, suite, etc. (opcional)",
+      "city": "Ciudad",
+      "state": "Estado",
+      "postalCode": "Código Postal",
+      "country": "País"
+    },
+    "orderSummary": "Resumen del Pedido",
+    "subtotal": "Subtotal",
+    "shippingCost": "Envío",
+    "tax": "Impuesto de Venta",
+    "shippingInsurance": "Seguro de Envío",
+    "total": "Total",
+    "whatsapp": "¿Necesita ayuda? Chatee por WhatsApp",
+    "secureCheckout": "Pago Seguro"
+  },
+  "orderConfirmation": {
+    "title": "¡Pedido Confirmado!",
+    "thankYou": "Gracias por su pedido.",
+    "orderNumber": "Número de Pedido",
+    "confirmationSent": "Se envió un correo de confirmación a {email}.",
+    "pickupInstructions": "Le notificaremos cuando su pedido esté listo para recoger.",
+    "shippingInstructions": "Le enviaremos un número de seguimiento cuando su pedido sea enviado.",
+    "continueShopping": "Seguir Comprando",
+    "viewOrder": "Ver Detalles del Pedido"
+  },
+  "account": {
+    "title": "Mi Cuenta",
+    "orders": "Pedidos",
+    "warranty": "Garantías",
+    "profile": "Perfil",
+    "addresses": "Direcciones",
+    "signOut": "Cerrar Sesión",
+    "noOrders": "Aún no hay pedidos.",
+    "browseDevices": "Ver dispositivos",
+    "preferredLanguage": "Idioma Preferido"
+  },
+  "warranty": {
+    "title": "Garantía",
+    "active": "Activa",
+    "expired": "Vencida",
+    "expires": "Vence",
+    "claimStatus": {
+      "none": "Sin Reclamo",
+      "submitted": "Reclamo Enviado",
+      "under_review": "En Revisión",
+      "approved": "Aprobado",
+      "denied": "Denegado",
+      "resolved": "Resuelto"
+    },
+    "submitClaim": "Enviar Reclamo de Garantía",
+    "describeProblem": "Describa el problema",
+    "submit": "Enviar Reclamo"
+  },
+  "auth": {
+    "signIn": "Iniciar Sesión",
+    "signUp": "Crear Cuenta",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "name": "Nombre Completo",
+    "forgotPassword": "¿Olvidó su contraseña?",
+    "noAccount": "¿No tiene una cuenta?",
+    "hasAccount": "¿Ya tiene una cuenta?",
+    "orContinueWith": "O continuar con",
+    "terms": "Al crear una cuenta, acepta nuestros Términos de Servicio y Política de Privacidad."
+  },
+  "errors": {
+    "notFound": "Página No Encontrada",
+    "notFoundMessage": "Lo sentimos, no pudimos encontrar esa página.",
+    "backToShop": "Volver a la Tienda",
+    "serverError": "Algo salió mal.",
+    "serverErrorMessage": "Estamos revisando el problema. Por favor inténtelo de nuevo.",
+    "returnHome": "Volver al Inicio",
+    "itemUnavailable": "Este artículo ya no está disponible.",
+    "invalidEmail": "Por favor ingrese una dirección de correo válida.",
+    "checkoutFailed": "No pudimos iniciar el pago. Por favor inténtelo de nuevo.",
+    "required": "Este campo es requerido."
+  },
+  "loading": {
+    "products": "Cargando productos...",
+    "order": "Cargando pedido...",
+    "processing": "Procesando..."
+  },
+  "common": {
+    "free": "Gratis",
+    "included": "Incluido",
+    "notIncluded": "No Incluido",
+    "yes": "Sí",
+    "no": "No",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "confirm": "Confirmar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "close": "Cerrar",
+    "search": "Buscar",
+    "clear": "Limpiar",
+    "apply": "Aplicar",
+    "viewAll": "Ver Todo",
+    "learnMore": "Más Información"
+  }
+}

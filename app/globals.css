@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * CSS Custom Properties for shadcn/ui compatibility.
+ * Based on brand colors from UX & Design Guidelines §3.
+ *
+ * Layout uses logical CSS properties (margin-inline-start, padding-inline-end)
+ * instead of directional properties (margin-left, margin-right) to support
+ * future RTL languages (Arabic, Urdu, Dari, Pashto) without layout rewrites.
+ * See Localization & Multilingual Strategy §4 and §5.
+ */
+@layer base {
+  :root {
+    /* Brand colors */
+    --primary: 220 90% 54%; /* #2563EB */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 28% 10%; /* #0F172A */
+    --secondary-foreground: 0 0% 100%;
+
+    /* Background */
+    --background: 0 0% 100%; /* #FFFFFF */
+    --foreground: 215 28% 10%; /* #0F172A */
+
+    /* Surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 215 28% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 28% 10%;
+
+    /* Muted / surface */
+    --muted: 210 40% 98%; /* #F8FAFC */
+    --muted-foreground: 215 16% 47%;
+
+    /* Accent */
+    --accent: 210 40% 96%;
+    --accent-foreground: 215 28% 10%;
+
+    /* Destructive / error */
+    --destructive: 0 84% 60%; /* #EF4444 */
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders & inputs */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 220 90% 54%;
+
+    /* Border radius */
+    --radius: 0.5rem;
+  }
+
+  /* Typography — Inter font from UX Guidelines §4 */
+  html {
+    font-family: Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /*
+   * Focus visible styles for keyboard accessibility (WCAG AA)
+   * UX Guidelines §21: keyboard navigation required
+   */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2;
+  }
+}
+
+@layer utilities {
+  /*
+   * Logical margin/padding utilities for RTL support.
+   * Use these instead of ml-*, mr-*, pl-*, pr-* for layout-critical spacing.
+   * Tailwind v3 does not generate these by default, so we add them here.
+   */
+  .ms-auto {
+    margin-inline-start: auto;
+  }
+  .me-auto {
+    margin-inline-end: auto;
+  }
+}
