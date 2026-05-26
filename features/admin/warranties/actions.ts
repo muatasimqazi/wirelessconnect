@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { requireStaff } from "@/lib/utils/permissions";
 import { writeAuditLog } from "@/lib/admin/audit";
+import { sendEmail } from "@/lib/email/send";
+import { buildWarrantyClaimEmail } from "@/lib/email/templates/warranty-claim";
 
 export interface WarrantyActionResult {
   error?: string;
@@ -33,6 +35,25 @@ export async function updateWarrantyClaimStatus(
     updateFields.claim_resolved_at = new Date().toISOString();
   }
 
+  // Fetch warranty + order info for the email before updating
+  const { data: warranty } = await admin
+    .from("warranties")
+    .select(`
+      id,
+      order_id,
+      orders (
+        customer_email,
+        customer_name,
+        order_number,
+        customer_locale
+      ),
+      order_items (
+        title
+      )
+    `)
+    .eq("id", warrantyId)
+    .single();
+
   const { error } = await admin
     .from("warranties")
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,6 +69,30 @@ export async function updateWarrantyClaimStatus(
     new_values: { claim_status: claimStatus },
     notes: claimNotes,
   });
+
+  // Send customer email for meaningful claim status changes (Sprint 5 DoD)
+  const EMAIL_STATUSES: Array<(typeof claimStatuses)[number]> = [
+    "submitted", "under_review", "approved", "denied", "resolved",
+  ];
+  if (EMAIL_STATUSES.includes(claimStatus) && warranty) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const order = (warranty as any).orders;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const item = (warranty as any).order_items;
+    const customerEmail = order?.customer_email;
+    if (customerEmail && claimStatus !== "none") {
+      const { subject, html } = buildWarrantyClaimEmail({
+        locale: order?.customer_locale ?? "en",
+        customerName: order?.customer_name ?? "Customer",
+        customerEmail,
+        orderNumber: order?.order_number ?? "N/A",
+        deviceTitle: item?.title ?? "Your device",
+        claimStatus,
+        claimNotes,
+      });
+      await sendEmail({ to: customerEmail, subject, html });
+    }
+  }
 
   revalidatePath("/admin/warranties");
   revalidatePath(`/admin/warranties/${warrantyId}`);

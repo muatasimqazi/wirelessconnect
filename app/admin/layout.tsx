@@ -30,27 +30,27 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   // Server-side auth guard — redirects to /en if not staff or admin
   const profile = await requireStaff();
 
+  // <html> and <body> are owned by app/layout.tsx (Next.js 15 requirement).
+  // Admin-specific background is applied via a wrapper div.
   return (
-    <html lang="en" dir="ltr">
-      <body className="bg-muted/30 font-sans antialiased">
-        <div className="flex min-h-screen">
-          {/* Sidebar — desktop */}
-          <AdminSidebar profile={profile} />
+    <div className="min-h-screen bg-muted/30">
+      <div className="flex min-h-screen">
+        {/* Sidebar — desktop */}
+        <AdminSidebar profile={profile} />
 
-          {/* Main area */}
-          <div className="flex flex-1 flex-col overflow-hidden">
-            <AdminTopBar profile={profile} />
+        {/* Main area */}
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <AdminTopBar profile={profile} />
 
-            <main
-              id="admin-main"
-              className="flex-1 overflow-auto p-4 md:p-6 lg:p-8"
-              tabIndex={-1}
-            >
-              {children}
-            </main>
-          </div>
+          <main
+            id="admin-main"
+            className="flex-1 overflow-auto p-4 md:p-6 lg:p-8"
+            tabIndex={-1}
+          >
+            {children}
+          </main>
         </div>
-      </body>
-    </html>
+      </div>
+    </div>
   );
 }

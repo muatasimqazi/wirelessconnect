@@ -160,7 +160,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
-                  href="/legal/do-not-sell"
+                  href="/legal/privacy/data-deletion"
                   className="text-primary-foreground underline underline-offset-2 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
                   lang="en"
                 >
@@ -170,7 +170,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/legal/do-not-sell"
+                  href="/legal/privacy/data-deletion"
                   className="text-primary-foreground underline underline-offset-2 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
                   lang="es"
                 >

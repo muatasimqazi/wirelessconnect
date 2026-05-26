@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { requireStaff } from "@/lib/utils/permissions";
 import { writeAuditLog } from "@/lib/admin/audit";
+import { sendEmail } from "@/lib/email/send";
+import { buildOrderCancellationEmail } from "@/lib/email/templates/order-cancellation";
 import type { Database } from "@/types/database.types";
 
 type OrderStatus = Database["public"]["Enums"]["order_status"];
@@ -32,7 +34,7 @@ export async function updateOrderStatus(
 
   const { data: order } = await admin
     .from("orders")
-    .select("status, fulfillment_method, tracking_number")
+    .select("status, fulfillment_method, tracking_number, customer_locale, order_number, customer_email, customer_name")
     .eq("id", orderId)
     .single();
 
@@ -76,6 +78,17 @@ export async function updateOrderStatus(
     old_values: { status: currentStatus },
     new_values: { status: newStatus },
   });
+
+  // Send cancellation email when admin cancels an order (Sprint 4 DoD)
+  if (newStatus === "cancelled" && order.customer_email) {
+    const { subject, html } = buildOrderCancellationEmail({
+      locale: order.customer_locale ?? "en",
+      orderNumber: order.order_number ?? orderId,
+      customerName: order.customer_name ?? "Customer",
+      customerEmail: order.customer_email,
+    });
+    await sendEmail({ to: order.customer_email, subject, html });
+  }
 
   revalidatePath("/admin/orders");
   revalidatePath(`/admin/orders/${orderId}`);
