@@ -22,6 +22,7 @@ import { ShopSort } from "@/components/store/shop-sort";
 import { ShopPagination } from "@/components/store/shop-pagination";
 import { PageHeader } from "@/components/store/page-header";
 import { ProductGridSkeleton } from "@/components/store/loading-skeleton";
+import { MobileFilterDrawer } from "@/components/store/mobile-filter-drawer";
 import type { Locale } from "@/i18n/routing";
 import type { ProductSortOption } from "@/lib/data/products";
 
@@ -115,6 +116,9 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
   const totalPages = Math.ceil(total / PAGE_SIZE);
   const hasFilters = !!(sp.brand || sp.storage || sp.carrier || sp.condition || sp.category || sp.min_price || sp.max_price || sp.pickup || sp.shipping || sp.q);
 
+  // Count active filters for the mobile filter badge
+  const activeFilterCount = [sp.brand, sp.storage, sp.carrier, sp.condition, sp.category, sp.min_price, sp.max_price, sp.pickup, sp.shipping, sp.q].filter(Boolean).length;
+
   return (
     <div className="mx-auto max-w-container px-4 py-8 sm:px-6 lg:px-8">
       <PageHeader
@@ -149,6 +153,24 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
         <div className="flex-1 min-w-0">
           {/* Sort + mobile filter trigger */}
           <div className="mb-4 flex items-center justify-between gap-3">
+            <MobileFilterDrawer
+              brands={brands}
+              storageSizes={storageSizes}
+              categories={categories}
+              currentFilters={{
+                brand: sp.brand,
+                storage: sp.storage,
+                carrier: sp.carrier,
+                condition: sp.condition,
+                category: sp.category,
+                minPrice: sp.min_price,
+                maxPrice: sp.max_price,
+                pickup: sp.pickup,
+                shipping: sp.shipping,
+                q: sp.q,
+              }}
+              activeFilterCount={activeFilterCount}
+            />
             <ShopSort currentSort={sort} />
           </div>
 

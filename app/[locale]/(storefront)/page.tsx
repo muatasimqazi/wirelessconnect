@@ -49,7 +49,62 @@ export default async function HomePage({ params }: HomePageProps) {
     getCategories(),
   ]);
 
-  return <HomePageContent locale={locale as Locale} featuredProducts={featuredProducts} categories={categories} />;
+  return (
+    <>
+      {/* LocalBusiness structured data — helps Google surface store info in search */}
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            name: "Wireless Connect",
+            url: "https://wirelessconnectnw.com",
+            logo: "https://wirelessconnectnw.com/logo.png",
+            image: "https://wirelessconnectnw.com/og-image.jpg",
+            description:
+              "Certified pre-owned phones professionally tested with 30-day warranty. Local pickup in Shoreline, WA or ships anywhere in the U.S.",
+            telephone: "+1-206-423-2965",
+            email: "officialwirelessconnect@gmail.com",
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: "14723 Aurora Ave N",
+              addressLocality: "Shoreline",
+              addressRegion: "WA",
+              postalCode: "98133",
+              addressCountry: "US",
+            },
+            geo: {
+              "@type": "GeoCoordinates",
+              latitude: 47.7516,
+              longitude: -122.3441,
+            },
+            openingHoursSpecification: [
+              {
+                "@type": "OpeningHoursSpecification",
+                dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                opens: "10:00",
+                closes: "19:00",
+              },
+              {
+                "@type": "OpeningHoursSpecification",
+                dayOfWeek: ["Saturday"],
+                opens: "10:00",
+                closes: "18:00",
+              },
+            ],
+            priceRange: "$$",
+            currenciesAccepted: "USD",
+            paymentAccepted: "Credit Card, Debit Card",
+            hasMap: "https://maps.google.com/?q=14723+Aurora+Ave+N+Shoreline+WA+98133",
+            sameAs: [],
+          }),
+        }}
+      />
+      <HomePageContent locale={locale as Locale} featuredProducts={featuredProducts} categories={categories} />
+    </>
+  );
 }
 
 // ─── Client-renderable content (uses useTranslations) ─────────────────────────
@@ -83,7 +138,7 @@ function HomePageContent({
             <Button size="lg" asChild>
               <Link href="/shop">{t("hero.cta")}</Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-white/40 text-white hover:bg-white/10 hover:text-white" asChild>
+            <Button size="lg" variant="outline" className="border-white/60 bg-white/10 text-white hover:bg-white/20 hover:text-white" asChild>
               <Link href="/about">Learn More</Link>
             </Button>
           </div>

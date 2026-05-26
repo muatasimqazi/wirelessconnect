@@ -49,6 +49,8 @@ interface ShopFiltersProps {
   categories: Category[];
   currentFilters: CurrentFilters;
   className?: string;
+  /** Called after any filter is applied — used by MobileFilterDrawer to close the sheet */
+  onFilterChange?: () => void;
 }
 
 const CONDITIONS = ["like_new", "excellent", "good", "fair"] as const;
@@ -66,6 +68,7 @@ export function ShopFilters({
   categories,
   currentFilters,
   className,
+  onFilterChange,
 }: ShopFiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -88,13 +91,15 @@ export function ShopFilters({
 
       // Reset to page 1 on any filter change
       router.push(`${pathname}?${params.toString()}`);
+      onFilterChange?.();
     },
-    [currentFilters, router, pathname],
+    [currentFilters, router, pathname, onFilterChange],
   );
 
   const clearAll = useCallback(() => {
     router.push(pathname);
-  }, [router, pathname]);
+    onFilterChange?.();
+  }, [router, pathname, onFilterChange]);
 
   return (
     <div className={cn("space-y-5 text-sm", className)}>

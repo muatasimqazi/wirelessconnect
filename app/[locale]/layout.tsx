@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { Suspense } from "react";
+import { PostHogProvider } from "@/components/analytics/posthog-provider";
 import { routing, localeConfig, type Locale } from "@/i18n/routing";
 
 const inter = Inter({
@@ -46,8 +49,15 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     >
       <body className="min-h-screen bg-background font-sans antialiased">
         <NextIntlClientProvider messages={messages} locale={locale}>
-          {children}
+          {/* PostHog — Suspense required because PostHogPageview uses useSearchParams */}
+          <Suspense>
+            <PostHogProvider>
+              {children}
+            </PostHogProvider>
+          </Suspense>
         </NextIntlClientProvider>
+        {/* Vercel Analytics — zero config, no env var needed */}
+        <Analytics />
       </body>
     </html>
   );

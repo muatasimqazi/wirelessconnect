@@ -61,7 +61,7 @@ export function AddToCartButton({
         size={size}
         className={cn(
           "w-full transition-all",
-          justAdded && "bg-success hover:bg-success",
+          justAdded && "bg-green-600 hover:bg-green-600 text-white",
           className,
         )}
         disabled={isDisabled}

@@ -18,6 +18,7 @@ import { CartItemRow } from "@/app/[locale]/(storefront)/cart/cart-item-row";
 import { EmptyState } from "@/components/store/empty-state";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { StickyCheckoutBar } from "@/components/store/sticky-checkout-bar";
 import { ShoppingCartIcon } from "lucide-react";
 
 interface CartPageProps {
@@ -133,6 +134,11 @@ export default async function CartPage({ params }: CartPageProps) {
           </ul>
         </aside>
       </div>
+      {/* Sticky mobile checkout bar — visible only on mobile */}
+      <StickyCheckoutBar subtotal={cart.subtotal} locale={locale} />
+
+      {/* Spacer so content doesn't hide behind the sticky bar on mobile */}
+      <div className="h-20 lg:hidden" aria-hidden="true" />
     </div>
   );
 }
