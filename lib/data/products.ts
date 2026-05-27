@@ -16,6 +16,9 @@ export type PublicProduct = NonNullable<
   Database["public"]["Views"]["public_products"]["Row"]
 >;
 
+/** PublicProduct augmented with the primary image URL from product_images. */
+export type ProductWithImage = PublicProduct & { primaryImageUrl: string | null };
+
 export type ProductSortOption =
   | "featured"
   | "newest"
@@ -45,7 +48,7 @@ export interface GetProductsOptions {
 }
 
 export interface GetProductsResult {
-  products: PublicProduct[];
+  products: ProductWithImage[];
   total: number;
 }
 
@@ -166,7 +169,30 @@ export async function getProducts(
     });
   }
 
-  return { products, total: count ?? 0 };
+  // Batch-fetch primary images for all returned products (single query, not N+1)
+  const productIds = products.map((p) => p.id).filter(Boolean) as string[];
+  let imageMap: Record<string, string> = {};
+
+  if (productIds.length > 0) {
+    const { data: imgData } = await supabase
+      .from("product_images")
+      .select("product_id, image_url")
+      .in("product_id", productIds)
+      .eq("is_primary", true) as unknown as {
+        data: Array<{ product_id: string; image_url: string }> | null;
+      };
+
+    for (const row of imgData ?? []) {
+      if (row.product_id) imageMap[row.product_id] = row.image_url;
+    }
+  }
+
+  const productsWithImages: ProductWithImage[] = products.map((p) => ({
+    ...p,
+    primaryImageUrl: (p.id && imageMap[p.id]) ? imageMap[p.id] : null,
+  }));
+
+  return { products: productsWithImages, total: count ?? 0 };
 }
 
 /**
@@ -196,7 +222,7 @@ export async function getProductBySlug(slug: string): Promise<PublicProduct | nu
  * Returns featured products for the homepage grid.
  * Limits to `limit` items (default 8).
  */
-export async function getFeaturedProducts(limit = 8): Promise<PublicProduct[]> {
+export async function getFeaturedProducts(limit = 8): Promise<ProductWithImage[]> {
   const { products } = await getProducts({
     filters: {},
     sort: "featured",

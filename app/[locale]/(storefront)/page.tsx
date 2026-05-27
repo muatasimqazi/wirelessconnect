@@ -109,7 +109,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
 // ─── Client-renderable content (uses useTranslations) ─────────────────────────
 
-import type { PublicProduct } from "@/lib/data/products";
+import type { ProductWithImage } from "@/lib/data/products";
 import type { Category } from "@/lib/data/categories";
 
 function HomePageContent({
@@ -118,7 +118,7 @@ function HomePageContent({
   categories,
 }: {
   locale: Locale;
-  featuredProducts: PublicProduct[];
+  featuredProducts: ProductWithImage[];
   categories: Category[];
 }) {
   const t = useTranslations("home");

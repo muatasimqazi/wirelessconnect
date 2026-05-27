@@ -7,11 +7,11 @@
 import { ProductCard } from "@/components/store/product-card";
 import { EmptyState } from "@/components/store/empty-state";
 import { SearchXIcon } from "lucide-react";
-import type { PublicProduct } from "@/lib/data/products";
+import type { ProductWithImage } from "@/lib/data/products";
 import type { Locale } from "@/i18n/routing";
 
 interface ProductGridProps {
-  products: PublicProduct[];
+  products: ProductWithImage[];
   locale: Locale;
   /** Whether filters are currently active — affects empty state message. */
   hasFilters?: boolean;

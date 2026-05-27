@@ -32,13 +32,11 @@ import { AddToCartButton } from "@/components/store/add-to-cart-button";
 import { ShieldCheckIcon, WrenchIcon, CheckCircleIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { resolveLocalizedField } from "@/lib/i18n/resolve-localized-field";
-import type { Database } from "@/types/database.types";
+import type { ProductWithImage } from "@/lib/data/products";
 import type { Locale } from "@/i18n/routing";
 
-type PublicProduct = Database["public"]["Views"]["public_products"]["Row"];
-
 interface ProductCardProps {
-  product: PublicProduct;
+  product: ProductWithImage;
   locale: Locale;
   className?: string;
 }
@@ -56,9 +54,7 @@ export function ProductCard({ product, locale, className }: ProductCardProps) {
     locale,
   ) ?? product.title ?? "Untitled Product";
 
-  // First product image URL (stored in product_images table, passed as image_url)
-  // For now uses a placeholder — wired to real images in Sprint 2
-  const imageUrl: string | null = null;
+  const imageUrl: string | null = product.primaryImageUrl ?? null;
 
   const isPhone =
     product.category_type === "phone";
