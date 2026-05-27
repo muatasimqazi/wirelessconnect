@@ -64,31 +64,31 @@ export function CartProvider({ children, initialCart }: CartProviderProps) {
 
   const addToCart = useCallback(
     async (productId: string, quantity = 1): Promise<string | null> => {
-      // Optimistic: increment count immediately
+      // Optimistic: increment cart badge immediately so the header count updates
+      // before the server roundtrip completes.
       setCart((prev) =>
         prev
           ? { ...prev, itemCount: prev.itemCount + quantity }
           : null,
       );
 
-      return new Promise((resolve) => {
-        startTransition(async () => {
-          const result = await serverAddToCart(productId, quantity);
-          if (result.error) {
-            // Roll back optimistic update
-            setCart((prev) =>
-              prev
-                ? { ...prev, itemCount: Math.max(0, prev.itemCount - quantity) }
-                : null,
-            );
-            resolve(result.error);
-          } else {
-            // Replace with server-confirmed state
-            setCart(result.cart ?? null);
-            resolve(null);
-          }
-        });
-      });
+      // Call server action directly — each button owns its own loading state,
+      // so we don't need startTransition here.
+      const result = await serverAddToCart(productId, quantity);
+
+      if (result.error) {
+        // Roll back the optimistic count increment
+        setCart((prev) =>
+          prev
+            ? { ...prev, itemCount: Math.max(0, prev.itemCount - quantity) }
+            : null,
+        );
+        return result.error;
+      }
+
+      // Replace optimistic state with server-confirmed cart (includes updated items)
+      setCart(result.cart ?? null);
+      return null;
     },
     [],
   );
