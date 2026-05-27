@@ -29,7 +29,7 @@ const config: Config = {
           foreground: "#FFFFFF",
         },
         error: {
-          DEFAULT: "#EF4444",
+          DEFAULT: "#DC2626", /* red-600 — 4.81:1 on white (WCAG AA) */
           foreground: "#FFFFFF",
         },
         background: "#FFFFFF",

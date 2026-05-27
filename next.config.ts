@@ -21,12 +21,12 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com https://cdn.vercel-insights.com https://us.posthog.com",
+      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com https://cdn.vercel-insights.com https://us.posthog.com https://us-assets.i.posthog.com",
       "frame-src https://js.stripe.com",
-      "connect-src 'self' https://api.stripe.com https://*.supabase.co wss://*.supabase.co https://us.posthog.com",
-      "img-src 'self' data: blob: https://*.supabase.co https://picsum.photos https://fastly.picsum.photos",
-      "style-src 'self' 'unsafe-inline'",
-      "font-src 'self'",
+      "connect-src 'self' https://api.stripe.com https://*.supabase.co wss://*.supabase.co https://us.posthog.com https://us-assets.i.posthog.com https://us.i.posthog.com",
+      "img-src 'self' data: blob: https://*.supabase.co https://picsum.photos https://fastly.picsum.photos https://fonts.gstatic.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com",
     ].join("; "),
   },
 ];

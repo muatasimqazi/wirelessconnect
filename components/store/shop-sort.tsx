@@ -48,7 +48,10 @@ export function ShopSort({ currentSort }: ShopSortProps) {
     <div className="flex items-center gap-2">
       <span className="hidden text-sm text-muted-foreground sm:inline">{t("label")}:</span>
       <Select value={currentSort} onValueChange={handleSortChange}>
-        <SelectTrigger className="h-8 w-auto gap-1.5 border-none bg-transparent text-sm font-medium shadow-none">
+        <SelectTrigger
+          className="h-8 w-auto gap-1.5 border-none bg-transparent text-sm font-medium shadow-none"
+          aria-label={t("label")}
+        >
           <SelectValue />
         </SelectTrigger>
         <SelectContent align="start">

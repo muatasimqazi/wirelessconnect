@@ -29,9 +29,11 @@ interface ProductCardProps {
   className?: string;
   avgRating?: number;
   reviewCount?: number;
+  /** Set true for the first card in the grid — marks its image as LCP priority */
+  imagePriority?: boolean;
 }
 
-export function ProductCard({ product, locale, className, avgRating, reviewCount }: ProductCardProps) {
+export function ProductCard({ product, locale, className, avgRating, reviewCount, imagePriority }: ProductCardProps) {
   const t = useTranslations("product");
 
   const title = resolveLocalizedField(
@@ -70,6 +72,7 @@ export function ProductCard({ product, locale, className, avgRating, reviewCount
               fill
               sizes="(max-width: 640px) 112px, (max-width: 1024px) 33vw, 25vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
+              priority={imagePriority}
             />
           ) : (
             <div

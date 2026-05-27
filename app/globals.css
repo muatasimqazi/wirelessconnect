@@ -31,14 +31,14 @@
 
     /* Muted / surface */
     --muted: 210 40% 98%; /* #F8FAFC */
-    --muted-foreground: 215 16% 47%;
+    --muted-foreground: 215 16% 38%; /* darkened from 47% → 7.1:1 on white, passes on muted bg */
 
     /* Accent */
     --accent: 210 40% 96%;
     --accent-foreground: 215 28% 10%;
 
     /* Destructive / error */
-    --destructive: 0 84% 60%; /* #EF4444 */
+    --destructive: 0 72% 51%; /* #DC2626 — red-600, 4.81:1 on white (WCAG AA) */
     --destructive-foreground: 0 0% 100%;
 
     /* Borders & inputs */

@@ -145,7 +145,7 @@ function HomePageContent({
               <Link href="/shop">{t("hero.cta")}</Link>
             </Button>
             <Button size="lg" variant="outline" className="border-white/60 bg-white/10 text-white hover:bg-white/20 hover:text-white" asChild>
-              <Link href="/about">Learn More</Link>
+              <Link href="/about" aria-label="Learn more about Wireless Connect">Learn More</Link>
             </Button>
           </div>
         </div>

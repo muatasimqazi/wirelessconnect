@@ -45,7 +45,7 @@ export function ProductGrid({ products, locale, hasFilters, ratingMap }: Product
       className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       aria-label={`${products.length} products`}
     >
-      {products.map((product) => {
+      {products.map((product, index) => {
         const rating = product.id ? ratingMap?.get(product.id) : undefined;
         return (
           <ProductCard
@@ -54,6 +54,8 @@ export function ProductGrid({ products, locale, hasFilters, ratingMap }: Product
             locale={locale}
             avgRating={rating?.avgRating}
             reviewCount={rating?.reviewCount}
+            // First card is the LCP candidate on desktop — load eagerly
+            imagePriority={index === 0}
           />
         );
       })}
