@@ -15,12 +15,19 @@
  *  - Network compatibility + supported bands (checkbox lists)
  */
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import type { ProductInput } from "@/features/admin/products/actions";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import type { ProductInput, StorageImage } from "@/features/admin/products/actions";
 import {
   createProduct,
   updateProduct,
@@ -28,6 +35,7 @@ import {
   deleteProductImage,
   setPrimaryProductImage,
   getProductImageUploadUrl,
+  listStorageImages,
 } from "@/features/admin/products/actions";
 
 // ─── Validation schema (mirrors server schema) ────────────────────────────────
@@ -173,6 +181,116 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   );
 }
 
+// ─── Storage Image Picker ─────────────────────────────────────────────────────
+
+function StorageImagePicker({
+  productId,
+  existingCount,
+  onPick,
+}: {
+  productId: string;
+  existingCount: number;
+  onPick: (img: StorageImage) => Promise<void>;
+}) {
+  const [open, setOpen] = useState(false);
+  const [images, setImages] = useState<StorageImage[]>([]);
+  const [filtered, setFiltered] = useState<StorageImage[]>([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [picking, setPicking] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    if (images.length > 0) return; // already loaded
+    setLoading(true);
+    const result = await listStorageImages("phones");
+    setImages(result.images);
+    setFiltered(result.images);
+    setLoading(false);
+  }, [images.length]);
+
+  // Load when dialog opens
+  useEffect(() => {
+    if (open) load();
+  }, [open, load]);
+
+  // Filter on search
+  useEffect(() => {
+    const q = search.toLowerCase();
+    setFiltered(q ? images.filter((i) => i.name.toLowerCase().includes(q)) : images);
+  }, [search, images]);
+
+  async function handlePick(img: StorageImage) {
+    setPicking(img.url);
+    await onPick(img);
+    setPicking(null);
+    setOpen(false);
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <button
+          type="button"
+          className="rounded-md border border-border bg-muted/40 px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors"
+        >
+          📂 Pick from library
+        </button>
+      </DialogTrigger>
+      <DialogContent className="max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>Phone Image Library</DialogTitle>
+        </DialogHeader>
+
+        {/* Search */}
+        <input
+          type="search"
+          placeholder="Search images…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        />
+
+        {/* Grid */}
+        <div className="mt-3 max-h-[60vh] overflow-y-auto">
+          {loading ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">Loading images…</p>
+          ) : filtered.length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">No images found.</p>
+          ) : (
+            <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
+              {filtered.map((img) => (
+                <button
+                  key={img.url}
+                  type="button"
+                  disabled={picking !== null}
+                  onClick={() => handlePick(img)}
+                  className="group relative overflow-hidden rounded-lg border-2 border-transparent bg-muted/30 transition-all hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={img.url}
+                    alt={img.name}
+                    className="aspect-square w-full object-contain p-1"
+                    loading="lazy"
+                  />
+                  <div className="bg-background/90 px-1.5 py-1 text-center text-[10px] leading-tight text-muted-foreground">
+                    {img.name.replace(".jpg", "").replace(/-/g, " ")}
+                  </div>
+                  {picking === img.url && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                      <span className="text-xs text-white">Adding…</span>
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ─── Image Manager ────────────────────────────────────────────────────────────
 
 function ImageManager({
@@ -186,6 +304,23 @@ function ImageManager({
 }) {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+
+  async function handlePickFromStorage(img: StorageImage) {
+    const isPrimary = images.length === 0;
+    const result = await addProductImage(productId, img.url, img.name.replace(/\.\w+$/, "").replace(/-/g, " "), isPrimary);
+    if (!result.error) {
+      onImagesChange([
+        ...images,
+        {
+          id: crypto.randomUUID(),
+          image_url: img.url,
+          alt_text: img.name.replace(/\.\w+$/, "").replace(/-/g, " "),
+          is_primary: isPrimary,
+          sort_order: images.length,
+        },
+      ]);
+    }
+  }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -254,6 +389,16 @@ function ImageManager({
 
   return (
     <div className="space-y-3">
+      {/* Toolbar: pick from library + upload */}
+      <div className="flex items-center gap-2">
+        <StorageImagePicker
+          productId={productId}
+          existingCount={images.length}
+          onPick={handlePickFromStorage}
+        />
+        <span className="text-xs text-muted-foreground">or upload a custom photo below</span>
+      </div>
+
       <div className="flex flex-wrap gap-3">
         {images.map((img) => (
           <div key={img.id} className="relative group rounded-lg overflow-hidden border border-border w-28 h-28 bg-muted/30">
@@ -261,7 +406,7 @@ function ImageManager({
             <img
               src={img.image_url}
               alt={img.alt_text ?? "Product image"}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain p-1"
             />
             {img.is_primary && (
               <span className="absolute top-1 left-1 rounded bg-primary px-1.5 py-0.5 text-[10px] font-medium text-primary-foreground">
@@ -296,7 +441,7 @@ function ImageManager({
           ) : (
             <>
               <span className="text-2xl">+</span>
-              <span className="text-xs">Add photo</span>
+              <span className="text-xs">Upload photo</span>
             </>
           )}
           <input

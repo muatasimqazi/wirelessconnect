@@ -215,6 +215,40 @@ export async function getProductImageUploadUrl(
   return { url: data.signedUrl, path };
 }
 
+// ─── Storage image browser ────────────────────────────────────────────────────
+
+export interface StorageImage {
+  name: string;
+  url: string;
+}
+
+/**
+ * Lists images from a Supabase Storage prefix (e.g. "phones").
+ * Returns filename + public URL for each image found.
+ */
+export async function listStorageImages(
+  prefix = "phones",
+): Promise<{ images: StorageImage[]; error?: string }> {
+  await requireStaff();
+  const admin = supabaseAdmin();
+
+  const { data, error } = await admin.storage
+    .from("product-images")
+    .list(prefix, { limit: 200, sortBy: { column: "name", order: "asc" } });
+
+  if (error) return { images: [], error: error.message };
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  const images = (data ?? [])
+    .filter((f) => /\.(jpg|jpeg|png|webp)$/i.test(f.name))
+    .map((f) => ({
+      name: f.name,
+      url: `${supabaseUrl}/storage/v1/object/public/product-images/${prefix}/${f.name}`,
+    }));
+
+  return { images };
+}
+
 export async function getIntakeImageUploadUrl(
   intakeId: string,
   fileName: string,
