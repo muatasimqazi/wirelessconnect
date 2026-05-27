@@ -24,7 +24,7 @@ const securityHeaders = [
       "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com https://cdn.vercel-insights.com https://us.posthog.com",
       "frame-src https://js.stripe.com",
       "connect-src 'self' https://api.stripe.com https://*.supabase.co wss://*.supabase.co https://us.posthog.com",
-      "img-src 'self' data: blob: https://*.supabase.co",
+      "img-src 'self' data: blob: https://*.supabase.co https://placehold.co",
       "style-src 'self' 'unsafe-inline'",
       "font-src 'self'",
     ].join("; "),
@@ -49,6 +49,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*.supabase.co",
         pathname: "/storage/v1/object/public/**",
+      },
+      {
+        // placehold.co — seed/dev placeholder images only
+        protocol: "https",
+        hostname: "placehold.co",
       },
     ],
   },
