@@ -171,7 +171,7 @@ export async function getProducts(
 
   // Batch-fetch primary images for all returned products (single query, not N+1)
   const productIds = products.map((p) => p.id).filter(Boolean) as string[];
-  let imageMap: Record<string, string> = {};
+  const imageMap: Record<string, string> = {};
 
   if (productIds.length > 0) {
     const { data: imgData } = await supabase

@@ -23,6 +23,7 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 import { sendEmail, sendAdminEmail } from "@/lib/email/send";
 import { buildOrderConfirmationEmail } from "@/lib/email/templates/order-confirmation";
 import { buildAdminNewOrderEmail } from "@/lib/email/templates/admin-new-order";
+import { releaseReservationsBySession } from "@/lib/inventory/reservations";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "";
 
@@ -244,6 +245,9 @@ async function handleCheckoutSessionCompleted(
       console.error("[webhook] Warranty creation error:", warrantyError.message);
     }
   }
+
+  // Release inventory reservations (they served their purpose — inventory already decremented)
+  await releaseReservationsBySession(sessionId);
 
   // Clear the cart
   const cartId = session.metadata?.cart_id;

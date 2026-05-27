@@ -1438,6 +1438,258 @@ export type Database = {
         }
         Relationships: []
       }
+      repairs: {
+        Row: {
+          id: string
+          user_id: string | null
+          customer_name: string
+          customer_email: string
+          customer_phone: string | null
+          customer_locale: string
+          device_brand: string | null
+          device_model: string | null
+          device_color: string | null
+          device_issue: string
+          requested_service: string | null
+          status: Database["public"]["Enums"]["repair_status"]
+          estimated_price: number | null
+          final_price: number | null
+          appointment_start: string | null
+          appointment_end: string | null
+          internal_notes: string | null
+          customer_notes: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          customer_name: string
+          customer_email: string
+          customer_phone?: string | null
+          customer_locale?: string
+          device_brand?: string | null
+          device_model?: string | null
+          device_color?: string | null
+          device_issue: string
+          requested_service?: string | null
+          status?: Database["public"]["Enums"]["repair_status"]
+          estimated_price?: number | null
+          final_price?: number | null
+          appointment_start?: string | null
+          appointment_end?: string | null
+          internal_notes?: string | null
+          customer_notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          customer_name?: string
+          customer_email?: string
+          customer_phone?: string | null
+          customer_locale?: string
+          device_brand?: string | null
+          device_model?: string | null
+          device_color?: string | null
+          device_issue?: string
+          requested_service?: string | null
+          status?: Database["public"]["Enums"]["repair_status"]
+          estimated_price?: number | null
+          final_price?: number | null
+          appointment_start?: string | null
+          appointment_end?: string | null
+          internal_notes?: string | null
+          customer_notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      repair_updates: {
+        Row: {
+          id: string
+          repair_id: string
+          status: Database["public"]["Enums"]["repair_status"]
+          message: string
+          visible_to_customer: boolean
+          created_by: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          repair_id: string
+          status: Database["public"]["Enums"]["repair_status"]
+          message: string
+          visible_to_customer?: boolean
+          created_by?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          repair_id?: string
+          status?: Database["public"]["Enums"]["repair_status"]
+          message?: string
+          visible_to_customer?: boolean
+          created_by?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      trade_ins: {
+        Row: {
+          id: string
+          user_id: string | null
+          customer_name: string
+          customer_email: string
+          customer_phone: string | null
+          customer_locale: string
+          device_type: Database["public"]["Enums"]["product_category_type"]
+          brand: string
+          model: string
+          storage: string | null
+          carrier: Database["public"]["Enums"]["carrier_type"] | null
+          condition: Database["public"]["Enums"]["device_condition"] | null
+          battery_health: number | null
+          imei: string | null
+          customer_description: string | null
+          status: Database["public"]["Enums"]["trade_in_status"]
+          estimated_offer: number | null
+          final_offer: number | null
+          offer_expires_at: string | null
+          admin_notes: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          customer_name: string
+          customer_email: string
+          customer_phone?: string | null
+          customer_locale?: string
+          device_type: Database["public"]["Enums"]["product_category_type"]
+          brand: string
+          model: string
+          storage?: string | null
+          carrier?: Database["public"]["Enums"]["carrier_type"] | null
+          condition?: Database["public"]["Enums"]["device_condition"] | null
+          battery_health?: number | null
+          imei?: string | null
+          customer_description?: string | null
+          status?: Database["public"]["Enums"]["trade_in_status"]
+          estimated_offer?: number | null
+          final_offer?: number | null
+          offer_expires_at?: string | null
+          admin_notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          customer_name?: string
+          customer_email?: string
+          customer_phone?: string | null
+          customer_locale?: string
+          device_type?: Database["public"]["Enums"]["product_category_type"]
+          brand?: string
+          model?: string
+          storage?: string | null
+          carrier?: Database["public"]["Enums"]["carrier_type"] | null
+          condition?: Database["public"]["Enums"]["device_condition"] | null
+          battery_health?: number | null
+          imei?: string | null
+          customer_description?: string | null
+          status?: Database["public"]["Enums"]["trade_in_status"]
+          estimated_offer?: number | null
+          final_offer?: number | null
+          offer_expires_at?: string | null
+          admin_notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          id: string
+          product_id: string
+          user_id: string | null
+          order_id: string | null
+          reviewer_name: string | null
+          reviewer_email: string | null
+          rating: number
+          title: string | null
+          body: string | null
+          approved: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          product_id: string
+          user_id?: string | null
+          order_id?: string | null
+          reviewer_name?: string | null
+          reviewer_email?: string | null
+          rating: number
+          title?: string | null
+          body?: string | null
+          approved?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          product_id?: string
+          user_id?: string | null
+          order_id?: string | null
+          reviewer_name?: string | null
+          reviewer_email?: string | null
+          rating?: number
+          title?: string | null
+          body?: string | null
+          approved?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      inventory_reservations: {
+        Row: {
+          id: string
+          product_id: string
+          cart_id: string | null
+          stripe_session_id: string | null
+          quantity: number
+          expires_at: string
+          released: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          product_id: string
+          cart_id?: string | null
+          stripe_session_id?: string | null
+          quantity?: number
+          expires_at: string
+          released?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          product_id?: string
+          cart_id?: string | null
+          stripe_session_id?: string | null
+          quantity?: number
+          expires_at?: string
+          released?: boolean
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       customer_order_items: {

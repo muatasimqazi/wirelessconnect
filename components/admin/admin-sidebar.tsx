@@ -20,6 +20,9 @@ import {
   TagIcon,
   SettingsIcon,
   PackageIcon,
+  RefreshCwIcon,
+  WrenchIcon,
+  StarIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { isAdmin } from "@/lib/utils/permissions";
@@ -50,6 +53,14 @@ const navGroups = [
       { href: "/admin/orders", label: "Orders", icon: ShoppingBagIcon },
       { href: "/admin/warranties", label: "Warranties", icon: ShieldIcon },
       { href: "/admin/coupons", label: "Coupons", icon: TagIcon },
+    ],
+  },
+  {
+    label: "Services",
+    items: [
+      { href: "/admin/trade-ins", label: "Trade-Ins", icon: RefreshCwIcon },
+      { href: "/admin/repairs", label: "Repairs", icon: WrenchIcon },
+      { href: "/admin/reviews", label: "Reviews", icon: StarIcon },
     ],
   },
   {

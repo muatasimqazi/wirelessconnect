@@ -18,6 +18,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getProductBySlug, getProducts, getProductImages } from "@/lib/data/products";
+import { getApprovedReviews } from "@/features/reviews/actions";
+import { ProductReviews } from "@/components/store/product-reviews";
 import { getCategories } from "@/lib/data/categories";
 import { resolveLocalizedField } from "@/lib/i18n/resolve-localized-field";
 import { ConditionBadge } from "@/components/store/condition-badge";
@@ -95,13 +97,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   // Fetch images + related products in parallel
   const category = categories.find((c) => c.id === product.category_id);
-  const [images, { products: relatedProducts }] = await Promise.all([
+  const [images, { products: relatedProducts }, reviews] = await Promise.all([
     product.id ? getProductImages(product.id) : Promise.resolve([]),
     getProducts({
       filters: { categoryId: product.category_id ?? undefined },
       sort: "featured",
       limit: 4,
     }),
+    product.id ? getApprovedReviews(product.id) : Promise.resolve([]),
   ]);
 
   // Filter out the current product from related
@@ -273,6 +276,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
           )}
         </div>
       </div>
+
+      {/* Reviews */}
+      <section className="mt-16">
+        <ProductReviews
+          productId={product.id ?? ""}
+          reviews={reviews}
+          locale={locale}
+        />
+      </section>
 
       {/* Related products */}
       {related.length > 0 && (

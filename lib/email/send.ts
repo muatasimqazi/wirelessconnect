@@ -35,6 +35,7 @@ export interface EmailPayload {
   subject: string;
   html: string;
   text?: string;
+  replyTo?: string;
 }
 
 /**
@@ -54,6 +55,7 @@ export async function sendEmail(payload: EmailPayload): Promise<void> {
       subject: payload.subject,
       html: payload.html,
       text: payload.text ?? stripHtml(payload.html),
+      ...(payload.replyTo ? { reply_to: payload.replyTo } : {}),
     });
 
     if (error) {

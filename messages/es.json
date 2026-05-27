@@ -164,7 +164,9 @@
     "pickupInstructions": "Le notificaremos cuando su pedido esté listo para recoger.",
     "shippingInstructions": "Le enviaremos un número de seguimiento cuando su pedido sea enviado.",
     "continueShopping": "Seguir Comprando",
-    "viewOrder": "Ver Detalles del Pedido"
+    "viewOrder": "Ver Detalles del Pedido",
+    "pickup": "Recogida Local",
+    "shipping": "Envío"
   },
   "account": {
     "title": "Mi Cuenta",
@@ -175,13 +177,53 @@
     "signOut": "Cerrar Sesión",
     "noOrders": "Aún no hay pedidos.",
     "browseDevices": "Ver dispositivos",
-    "preferredLanguage": "Idioma Preferido"
+    "preferredLanguage": "Idioma Preferido",
+    "nav": {
+      "overview": "Resumen"
+    },
+    "overview": {
+      "welcome": "¡Bienvenido de vuelta, {name}!",
+      "totalOrders": "Total de pedidos realizados",
+      "activeWarranties": "Garantías activas",
+      "personalInfo": "Nombre, teléfono, idioma",
+      "savedAddresses": "Direcciones de envío guardadas",
+      "noOrdersDesc": "Aún no ha realizado ningún pedido.",
+      "notSet": "No definido",
+      "manage": "Administrar"
+    },
+    "profile": {
+      "fullName": "Nombre Completo",
+      "phone": "Número de Teléfono",
+      "phoneHint": "Usado para actualizaciones de pedidos y notificaciones de recogida.",
+      "save": "Guardar Cambios",
+      "saving": "Guardando…",
+      "saved": "¡Cambios guardados!"
+    },
+    "addresses": {
+      "add": "Agregar Dirección",
+      "addFirst": "Agregar tu primera dirección",
+      "addAddress": "Agregar Nueva Dirección",
+      "editAddress": "Editar Dirección",
+      "noAddresses": "Aún no hay direcciones guardadas.",
+      "fullName": "Nombre Completo",
+      "phone": "Teléfono",
+      "line1": "Dirección",
+      "line2": "Apto, Suite, Unidad",
+      "city": "Ciudad",
+      "state": "Estado",
+      "postalCode": "Código Postal",
+      "setDefault": "Establecer como dirección de envío predeterminada",
+      "save": "Guardar Dirección",
+      "saving": "Guardando…",
+      "cancel": "Cancelar"
+    }
   },
   "warranty": {
     "title": "Garantía",
     "active": "Activa",
     "expired": "Vencida",
     "expires": "Vence",
+    "noWarranties": "No se encontraron garantías. Las garantías se crean automáticamente después de una compra.",
     "claimStatus": {
       "none": "Sin Reclamo",
       "submitted": "Reclamo Enviado",
@@ -222,6 +264,175 @@
     "products": "Cargando productos...",
     "order": "Cargando pedido...",
     "processing": "Procesando..."
+  },
+  "about": {
+    "meta": {
+      "title": "Sobre Wireless Connect",
+      "description": "Teléfonos usados certificados, probados profesionalmente con garantía de 30 días. Recogida local en Shoreline, WA o envío a todo Estados Unidos."
+    },
+    "hero": {
+      "headline": "Sobre Wireless Connect",
+      "subheadline": "Tu fuente confiable de smartphones usados certificados en el noroeste del Pacífico."
+    },
+    "story": {
+      "title": "Nuestra Historia",
+      "p1": "Wireless Connect es una tienda de teléfonos y dispositivos de propiedad local con sede en Shoreline, Washington. Nos especializamos en smartphones, tablets, laptops y accesorios usados certificados.",
+      "p2": "Cada dispositivo que vendemos pasa por un exhaustivo proceso de pruebas: verificamos la calidad de la pantalla, el estado de la batería, el estado del IMEI y todas las funciones de hardware antes de enviarlo.",
+      "p3": "Ya sea que seas un cliente local que quiere recoger en tienda o un comprador en cualquier parte de los Estados Unidos, enviamos a todo el país para que puedas obtener un excelente dispositivo a un precio justo."
+    },
+    "trust": {
+      "title": "Por Qué los Clientes Confían en Nosotros",
+      "cleanImei": "IMEI Limpio Verificado",
+      "tested": "Probado Profesionalmente",
+      "warranty": "Garantía de 30 Días",
+      "shipping": "Envío a Todo el País"
+    },
+    "store": {
+      "title": "Visítenos",
+      "location": "Ubicación",
+      "phone": "Teléfono",
+      "email": "Correo",
+      "hours": "Horario",
+      "weekdays": "Lunes – Viernes",
+      "saturday": "Sábado",
+      "sunday": "Domingo",
+      "closed": "Cerrado"
+    },
+    "cta": {
+      "title": "¿Listo para Encontrar tu Próximo Teléfono?",
+      "description": "Explora nuestro inventario actual de dispositivos usados certificados.",
+      "shop": "Ver Teléfonos",
+      "contact": "Contáctenos"
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Contacto | Wireless Connect",
+      "description": "Contáctenos. Visítenos en Shoreline, WA o envíenos un mensaje."
+    },
+    "hero": {
+      "headline": "Contáctenos",
+      "subheadline": "Estamos aquí para ayudar. Escríbanos en cualquier momento."
+    },
+    "info": {
+      "title": "Información de la Tienda",
+      "address": "Dirección",
+      "getDirections": "Obtener indicaciones",
+      "phone": "Teléfono",
+      "email": "Correo",
+      "hours": "Horario de Atención"
+    },
+    "form": {
+      "title": "Envíenos un Mensaje",
+      "name": "Su Nombre",
+      "email": "Su Correo",
+      "subject": "Asunto",
+      "message": "Mensaje",
+      "send": "Enviar Mensaje",
+      "sending": "Enviando…",
+      "successTitle": "¡Mensaje Enviado!",
+      "successMessage": "Gracias por comunicarse. Le responderemos dentro de 1 día hábil."
+    }
+  },
+  "tradeIn": {
+    "meta": {
+      "title": "Cambio de Dispositivo | Wireless Connect",
+      "description": "Obtenga efectivo o crédito en tienda por su teléfono, tableta o laptop usados. Envíe una solicitud de cambio en línea."
+    },
+    "hero": {
+      "headline": "Cambie su Dispositivo",
+      "subheadline": "Obtenga efectivo o crédito en tienda por su teléfono, tableta o laptop viejo."
+    },
+    "disclaimer": "Las cotizaciones de cambio en línea son solo estimaciones preliminares. Su oferta final se determina después de una inspección en persona en nuestra tienda. Las cotizaciones no son vinculantes y pueden diferir de la oferta final.",
+    "howItWorks": {
+      "title": "Cómo Funciona",
+      "step1": "Envíe los detalles de su dispositivo usando el formulario a continuación.",
+      "step2": "Revisaremos su solicitud y le contactaremos con una cotización preliminar dentro de 1 día hábil.",
+      "step3": "Traiga su dispositivo a nuestra tienda para una inspección gratuita en persona.",
+      "step4": "Acepte la oferta final y reciba efectivo o crédito en tienda de inmediato."
+    },
+    "weAccept": {
+      "title": "Aceptamos"
+    },
+    "form": {
+      "title": "Envíe su Dispositivo",
+      "name": "Su Nombre",
+      "email": "Correo Electrónico",
+      "phone": "Número de Teléfono",
+      "deviceType": "Tipo de Dispositivo",
+      "brand": "Marca",
+      "model": "Modelo",
+      "storage": "Almacenamiento",
+      "carrier": "Operadora",
+      "batteryHealth": "Salud de la Batería (%)",
+      "condition": "Condición",
+      "description": "Notas Adicionales",
+      "submit": "Enviar Solicitud de Cambio",
+      "submitting": "Enviando…",
+      "successTitle": "¡Solicitud Enviada!",
+      "successMessage": "Revisaremos los detalles de su dispositivo y le contactaremos dentro de 1 día hábil con una cotización preliminar.",
+      "disclaimerShort": "Las cotizaciones en línea son solo estimaciones. La oferta final se determina después de la inspección en persona."
+    }
+  },
+  "repairs": {
+    "meta": {
+      "title": "Reparación de Dispositivos | Wireless Connect",
+      "description": "Reparación profesional de teléfonos y dispositivos en Shoreline, WA. Cambio de pantalla, batería, puerto de carga y más. Se aceptan personas sin cita."
+    },
+    "hero": {
+      "headline": "Reparación de Dispositivos",
+      "subheadline": "Reparaciones profesionales para teléfonos, tabletas y laptops. La mayoría se completan el mismo día."
+    },
+    "services": {
+      "title": "Nuestros Servicios de Reparación",
+      "screenRepair": "Cambio de Pantalla",
+      "batteryReplacement": "Cambio de Batería",
+      "chargingPort": "Reparación del Puerto de Carga",
+      "cameraRepair": "Reparación de Cámara",
+      "waterDamage": "Reparación por Daño de Agua",
+      "softwareIssues": "Problemas de Software / Restablecimiento de Fábrica"
+    },
+    "turnaround": {
+      "title": "Entrega Rápida",
+      "description": "La mayoría de las reparaciones se completan el mismo día. Las reparaciones complejas generalmente toman 1-2 días hábiles. Le daremos una estimación precisa cuando traiga su dispositivo."
+    },
+    "walkIn": {
+      "title": "Sin Cita Necesaria",
+      "description": "Puede venir directamente durante el horario de atención. También puede llamar para consultar tiempos de espera o preguntar sobre una reparación específica."
+    },
+    "form": {
+      "title": "Solicite una Cita de Reparación",
+      "name": "Su Nombre",
+      "email": "Correo Electrónico",
+      "phone": "Número de Teléfono",
+      "brand": "Marca del Dispositivo",
+      "model": "Modelo del Dispositivo",
+      "service": "Servicio Necesario",
+      "issue": "Describa el Problema",
+      "notes": "Notas Adicionales",
+      "submit": "Enviar Solicitud",
+      "submitting": "Enviando…",
+      "successTitle": "¡Solicitud Recibida!",
+      "successMessage": "Le contactaremos dentro de 1 día hábil para confirmar su cita. Las personas sin cita siempre son bienvenidas durante el horario de atención."
+    }
+  },
+  "reviews": {
+    "title": "Reseñas de Clientes",
+    "review": "reseña",
+    "reviews": "reseñas",
+    "writeReview": "Escribir una Reseña",
+    "formTitle": "Escribir una Reseña",
+    "yourRating": "Su Calificación",
+    "yourName": "Su Nombre",
+    "yourEmail": "Su Correo (no se muestra)",
+    "reviewTitle": "Título de la Reseña",
+    "reviewBody": "Su Reseña",
+    "approvalNote": "Las reseñas son revisadas por nuestro equipo antes de publicarse.",
+    "submitReview": "Enviar Reseña",
+    "submitting": "Enviando…",
+    "cancel": "Cancelar",
+    "thankYou": "¡Gracias por su reseña! Aparecerá después de que nuestro equipo la apruebe.",
+    "noReviews": "Aún no hay reseñas. ¡Sea el primero en compartir su experiencia!"
   },
   "common": {
     "free": "Gratis",

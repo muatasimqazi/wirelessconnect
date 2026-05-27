@@ -164,7 +164,9 @@
     "pickupInstructions": "We'll notify you when your order is ready for pickup.",
     "shippingInstructions": "We'll send you a tracking number when your order ships.",
     "continueShopping": "Continue Shopping",
-    "viewOrder": "View Order Details"
+    "viewOrder": "View Order Details",
+    "pickup": "Local Pickup",
+    "shipping": "Shipping"
   },
   "account": {
     "title": "My Account",
@@ -175,13 +177,53 @@
     "signOut": "Sign Out",
     "noOrders": "No orders yet.",
     "browseDevices": "Browse devices",
-    "preferredLanguage": "Preferred Language"
+    "preferredLanguage": "Preferred Language",
+    "nav": {
+      "overview": "Overview"
+    },
+    "overview": {
+      "welcome": "Welcome back, {name}!",
+      "totalOrders": "Total orders placed",
+      "activeWarranties": "Active warranty records",
+      "personalInfo": "Name, phone, language",
+      "savedAddresses": "Saved shipping addresses",
+      "noOrdersDesc": "You haven't placed any orders yet.",
+      "notSet": "Not set",
+      "manage": "Manage"
+    },
+    "profile": {
+      "fullName": "Full Name",
+      "phone": "Phone Number",
+      "phoneHint": "Used for order updates and pickup notifications.",
+      "save": "Save Changes",
+      "saving": "Saving…",
+      "saved": "Changes saved!"
+    },
+    "addresses": {
+      "add": "Add Address",
+      "addFirst": "Add your first address",
+      "addAddress": "Add New Address",
+      "editAddress": "Edit Address",
+      "noAddresses": "No saved addresses yet.",
+      "fullName": "Full Name",
+      "phone": "Phone",
+      "line1": "Street Address",
+      "line2": "Apt, Suite, Unit",
+      "city": "City",
+      "state": "State",
+      "postalCode": "ZIP Code",
+      "setDefault": "Set as default shipping address",
+      "save": "Save Address",
+      "saving": "Saving…",
+      "cancel": "Cancel"
+    }
   },
   "warranty": {
     "title": "Warranty",
     "active": "Active",
     "expired": "Expired",
     "expires": "Expires",
+    "noWarranties": "No warranty records found. Warranties are created automatically after a purchase.",
     "claimStatus": {
       "none": "No Claim",
       "submitted": "Claim Submitted",
@@ -222,6 +264,175 @@
     "products": "Loading products...",
     "order": "Loading order...",
     "processing": "Processing..."
+  },
+  "about": {
+    "meta": {
+      "title": "About Wireless Connect",
+      "description": "Certified pre-owned phones professionally tested with a 30-day warranty. Local pickup in Shoreline, WA or ships anywhere in the U.S."
+    },
+    "hero": {
+      "headline": "About Wireless Connect",
+      "subheadline": "Your trusted source for certified pre-owned smartphones in the Pacific Northwest."
+    },
+    "story": {
+      "title": "Our Story",
+      "p1": "Wireless Connect is a locally owned phone and device shop based in Shoreline, Washington. We specialize in certified pre-owned smartphones, tablets, laptops, and accessories.",
+      "p2": "Every device we sell goes through a thorough testing process — we check screen quality, battery health, IMEI status, and all hardware functions before it goes out the door. We stand behind our products with a 30-day warranty on every eligible device.",
+      "p3": "Whether you're a local customer looking to pick up in-store or a buyer anywhere in the United States, we ship nationwide so you can get a great device at a fair price."
+    },
+    "trust": {
+      "title": "Why Customers Trust Us",
+      "cleanImei": "Clean IMEI Verified",
+      "tested": "Professionally Tested",
+      "warranty": "30-Day Warranty",
+      "shipping": "Ships Nationwide"
+    },
+    "store": {
+      "title": "Visit Us",
+      "location": "Location",
+      "phone": "Phone",
+      "email": "Email",
+      "hours": "Store Hours",
+      "weekdays": "Monday – Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday",
+      "closed": "Closed"
+    },
+    "cta": {
+      "title": "Ready to Find Your Next Phone?",
+      "description": "Browse our current inventory of certified pre-owned devices.",
+      "shop": "Shop Phones",
+      "contact": "Contact Us"
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Contact Wireless Connect",
+      "description": "Get in touch with Wireless Connect. Visit us in Shoreline, WA or send us a message."
+    },
+    "hero": {
+      "headline": "Contact Us",
+      "subheadline": "We're here to help. Reach out anytime."
+    },
+    "info": {
+      "title": "Store Information",
+      "address": "Address",
+      "getDirections": "Get directions",
+      "phone": "Phone",
+      "email": "Email",
+      "hours": "Store Hours"
+    },
+    "form": {
+      "title": "Send Us a Message",
+      "name": "Your Name",
+      "email": "Your Email",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send Message",
+      "sending": "Sending…",
+      "successTitle": "Message Sent!",
+      "successMessage": "Thanks for reaching out. We'll get back to you within 1 business day."
+    }
+  },
+  "tradeIn": {
+    "meta": {
+      "title": "Trade In Your Device | Wireless Connect",
+      "description": "Get cash or store credit for your used phone, tablet, or laptop. Submit a trade-in request online and we'll make you an offer."
+    },
+    "hero": {
+      "headline": "Trade In Your Device",
+      "subheadline": "Get cash or store credit for your old phone, tablet, or laptop."
+    },
+    "disclaimer": "Online trade-in quotes are preliminary estimates only. Your final offer is determined after an in-person inspection at our store. Quotes are not binding and may differ from the final offer.",
+    "howItWorks": {
+      "title": "How It Works",
+      "step1": "Submit your device details using the form below.",
+      "step2": "We'll review your submission and contact you with a preliminary quote within 1 business day.",
+      "step3": "Bring your device to our store for a free in-person inspection.",
+      "step4": "Accept the final offer and receive cash or store credit on the spot."
+    },
+    "weAccept": {
+      "title": "We Accept"
+    },
+    "form": {
+      "title": "Submit Your Device",
+      "name": "Your Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "deviceType": "Device Type",
+      "brand": "Brand",
+      "model": "Model",
+      "storage": "Storage",
+      "carrier": "Carrier",
+      "batteryHealth": "Battery Health (%)",
+      "condition": "Condition",
+      "description": "Additional Notes",
+      "submit": "Submit Trade-In Request",
+      "submitting": "Submitting…",
+      "successTitle": "Request Submitted!",
+      "successMessage": "We'll review your device details and contact you within 1 business day with a preliminary quote.",
+      "disclaimerShort": "Online quotes are estimates only. Final offer determined after in-person inspection."
+    }
+  },
+  "repairs": {
+    "meta": {
+      "title": "Device Repair | Wireless Connect",
+      "description": "Professional phone and device repair in Shoreline, WA. Screen replacement, battery, charging port, and more. Walk-ins welcome."
+    },
+    "hero": {
+      "headline": "Device Repair",
+      "subheadline": "Professional repairs for phones, tablets, and laptops. Most repairs completed same day."
+    },
+    "services": {
+      "title": "Our Repair Services",
+      "screenRepair": "Screen Replacement",
+      "batteryReplacement": "Battery Replacement",
+      "chargingPort": "Charging Port Repair",
+      "cameraRepair": "Camera Repair",
+      "waterDamage": "Water Damage Repair",
+      "softwareIssues": "Software Issues / Factory Reset"
+    },
+    "turnaround": {
+      "title": "Fast Turnaround",
+      "description": "Most repairs are completed the same day. Complex repairs typically take 1–2 business days. We'll give you an accurate time estimate when you drop off your device."
+    },
+    "walkIn": {
+      "title": "Walk-Ins Welcome",
+      "description": "No appointment necessary — walk in anytime during store hours. You can also call ahead to check wait times or ask about a specific repair."
+    },
+    "form": {
+      "title": "Request a Repair Appointment",
+      "name": "Your Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "brand": "Device Brand",
+      "model": "Device Model",
+      "service": "Service Needed",
+      "issue": "Describe the Issue",
+      "notes": "Additional Notes",
+      "submit": "Submit Request",
+      "submitting": "Submitting…",
+      "successTitle": "Request Received!",
+      "successMessage": "We'll contact you within 1 business day to confirm your appointment. Walk-ins are always welcome during store hours."
+    }
+  },
+  "reviews": {
+    "title": "Customer Reviews",
+    "review": "review",
+    "reviews": "reviews",
+    "writeReview": "Write a Review",
+    "formTitle": "Write a Review",
+    "yourRating": "Your Rating",
+    "yourName": "Your Name",
+    "yourEmail": "Your Email (not displayed)",
+    "reviewTitle": "Review Title",
+    "reviewBody": "Your Review",
+    "approvalNote": "Reviews are reviewed by our team before being published.",
+    "submitReview": "Submit Review",
+    "submitting": "Submitting…",
+    "cancel": "Cancel",
+    "thankYou": "Thank you for your review! It will appear after our team approves it.",
+    "noReviews": "No reviews yet. Be the first to share your experience!"
   },
   "common": {
     "free": "Free",

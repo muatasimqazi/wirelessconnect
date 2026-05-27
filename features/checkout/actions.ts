@@ -24,6 +24,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getCart } from "@/lib/cart/cart-queries";
 import { isCheckoutAllowed } from "@/lib/rate-limit";
 import { getStoreSettings, isStripeTaxEnabled } from "@/lib/data/settings";
+import { createReservations, associateStripeSession } from "@/lib/inventory/reservations";
 import type { CartItemWithProduct } from "@/lib/cart/cart-queries";
 import type { Database } from "@/types/database.types";
 
@@ -125,6 +126,19 @@ export async function createCheckoutSession(
     if (input.fulfillmentMethod === "shipping" && !product.allow_shipping) {
       return { error: `"${product.title ?? "An item"}" is not available for shipping.` };
     }
+  }
+
+  // 5b. Create inventory reservations (15-min checkout holds)
+  // This prevents two customers from buying the last unit simultaneously.
+  const { success: reserveSuccess, reservationIds, insufficientStock } = await createReservations(
+    cart.items.map((i) => ({ productId: i.product_id, quantity: i.quantity })),
+    cart.id,
+  );
+  if (!reserveSuccess) {
+    const outOfStockTitle = insufficientStock[0]
+      ? (productMap.get(insufficientStock[0])?.title ?? "An item")
+      : "An item";
+    return { error: `"${outOfStockTitle}" sold out while you were checking out. Please review your cart.` };
   }
 
   // 6. Settings + coupon
@@ -309,6 +323,9 @@ export async function createCheckoutSession(
     .from("orders")
     .update({ stripe_checkout_session_id: stripeSession.id })
     .eq("id", order.id);
+
+  // 16. Associate reservations with Stripe session (so webhook can release them)
+  await associateStripeSession(reservationIds, stripeSession.id);
 
   if (!stripeSession.url) {
     return { error: "Checkout session URL missing. Please try again." };
