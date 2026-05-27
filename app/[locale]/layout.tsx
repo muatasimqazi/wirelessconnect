@@ -69,7 +69,8 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "home.hero" });
   const description = t("subheadline");
-  const siteUrl = "https://wirelessconnectnw.com";
+  // Use NEXT_PUBLIC_SITE_URL so this works on Vercel preview + custom domain
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://wirelessconnect.vercel.app").replace(/\/$/, "");
   const ogImageUrl = `${siteUrl}/opengraph-image`;
 
   return {

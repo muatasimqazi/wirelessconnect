@@ -57,17 +57,14 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     locale as Locale,
   ) ?? product.description ?? undefined;
 
-  const siteUrl = "https://wirelessconnectnw.com";
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://wirelessconnect.vercel.app").replace(/\/$/, "");
   const canonicalUrl = `${siteUrl}/${locale}/product/${slug}`;
-  const fallbackOgImage = `${siteUrl}/opengraph-image`;
-
-  // Fetch primary product image for OG (lightweight — limit 1)
-  const images = product.id ? await getProductImages(product.id) : [];
-  const primaryImage = images.find((i) => i.is_primary) ?? images[0];
-  const ogImage = primaryImage?.image_url ?? fallbackOgImage;
-
   const ogTitle = product.seo_title ?? title ?? "Wireless Connect";
   const ogDescription = product.seo_description ?? description;
+
+  // OG image is served by the co-located opengraph-image.tsx file convention.
+  // We reference it explicitly so Twitter card also picks it up.
+  const ogImageUrl = `${siteUrl}/${locale}/product/${slug}/opengraph-image`;
 
   return {
     title: ogTitle,
@@ -86,20 +83,13 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       description: ogDescription,
       url: canonicalUrl,
       siteName: "Wireless Connect",
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: ogTitle ?? "Product image",
-        },
-      ],
+      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: ogTitle ?? "Product" }],
     },
     twitter: {
       card: "summary_large_image",
       title: ogTitle ?? undefined,
       description: ogDescription,
-      images: [ogImage],
+      images: [ogImageUrl],
     },
   };
 }
