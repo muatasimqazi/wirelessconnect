@@ -15,9 +15,11 @@ interface ProductGridProps {
   locale: Locale;
   /** Whether filters are currently active — affects empty state message. */
   hasFilters?: boolean;
+  /** Map of productId → { avgRating, reviewCount } — from getReviewSummaries() */
+  ratingMap?: Map<string, { avgRating: number; reviewCount: number }>;
 }
 
-export function ProductGrid({ products, locale, hasFilters }: ProductGridProps) {
+export function ProductGrid({ products, locale, hasFilters, ratingMap }: ProductGridProps) {
   if (products.length === 0) {
     return (
       <EmptyState
@@ -43,9 +45,18 @@ export function ProductGrid({ products, locale, hasFilters }: ProductGridProps) 
       className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       aria-label={`${products.length} products`}
     >
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} locale={locale} />
-      ))}
+      {products.map((product) => {
+        const rating = product.id ? ratingMap?.get(product.id) : undefined;
+        return (
+          <ProductCard
+            key={product.id}
+            product={product}
+            locale={locale}
+            avgRating={rating?.avgRating}
+            reviewCount={rating?.reviewCount}
+          />
+        );
+      })}
     </div>
   );
 }

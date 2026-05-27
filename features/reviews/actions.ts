@@ -54,6 +54,51 @@ export async function submitReview(data: SubmitReviewData): Promise<ActionResult
   return { success: true };
 }
 
+export interface ReviewSummary {
+  productId: string;
+  avgRating: number;
+  reviewCount: number;
+}
+
+/**
+ * Batch-fetches avg rating + review count for a list of product IDs.
+ * Returns a Map keyed by productId for O(1) lookup in product grids.
+ *
+ * Uses approved reviews only.
+ */
+export async function getReviewSummaries(
+  productIds: string[],
+): Promise<Map<string, ReviewSummary>> {
+  if (productIds.length === 0) return new Map();
+
+  const admin = supabaseAdmin();
+  const { data, error } = await admin
+    .from("reviews")
+    .select("product_id, rating")
+    .in("product_id", productIds)
+    .eq("approved", true);
+
+  if (error || !data) return new Map();
+
+  // Aggregate client-side (simple, avoids needing a DB function)
+  const acc = new Map<string, { sum: number; count: number }>();
+  for (const row of data) {
+    const pid = row.product_id as string;
+    const existing = acc.get(pid) ?? { sum: 0, count: 0 };
+    acc.set(pid, { sum: existing.sum + row.rating, count: existing.count + 1 });
+  }
+
+  const result = new Map<string, ReviewSummary>();
+  for (const [pid, { sum, count }] of acc) {
+    result.set(pid, {
+      productId: pid,
+      avgRating: Math.round((sum / count) * 10) / 10,
+      reviewCount: count,
+    });
+  }
+  return result;
+}
+
 export async function getApprovedReviews(productId: string): Promise<Array<{
   id: string;
   rating: number;

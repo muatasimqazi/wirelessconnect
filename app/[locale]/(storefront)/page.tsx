@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/store/product-card";
 import { EmptyState } from "@/components/store/empty-state";
 import { getFeaturedProducts } from "@/lib/data/products";
+import { getReviewSummaries } from "@/features/reviews/actions";
 import { getCategories } from "@/lib/data/categories";
 import { resolveLocalizedField } from "@/lib/i18n/resolve-localized-field";
 import {
@@ -48,6 +49,9 @@ export default async function HomePage({ params }: HomePageProps) {
     getFeaturedProducts(8),
     getCategories(),
   ]);
+
+  const featuredIds = featuredProducts.map((p) => p.id).filter(Boolean) as string[];
+  const ratingMap = await getReviewSummaries(featuredIds);
 
   return (
     <>
@@ -102,7 +106,7 @@ export default async function HomePage({ params }: HomePageProps) {
           }),
         }}
       />
-      <HomePageContent locale={locale as Locale} featuredProducts={featuredProducts} categories={categories} />
+      <HomePageContent locale={locale as Locale} featuredProducts={featuredProducts} categories={categories} ratingMap={ratingMap} />
     </>
   );
 }
@@ -116,10 +120,12 @@ function HomePageContent({
   locale,
   featuredProducts,
   categories,
+  ratingMap,
 }: {
   locale: Locale;
   featuredProducts: ProductWithImage[];
   categories: Category[];
+  ratingMap: Map<string, { avgRating: number; reviewCount: number }>;
 }) {
   const t = useTranslations("home");
 
@@ -208,9 +214,18 @@ function HomePageContent({
             />
           ) : (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} locale={locale} />
-              ))}
+              {featuredProducts.map((product) => {
+                const rating = product.id ? ratingMap.get(product.id) : undefined;
+                return (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    locale={locale}
+                    avgRating={rating?.avgRating}
+                    reviewCount={rating?.reviewCount}
+                  />
+                );
+              })}
             </div>
           )}
         </div>

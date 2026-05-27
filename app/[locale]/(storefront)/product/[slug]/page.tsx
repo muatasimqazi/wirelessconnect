@@ -31,6 +31,7 @@ import { ProductImageGallery } from "@/components/store/product-image-gallery";
 import { ProductGrid } from "@/components/store/product-grid";
 import { AddToCartButton } from "@/components/store/add-to-cart-button";
 import { Separator } from "@/components/ui/separator";
+import { StarDisplay } from "@/components/store/star-display";
 import { StoreIcon, TruckIcon } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
 
@@ -174,6 +175,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
               seller: { "@type": "Organization", name: "Wireless Connect" },
             },
             ...(images[0] ? { image: images[0].image_url } : {}),
+            ...(reviews.length > 0 ? {
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1),
+                reviewCount: reviews.length,
+                bestRating: 5,
+                worstRating: 1,
+              },
+            } : {}),
           }),
         }}
       />
@@ -194,6 +204,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <h1 className="text-h2-mobile font-bold text-foreground md:text-h2-desktop">
             {title}
           </h1>
+
+          {/* Star rating summary — only shown when reviews exist */}
+          {reviews.length > 0 && (() => {
+            const avg = Math.round((reviews.reduce((s, r) => s + r.rating, 0) / reviews.length) * 10) / 10;
+            return (
+              <a href="#reviews" className="inline-flex w-fit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
+                <StarDisplay rating={avg} count={reviews.length} size="md" />
+              </a>
+            );
+          })()}
 
           {/* Condition + battery */}
           <div className="flex flex-wrap items-center gap-3">
@@ -305,7 +325,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </div>
 
       {/* Reviews */}
-      <section className="mt-16">
+      <section id="reviews" className="mt-16">
         <ProductReviews
           productId={product.id ?? ""}
           reviews={reviews}

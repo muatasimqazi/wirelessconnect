@@ -16,6 +16,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
 import { getProducts, getAvailableBrands, getAvailableStorageSizes } from "@/lib/data/products";
 import { getCategories } from "@/lib/data/categories";
+import { getReviewSummaries } from "@/features/reviews/actions";
 import { ProductGrid } from "@/components/store/product-grid";
 import { ShopFilters } from "@/components/store/shop-filters";
 import { ShopSort } from "@/components/store/shop-sort";
@@ -113,6 +114,10 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
     getCategories(),
   ]);
 
+  // Batch-fetch review summaries for all returned products (single query, not N+1)
+  const productIds = products.map((p) => p.id).filter(Boolean) as string[];
+  const ratingMap = await getReviewSummaries(productIds);
+
   const totalPages = Math.ceil(total / PAGE_SIZE);
   const hasFilters = !!(sp.brand || sp.storage || sp.carrier || sp.condition || sp.category || sp.min_price || sp.max_price || sp.pickup || sp.shipping || sp.q);
 
@@ -180,6 +185,7 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
               products={products}
               locale={locale as Locale}
               hasFilters={hasFilters}
+              ratingMap={ratingMap}
             />
           </Suspense>
 

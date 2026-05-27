@@ -19,6 +19,7 @@ import { AddToCartButton } from "@/components/store/add-to-cart-button";
 import { ShieldCheckIcon, WrenchIcon, CheckCircleIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { resolveLocalizedField } from "@/lib/i18n/resolve-localized-field";
+import { StarDisplay } from "@/components/store/star-display";
 import type { ProductWithImage } from "@/lib/data/products";
 import type { Locale } from "@/i18n/routing";
 
@@ -26,9 +27,11 @@ interface ProductCardProps {
   product: ProductWithImage;
   locale: Locale;
   className?: string;
+  avgRating?: number;
+  reviewCount?: number;
 }
 
-export function ProductCard({ product, locale, className }: ProductCardProps) {
+export function ProductCard({ product, locale, className, avgRating, reviewCount }: ProductCardProps) {
   const t = useTranslations("product");
 
   const title = resolveLocalizedField(
@@ -104,6 +107,11 @@ export function ProductCard({ product, locale, className }: ProductCardProps) {
           >
             {title}
           </Link>
+
+          {/* Star rating — only shown if reviews exist */}
+          {avgRating != null && reviewCount != null && reviewCount > 0 && (
+            <StarDisplay rating={avgRating} count={reviewCount} size="sm" />
+          )}
 
           {/* Storage · Color — visible at all sizes */}
           {(product.storage || product.color) && (
