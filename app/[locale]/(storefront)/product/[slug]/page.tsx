@@ -57,12 +57,49 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     locale as Locale,
   ) ?? product.description ?? undefined;
 
+  const siteUrl = "https://wirelessconnectnw.com";
+  const canonicalUrl = `${siteUrl}/${locale}/product/${slug}`;
+  const fallbackOgImage = `${siteUrl}/opengraph-image`;
+
+  // Fetch primary product image for OG (lightweight — limit 1)
+  const images = product.id ? await getProductImages(product.id) : [];
+  const primaryImage = images.find((i) => i.is_primary) ?? images[0];
+  const ogImage = primaryImage?.image_url ?? fallbackOgImage;
+
+  const ogTitle = product.seo_title ?? title ?? "Wireless Connect";
+  const ogDescription = product.seo_description ?? description;
+
   return {
-    title: product.seo_title ?? title,
-    description: product.seo_description ?? description,
+    title: ogTitle,
+    description: ogDescription,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${siteUrl}/en/product/${slug}`,
+        es: `${siteUrl}/es/product/${slug}`,
+        "x-default": `${siteUrl}/en/product/${slug}`,
+      },
+    },
     openGraph: {
-      title: product.seo_title ?? title ?? undefined,
-      description: product.seo_description ?? description,
+      type: "website",
+      title: ogTitle ?? undefined,
+      description: ogDescription,
+      url: canonicalUrl,
+      siteName: "Wireless Connect",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: ogTitle ?? "Product image",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: ogTitle ?? undefined,
+      description: ogDescription,
+      images: [ogImage],
     },
   };
 }

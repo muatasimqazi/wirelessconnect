@@ -68,20 +68,46 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "home.hero" });
+  const description = t("subheadline");
+  const siteUrl = "https://wirelessconnectnw.com";
+  const ogImageUrl = `${siteUrl}/opengraph-image`;
 
   return {
     title: {
       default: "Wireless Connect",
       template: "%s | Wireless Connect",
     },
-    description: t("subheadline"),
+    description,
+    metadataBase: new URL(siteUrl),
     alternates: {
-      canonical: `https://wirelessconnectnw.com/${locale}`,
+      canonical: `${siteUrl}/${locale}`,
       languages: {
-        en: "https://wirelessconnectnw.com/en",
-        es: "https://wirelessconnectnw.com/es",
-        "x-default": "https://wirelessconnectnw.com/en",
+        en: `${siteUrl}/en`,
+        es: `${siteUrl}/es`,
+        "x-default": `${siteUrl}/en`,
       },
+    },
+    openGraph: {
+      type: "website",
+      siteName: "Wireless Connect",
+      title: "Wireless Connect",
+      description,
+      url: `${siteUrl}/${locale}`,
+      locale: locale === "es" ? "es_US" : "en_US",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: "Wireless Connect — Certified Refurbished Phones",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Wireless Connect",
+      description,
+      images: [ogImageUrl],
     },
   };
 }
