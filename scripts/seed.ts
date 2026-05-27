@@ -659,13 +659,19 @@ async function seedProducts() {
 
 // ── 3. Product Images ─────────────────────────────────────────────────────────
 
+// Real press images uploaded to Supabase Storage (product-images bucket, phones/ prefix)
+const IMG_BASE = "https://zqbwngowigmskvuryayd.supabase.co/storage/v1/object/public/product-images/phones";
+
+function img(filename: string) {
+  return `${IMG_BASE}/${filename}`;
+}
+
 async function seedProductImages() {
-  // Using placehold.co for seed images — swap with real Supabase Storage URLs in production
   const images = [
     {
       id: "e1000001-0000-0000-0000-000000000001",
       product_id: PROD.iphone15pm,
-      image_url: "https://picsum.photos/seed/ip15pm/800/800",
+      image_url: img("apple-iphone-15-pro.jpg"),
       is_primary: true,
       sort_order: 0,
       alt_text: "iPhone 15 Pro Max Natural Titanium",
@@ -674,7 +680,7 @@ async function seedProductImages() {
     {
       id: "e1000002-0000-0000-0000-000000000002",
       product_id: PROD.iphone14pro,
-      image_url: "https://picsum.photos/seed/ip14pro/800/800",
+      image_url: img("apple-iphone-14-pro.jpg"),
       is_primary: true,
       sort_order: 0,
       alt_text: "iPhone 14 Pro Deep Purple",
@@ -683,7 +689,7 @@ async function seedProductImages() {
     {
       id: "e1000003-0000-0000-0000-000000000003",
       product_id: PROD.iphone13,
-      image_url: "https://picsum.photos/seed/ip13/800/800",
+      image_url: img("apple-iphone-13.jpg"),
       is_primary: true,
       sort_order: 0,
       alt_text: "iPhone 13 Midnight",
@@ -692,7 +698,8 @@ async function seedProductImages() {
     {
       id: "e1000004-0000-0000-0000-000000000004",
       product_id: PROD.s24ultra,
-      image_url: "https://picsum.photos/seed/s24ultra/800/800",
+      // No S24 Ultra image in storage — using Z Fold 6 (closest premium Samsung)
+      image_url: img("samsung-galaxy-z-fold6.jpg"),
       is_primary: true,
       sort_order: 0,
       alt_text: "Samsung Galaxy S24 Ultra Titanium Black",
@@ -701,7 +708,7 @@ async function seedProductImages() {
     {
       id: "e1000005-0000-0000-0000-000000000005",
       product_id: PROD.s23plus,
-      image_url: "https://picsum.photos/seed/s23plus/800/800",
+      image_url: img("samsung-galaxy-s23-fe.jpg"),
       is_primary: true,
       sort_order: 0,
       alt_text: "Samsung Galaxy S23+ Phantom Black",
@@ -710,7 +717,7 @@ async function seedProductImages() {
     {
       id: "e1000006-0000-0000-0000-000000000006",
       product_id: PROD.pixel8pro,
-      image_url: "https://picsum.photos/seed/px8pro/800/800",
+      image_url: img("google-pixel-8-pro.jpg"),
       is_primary: true,
       sort_order: 0,
       alt_text: "Google Pixel 8 Pro Obsidian",
@@ -719,7 +726,8 @@ async function seedProductImages() {
     {
       id: "e1000007-0000-0000-0000-000000000007",
       product_id: PROD.pixel7,
-      image_url: "https://picsum.photos/seed/px7/800/800",
+      // No Pixel 7 image in storage — using Pixel 7a (same generation)
+      image_url: img("google-pixel-7a.jpg"),
       is_primary: true,
       sort_order: 0,
       alt_text: "Google Pixel 7 Snow",
@@ -728,7 +736,8 @@ async function seedProductImages() {
     {
       id: "e1000008-0000-0000-0000-000000000008",
       product_id: PROD.iphone12,
-      image_url: "https://picsum.photos/seed/ip12/800/800",
+      // No iPhone 12 image in storage — using iPhone 13 (closest available)
+      image_url: img("apple-iphone-13.jpg"),
       is_primary: true,
       sort_order: 0,
       alt_text: "iPhone 12 Blue",
@@ -737,7 +746,7 @@ async function seedProductImages() {
     {
       id: "e1000009-0000-0000-0000-000000000009",
       product_id: PROD.galaxyA54,
-      image_url: "https://picsum.photos/seed/a54/800/800",
+      image_url: img("samsung-galaxy-a54.jpg"),
       is_primary: true,
       sort_order: 0,
       alt_text: "Samsung Galaxy A54 Awesome Black",
@@ -746,7 +755,7 @@ async function seedProductImages() {
     {
       id: "e100000a-0000-0000-0000-00000000000a",
       product_id: PROD.pixel8a,
-      image_url: "https://picsum.photos/seed/px8a/800/800",
+      image_url: img("google-pixel-8a.jpg"),
       is_primary: true,
       sort_order: 0,
       alt_text: "Google Pixel 8a Aloe",
@@ -1000,7 +1009,7 @@ async function seedOrders() {
       product_title: "iPhone 13 128GB",
       product_sku: "IP13-128-MN-001",
       product_slug: "iphone-13-128gb-midnight",
-      product_image_url: "https://picsum.photos/seed/ip13/800/800",
+      product_image_url: img("apple-iphone-13.jpg"),
       product_imei: "351234567890125",
       product_serial_number: "F0NXK4NABC3",
       device_brand: "Apple",
@@ -1022,7 +1031,7 @@ async function seedOrders() {
       product_title: "iPhone 14 Pro 128GB",
       product_sku: "IP14P-128-DP-001",
       product_slug: "iphone-14-pro-128gb-deep-purple",
-      product_image_url: "https://picsum.photos/seed/ip14pro/800/800",
+      product_image_url: img("apple-iphone-14-pro.jpg"),
       product_imei: "351234567890124",
       product_serial_number: "F1MXK4NABC2",
       device_brand: "Apple",
@@ -1044,7 +1053,7 @@ async function seedOrders() {
       product_title: "Google Pixel 8 Pro 128GB",
       product_sku: "GP8P-128-OB-001",
       product_slug: "google-pixel-8-pro-128gb-obsidian",
-      product_image_url: "https://picsum.photos/seed/px8pro/800/800",
+      product_image_url: img("google-pixel-8-pro.jpg"),
       product_imei: "353456789012345",
       product_serial_number: "PX8P3NABC1",
       device_brand: "Google",
@@ -1066,7 +1075,7 @@ async function seedOrders() {
       product_title: "iPhone 15 Pro Max 256GB",
       product_sku: "IP15PM-256-NT-001",
       product_slug: "iphone-15-pro-max-256gb-natural-titanium",
-      product_image_url: "https://picsum.photos/seed/ip15pm/800/800",
+      product_image_url: img("apple-iphone-15-pro.jpg"),
       product_imei: "351234567890123",
       product_serial_number: "F2LXK4NABC1",
       device_brand: "Apple",
@@ -1088,7 +1097,7 @@ async function seedOrders() {
       product_title: "Samsung Galaxy S24 Ultra 256GB",
       product_sku: "SGS24U-256-TB-001",
       product_slug: "samsung-galaxy-s24-ultra-256gb-titanium-black",
-      product_image_url: "https://picsum.photos/seed/s24ultra/800/800",
+      product_image_url: img("samsung-galaxy-z-fold6.jpg"),
       product_imei: "352345678901234",
       product_serial_number: "R3CMKG4ABC1",
       device_brand: "Samsung",
