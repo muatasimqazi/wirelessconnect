@@ -26,7 +26,7 @@ export default async function AccountLayout({ children, params }: AccountLayoutP
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect(`/${locale}/sign-in?returnTo=/${locale}/account`);
+    redirect(`/${locale}/sign-in?returnTo=/account`);
   }
 
   const t = await getTranslations({ locale, namespace: "account" });

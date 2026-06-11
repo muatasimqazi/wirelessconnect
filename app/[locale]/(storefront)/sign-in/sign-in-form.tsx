@@ -65,8 +65,13 @@ export function SignInForm({ returnTo }: SignInFormProps) {
         return;
       }
 
-      // Redirect to returnTo or homepage after successful sign-in
-      router.push(returnTo ?? "/");
+      // Strip leading locale segment (/en/..., /es/...) before pushing —
+      // next-intl's router.push() adds the current locale automatically,
+      // so passing /en/account would produce /en/en/account.
+      const destination = returnTo
+        ? returnTo.replace(/^\/(en|es)(\/|$)/, "/")
+        : "/";
+      router.push(destination);
       router.refresh();
     });
   }
