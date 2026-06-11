@@ -184,8 +184,8 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 // ─── Storage Image Picker ─────────────────────────────────────────────────────
 
 function StorageImagePicker({
-  productId,
-  existingCount,
+  productId: _productId,
+  existingCount: _existingCount,
   onPick,
 }: {
   productId: string;
