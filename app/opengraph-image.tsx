@@ -151,7 +151,7 @@ export default async function OgImage() {
             display: "flex",
           }}
         >
-          wirelessconnectnw.com
+          wirelessconnectstore.com
         </div>
       </div>
     ),

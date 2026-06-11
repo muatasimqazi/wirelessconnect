@@ -20,7 +20,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin/", "/api/", "/en/auth/", "/es/auth/"],
       },
     ],
-    sitemap: "https://wirelessconnectnw.com/sitemap.xml",
-    host: "https://wirelessconnectnw.com",
+    sitemap: "https://wirelessconnectstore.com/sitemap.xml",
+    host: "https://wirelessconnectstore.com",
   };
 }

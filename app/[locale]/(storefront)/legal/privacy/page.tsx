@@ -23,10 +23,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? "Cómo Wireless Connect recopila, usa y protege su información personal."
       : "How Wireless Connect collects, uses, and protects your personal information.",
     alternates: {
-      canonical: `https://wirelessconnectnw.com/${locale}/legal/privacy`,
+      canonical: `https://wirelessconnectstore.com/${locale}/legal/privacy`,
       languages: {
-        en: "https://wirelessconnectnw.com/en/legal/privacy",
-        es: "https://wirelessconnectnw.com/es/legal/privacy",
+        en: "https://wirelessconnectstore.com/en/legal/privacy",
+        es: "https://wirelessconnectstore.com/es/legal/privacy",
       },
     },
   };
@@ -43,7 +43,7 @@ export default async function PrivacyPage({ params }: Props) {
         <p>
           Wireless Connect (&ldquo;nosotros&rdquo;, &ldquo;nuestro&rdquo;) respeta su privacidad.
           Esta Política de Privacidad explica cómo recopilamos, usamos y protegemos su información
-          personal cuando usa nuestro sitio web en wirelessconnectnw.com.
+          personal cuando usa nuestro sitio web en wirelessconnectstore.com.
         </p>
 
         <h2>1. Información que Recopilamos</h2>
@@ -140,7 +140,7 @@ export default async function PrivacyPage({ params }: Props) {
       <p>
         Wireless Connect (&ldquo;we,&rdquo; &ldquo;our,&rdquo; &ldquo;us&rdquo;) respects your
         privacy. This Privacy Policy explains how we collect, use, and protect your personal
-        information when you use our website at wirelessconnectnw.com.
+        information when you use our website at wirelessconnectstore.com.
       </p>
 
       <h2>1. Information We Collect</h2>

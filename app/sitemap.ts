@@ -13,7 +13,7 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase/server";
 
-const BASE_URL = "https://wirelessconnectnw.com";
+const BASE_URL = "https://wirelessconnectstore.com";
 const LOCALES = ["en", "es"] as const;
 
 // Static storefront paths (locale-aware)

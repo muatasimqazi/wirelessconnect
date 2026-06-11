@@ -55,8 +55,8 @@ export async function generateMetadata({ params }: ShopPageProps): Promise<Metad
     description: "Browse certified pre-owned phones, tablets, and laptops — professionally tested with warranty.",
     alternates: {
       languages: {
-        en: "https://wirelessconnectnw.com/en/shop",
-        es: "https://wirelessconnectnw.com/es/shop",
+        en: "https://wirelessconnectstore.com/en/shop",
+        es: "https://wirelessconnectstore.com/es/shop",
       },
     },
   };

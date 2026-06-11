@@ -64,9 +64,9 @@ export default async function HomePage({ params }: HomePageProps) {
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
             name: "Wireless Connect",
-            url: "https://wirelessconnectnw.com",
-            logo: "https://wirelessconnectnw.com/logo.png",
-            image: "https://wirelessconnectnw.com/og-image.jpg",
+            url: "https://wirelessconnectstore.com",
+            logo: "https://wirelessconnectstore.com/logo.png",
+            image: "https://wirelessconnectstore.com/og-image.jpg",
             description:
               "Certified pre-owned phones professionally tested with 30-day warranty. Local pickup in Shoreline, WA or ships anywhere in the U.S.",
             telephone: "+1-206-423-2965",

@@ -24,10 +24,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? "Solicite la eliminación de su información personal de Wireless Connect."
       : "Request deletion of your personal information from Wireless Connect.",
     alternates: {
-      canonical: `https://wirelessconnectnw.com/${locale}/legal/privacy/data-deletion`,
+      canonical: `https://wirelessconnectstore.com/${locale}/legal/privacy/data-deletion`,
       languages: {
-        en: "https://wirelessconnectnw.com/en/legal/privacy/data-deletion",
-        es: "https://wirelessconnectnw.com/es/legal/privacy/data-deletion",
+        en: "https://wirelessconnectstore.com/en/legal/privacy/data-deletion",
+        es: "https://wirelessconnectstore.com/es/legal/privacy/data-deletion",
       },
     },
   };

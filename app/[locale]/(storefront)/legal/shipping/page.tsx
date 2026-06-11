@@ -21,10 +21,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? "Opciones de envío, plazos de entrega y cobertura geográfica de Wireless Connect."
       : "Shipping options, delivery timelines, and geographic coverage for Wireless Connect.",
     alternates: {
-      canonical: `https://wirelessconnectnw.com/${locale}/legal/shipping`,
+      canonical: `https://wirelessconnectstore.com/${locale}/legal/shipping`,
       languages: {
-        en: "https://wirelessconnectnw.com/en/legal/shipping",
-        es: "https://wirelessconnectnw.com/es/legal/shipping",
+        en: "https://wirelessconnectstore.com/en/legal/shipping",
+        es: "https://wirelessconnectstore.com/es/legal/shipping",
       },
     },
   };

@@ -6,18 +6,18 @@
  *  - Consistent sender address
  *  - Admin notification helper
  *
- * All emails are sent from: Wireless Connect <orders@wirelessconnectnw.com>
+ * All emails are sent from: Wireless Connect <orders@wirelessconnectstore.com>
  */
 
 import { Resend } from "resend";
 
-const FROM = "Wireless Connect <orders@wirelessconnectnw.com>";
+const FROM = "Wireless Connect <orders@wirelessconnectstore.com>";
 
 // Admin recipient — falls back to env var, then a hard-coded fallback
 const ADMIN_EMAIL =
   process.env.ADMIN_NOTIFICATION_EMAIL ??
   process.env.STORE_EMAIL ??
-  "admin@wirelessconnectnw.com";
+  "admin@wirelessconnectstore.com";
 
 let _resend: Resend | null = null;
 

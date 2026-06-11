@@ -22,10 +22,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? "Los términos y condiciones que rigen el uso de Wireless Connect."
       : "The terms and conditions governing your use of Wireless Connect.",
     alternates: {
-      canonical: `https://wirelessconnectnw.com/${locale}/legal/terms`,
+      canonical: `https://wirelessconnectstore.com/${locale}/legal/terms`,
       languages: {
-        en: "https://wirelessconnectnw.com/en/legal/terms",
-        es: "https://wirelessconnectnw.com/es/legal/terms",
+        en: "https://wirelessconnectstore.com/en/legal/terms",
+        es: "https://wirelessconnectstore.com/es/legal/terms",
       },
     },
   };
@@ -46,7 +46,7 @@ export default async function TermsPage({ params }: Props) {
 
         <h2>1. Aceptación de los Términos</h2>
         <p>
-          Al usar el sitio web de Wireless Connect ubicado en wirelessconnectnw.com, usted
+          Al usar el sitio web de Wireless Connect ubicado en wirelessconnectstore.com, usted
           confirma que tiene al menos 18 años de edad o que tiene el consentimiento de un
           padre o tutor legal, y que acepta cumplir con estos términos.
         </p>
@@ -121,7 +121,7 @@ export default async function TermsPage({ params }: Props) {
 
       <h2>1. Acceptance of Terms</h2>
       <p>
-        By using the Wireless Connect website at wirelessconnectnw.com, you confirm that
+        By using the Wireless Connect website at wirelessconnectstore.com, you confirm that
         you are at least 18 years old or have the consent of a parent or legal guardian,
         and that you agree to comply with these terms.
       </p>

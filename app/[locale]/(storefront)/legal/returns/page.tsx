@@ -23,10 +23,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? "Conozca nuestros plazos y condiciones de devolución para compras en línea."
       : "Learn about our return window and conditions for online purchases.",
     alternates: {
-      canonical: `https://wirelessconnectnw.com/${locale}/legal/returns`,
+      canonical: `https://wirelessconnectstore.com/${locale}/legal/returns`,
       languages: {
-        en: "https://wirelessconnectnw.com/en/legal/returns",
-        es: "https://wirelessconnectnw.com/es/legal/returns",
+        en: "https://wirelessconnectstore.com/en/legal/returns",
+        es: "https://wirelessconnectstore.com/es/legal/returns",
       },
     },
   };
@@ -41,7 +41,7 @@ export default async function ReturnPolicyPage({ params }: Props) {
     return (
       <LegalLayout title="Política de Devoluciones" lastUpdated="26 de mayo de 2026">
         <p>
-          Esta política aplica exclusivamente a compras realizadas en wirelessconnectnw.com.
+          Esta política aplica exclusivamente a compras realizadas en wirelessconnectstore.com.
           La política de la tienda física <strong>no aplica</strong> a devoluciones de
           compras en línea.
         </p>
@@ -105,7 +105,7 @@ export default async function ReturnPolicyPage({ params }: Props) {
   return (
     <LegalLayout title="Return Policy" lastUpdated="May 26, 2026">
       <p>
-        This policy applies exclusively to purchases made at wirelessconnectnw.com. The
+        This policy applies exclusively to purchases made at wirelessconnectstore.com. The
         physical store&apos;s purchase policy does <strong>not apply</strong> to online
         order returns.
       </p>

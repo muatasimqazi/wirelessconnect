@@ -162,7 +162,7 @@ export function SettingsForm({
             <Input type="tel" {...register("store_phone")} placeholder="(206) 555-0100" />
           </Field>
           <Field label="Store Email" error={errors.store_email?.message}>
-            <Input type="email" {...register("store_email")} placeholder="info@wirelessconnectnw.com" />
+            <Input type="email" {...register("store_email")} placeholder="info@wirelessconnectstore.com" />
           </Field>
           <Field label="WhatsApp Number" hint="Include country code, e.g. +12065550100">
             <Input {...register("whatsapp_number")} placeholder="+12065550100" />

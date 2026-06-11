@@ -21,10 +21,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? "Cobertura de garantía para dispositivos Wireless Connect."
       : "Warranty coverage for Wireless Connect devices.",
     alternates: {
-      canonical: `https://wirelessconnectnw.com/${locale}/legal/warranty`,
+      canonical: `https://wirelessconnectstore.com/${locale}/legal/warranty`,
       languages: {
-        en: "https://wirelessconnectnw.com/en/legal/warranty",
-        es: "https://wirelessconnectnw.com/es/legal/warranty",
+        en: "https://wirelessconnectstore.com/en/legal/warranty",
+        es: "https://wirelessconnectstore.com/es/legal/warranty",
       },
     },
   };
@@ -40,7 +40,7 @@ export default async function WarrantyPolicyPage({ params }: Props) {
       <LegalLayout title="Política de Garantía" lastUpdated="26 de mayo de 2026">
         <p>
           Wireless Connect proporciona una garantía limitada en dispositivos elegibles
-          vendidos a través de wirelessconnectnw.com.
+          vendidos a través de wirelessconnectstore.com.
         </p>
 
         <h2>Período de Garantía</h2>
@@ -102,7 +102,7 @@ export default async function WarrantyPolicyPage({ params }: Props) {
     <LegalLayout title="Warranty Policy" lastUpdated="May 26, 2026">
       <p>
         Wireless Connect provides a limited warranty on eligible devices sold through
-        wirelessconnectnw.com.
+        wirelessconnectstore.com.
       </p>
 
       <h2>Warranty Period</h2>
