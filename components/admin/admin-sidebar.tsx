@@ -15,6 +15,7 @@ import {
   SmartphoneIcon,
   ShoppingBagIcon,
   UsersIcon,
+  UserCogIcon,
   ClipboardListIcon,
   ShieldIcon,
   TagIcon,
@@ -67,8 +68,9 @@ const navGroups = [
     label: "People",
     items: [
       { href: "/admin/customers", label: "Customers", icon: UsersIcon },
+      { href: "/admin/users", label: "User Roles", icon: UserCogIcon },
     ],
-    adminOnly: false,
+    adminOnly: true,
   },
   {
     label: "System",
