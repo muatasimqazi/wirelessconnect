@@ -23,6 +23,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
 import { createIntake } from "@/features/admin/intakes/actions";
+import { ImeiScannerInput } from "@/components/admin/imei-scanner-input";
+import type { ImeiLookupResult } from "@/lib/imei/lookup";
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
 
@@ -142,6 +144,7 @@ export default function NewIntakePage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -152,6 +155,14 @@ export default function NewIntakePage() {
       warranty_days: 30,
     },
   });
+
+  function handleImeiResult(result: ImeiLookupResult) {
+    if (result.imei) setValue("imei", result.imei);
+    if (result.brand) setValue("brand", result.brand);
+    if (result.model) setValue("model", result.model);
+    if (result.storage) setValue("storage", result.storage);
+    if (result.carrier) setValue("carrier", result.carrier as FormValues["carrier"]);
+  }
 
   function onSubmit(data: FormValues) {
     setServerError(null);
@@ -194,6 +205,7 @@ export default function NewIntakePage() {
         {/* Device */}
         <div className="rounded-xl border border-border bg-card p-6 shadow-sm space-y-4">
           <SectionTitle>Device Details</SectionTitle>
+          <ImeiScannerInput onResult={handleImeiResult} />
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Brand *" error={errors.brand?.message}>
               <Input {...register("brand")} placeholder="Apple" />
