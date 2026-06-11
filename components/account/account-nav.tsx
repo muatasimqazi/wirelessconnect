@@ -7,14 +7,13 @@
  * Highlights the active route. Includes a Sign Out button.
  */
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/features/account/actions";
 import { LogOutIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import type { Locale } from "@/i18n/routing";
 
 interface NavItem {
   href: string;
@@ -24,22 +23,21 @@ interface NavItem {
 
 interface AccountNavProps {
   items: NavItem[];
-  locale: Locale;
 }
 
-export function AccountNav({ items, locale }: AccountNavProps) {
+export function AccountNav({ items }: AccountNavProps) {
   const pathname = usePathname();
   const router = useRouter();
   const t = useTranslations("account");
 
   const isActive = (item: NavItem) => {
-    if (item.exact) return pathname === item.href || pathname === `/${locale}/account`;
+    if (item.exact) return pathname === item.href;
     return pathname.startsWith(item.href);
   };
 
   async function handleSignOut() {
     await signOut();
-    router.push(`/${locale}`);
+    router.push("/");
     router.refresh();
   }
 

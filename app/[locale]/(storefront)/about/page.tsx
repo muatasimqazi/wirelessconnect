@@ -19,7 +19,6 @@ import {
   PhoneIcon,
   MailIcon,
 } from "lucide-react";
-import type { Locale } from "@/i18n/routing";
 
 interface AboutPageProps {
   params: Promise<{ locale: string }>;
@@ -37,10 +36,10 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
 export default async function AboutPage({ params }: AboutPageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <AboutContent locale={locale as Locale} />;
+  return <AboutContent />;
 }
 
-function AboutContent({ locale }: { locale: Locale }) {
+function AboutContent() {
   const t = useTranslations("about");
 
   const trustPoints = [
@@ -156,10 +155,10 @@ function AboutContent({ locale }: { locale: Locale }) {
           <p className="mb-8 text-muted-foreground">{t("cta.description")}</p>
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Button size="lg" asChild>
-              <Link href={`/${locale}/shop`}>{t("cta.shop")}</Link>
+              <Link href="/shop">{t("cta.shop")}</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href={`/${locale}/contact`}>{t("cta.contact")}</Link>
+              <Link href="/contact">{t("cta.contact")}</Link>
             </Button>
           </div>
         </div>

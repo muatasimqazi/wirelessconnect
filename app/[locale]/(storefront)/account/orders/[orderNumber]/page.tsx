@@ -15,8 +15,6 @@ import { Button } from "@/components/ui/button";
 import { getCustomerOrderByNumber } from "@/features/orders/queries";
 import { formatMoney } from "@/lib/utils/format-money";
 import { ArrowLeftIcon, PackageIcon, TruckIcon, StoreIcon } from "lucide-react";
-import type { Locale } from "@/i18n/routing";
-
 interface OrderDetailPageProps {
   params: Promise<{ locale: string; orderNumber: string }>;
 }
@@ -28,7 +26,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
   const order = await getCustomerOrderByNumber(orderNumber);
   if (!order) notFound();
 
-  return <OrderDetailView order={order} locale={locale as Locale} />;
+  return <OrderDetailView order={order} locale={locale} />;
 }
 
 function OrderDetailView({
@@ -36,7 +34,7 @@ function OrderDetailView({
   locale,
 }: {
   order: Awaited<ReturnType<typeof getCustomerOrderByNumber>>;
-  locale: Locale;
+  locale: string;
 }) {
   const t = useTranslations("orderConfirmation");
   if (!order) return null;
@@ -45,7 +43,7 @@ function OrderDetailView({
     <div className="space-y-6">
       {/* Back link */}
       <Button variant="ghost" size="sm" className="-ml-2" asChild>
-        <Link href={`/${locale}/account/orders`}>
+        <Link href="/account/orders">
           <ArrowLeftIcon className="mr-1 h-4 w-4" />
           All Orders
         </Link>
@@ -128,7 +126,7 @@ function OrderDetailView({
               <p className="font-medium leading-snug">
                 {item.product_slug ? (
                   <Link
-                    href={`/${locale}/product/${item.product_slug}`}
+                    href={`/product/${item.product_slug}`}
                     className="hover:text-primary"
                   >
                     {item.product_title}

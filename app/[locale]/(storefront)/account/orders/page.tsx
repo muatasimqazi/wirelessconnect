@@ -13,7 +13,6 @@ import { EmptyState } from "@/components/store/empty-state";
 import { getCustomerOrders } from "@/features/orders/queries";
 import { formatMoney } from "@/lib/utils/format-money";
 import { PackageIcon, ChevronRightIcon } from "lucide-react";
-import type { Locale } from "@/i18n/routing";
 
 interface OrdersPageProps {
   params: Promise<{ locale: string }>;
@@ -24,7 +23,7 @@ export default async function OrdersPage({ params }: OrdersPageProps) {
   setRequestLocale(locale);
   const orders = await getCustomerOrders();
 
-  return <OrdersList orders={orders} locale={locale as Locale} />;
+  return <OrdersList orders={orders} locale={locale} />;
 }
 
 function OrdersList({
@@ -32,7 +31,7 @@ function OrdersList({
   locale,
 }: {
   orders: Awaited<ReturnType<typeof getCustomerOrders>>;
-  locale: Locale;
+  locale: string;
 }) {
   const t = useTranslations("account");
 
@@ -54,7 +53,7 @@ function OrdersList({
         icon={PackageIcon}
         title={t("noOrders")}
         description={t("overview.noOrdersDesc")}
-        action={{ label: t("browseDevices"), href: `/${locale}/shop` }}
+        action={{ label: t("browseDevices"), href: "/shop" }}
       />
     );
   }
@@ -91,7 +90,7 @@ function OrdersList({
 
           <Button variant="ghost" size="sm" asChild>
             <Link
-              href={`/${locale}/account/orders/${order.order_number}`}
+              href={`/account/orders/${order.order_number}`}
               aria-label={`View order #${order.order_number}`}
             >
               <ChevronRightIcon className="h-4 w-4" />

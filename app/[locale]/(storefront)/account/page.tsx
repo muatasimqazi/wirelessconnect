@@ -14,7 +14,6 @@ import { getCustomerOrders } from "@/features/orders/queries";
 import { getCustomerWarranties } from "@/features/account/queries";
 import { getCustomerProfile } from "@/features/account/queries";
 import { PackageIcon, UserIcon, MapPinIcon, ShieldCheckIcon } from "lucide-react";
-import type { Locale } from "@/i18n/routing";
 
 interface AccountPageProps {
   params: Promise<{ locale: string }>;
@@ -32,16 +31,14 @@ export default async function AccountPage({ params }: AccountPageProps) {
 
   const activeWarranties = warranties.filter((w) => w.active).length;
 
-  return <AccountOverview locale={locale as Locale} profile={profile} orderCount={orders.length} activeWarranties={activeWarranties} />;
+  return <AccountOverview profile={profile} orderCount={orders.length} activeWarranties={activeWarranties} />;
 }
 
 function AccountOverview({
-  locale,
   profile,
   orderCount,
   activeWarranties,
 }: {
-  locale: Locale;
   profile: Awaited<ReturnType<typeof getCustomerProfile>>;
   orderCount: number;
   activeWarranties: number;
@@ -54,28 +51,28 @@ function AccountOverview({
       value: orderCount,
       description: t("overview.totalOrders"),
       icon: PackageIcon,
-      href: `/${locale}/account/orders`,
+      href: "/account/orders",
     },
     {
       title: t("warranty"),
       value: activeWarranties,
       description: t("overview.activeWarranties"),
       icon: ShieldCheckIcon,
-      href: `/${locale}/account/warranty`,
+      href: "/account/warranty",
     },
     {
       title: t("profile"),
       value: profile?.full_name ?? t("overview.notSet"),
       description: t("overview.personalInfo"),
       icon: UserIcon,
-      href: `/${locale}/account/profile`,
+      href: "/account/profile",
     },
     {
       title: t("addresses"),
       value: null,
       description: t("overview.savedAddresses"),
       icon: MapPinIcon,
-      href: `/${locale}/account/addresses`,
+      href: "/account/addresses",
     },
   ];
 
