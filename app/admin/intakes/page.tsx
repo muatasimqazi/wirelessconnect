@@ -87,12 +87,20 @@ export default async function AdminIntakesPage({ searchParams }: PageProps) {
             {status ? ` · ${INTAKE_STATUS_LABELS[status] ?? status}` : ""}
           </p>
         </div>
-        <Link
-          href="/admin/intakes/new"
-          className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm hover:bg-primary/90"
-        >
-          + New Intake
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            href="/admin/intakes/wholesale"
+            className="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm hover:bg-muted"
+          >
+            Wholesale Batch
+          </Link>
+          <Link
+            href="/admin/intakes/new"
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm hover:bg-primary/90"
+          >
+            + New Intake
+          </Link>
+        </div>
       </div>
 
       {/* Filters */}

@@ -129,6 +129,92 @@ export async function createIntake(input: CreateIntakeInput): Promise<IntakeActi
   return { id: data.id };
 }
 
+// ─── Wholesale batch intake ───────────────────────────────────────────────────
+
+export interface WholesaleSupplier {
+  name: string;
+  invoice: string;
+  date: string;
+  paymentMethod: "cash" | "check" | "zelle" | "venmo" | "store_credit" | "other";
+  perUnitCost: number; // cents
+  notes: string;
+}
+
+export interface WholesaleDevice {
+  imei: string;
+  brand: string;
+  model: string;
+  storage: string;
+  color: string;
+  serialNumber: string;
+  condition: string;
+  imeiVerificationStatus: "not_checked" | "passed" | "failed" | "needs_review";
+  isCleanImei: boolean | null;
+  notes: string;
+}
+
+export async function createWholesaleBatch(
+  supplier: WholesaleSupplier,
+  devices: WholesaleDevice[],
+): Promise<{ error?: string; count?: number }> {
+  const profile = await requireStaff();
+
+  if (!supplier.name.trim()) return { error: "Supplier name is required." };
+  if (devices.length === 0) return { error: "Add at least one device." };
+
+  const admin = supabaseAdmin();
+
+  const holdPeriodDays = 3;
+  const holdUntil = new Date(supplier.date);
+  holdUntil.setDate(holdUntil.getDate() + holdPeriodDays);
+  const holdUntilStr = holdUntil.toISOString().split("T")[0];
+
+  const supplierNotes = [
+    supplier.invoice ? `Invoice: ${supplier.invoice}` : null,
+    supplier.notes || null,
+  ].filter(Boolean).join("\n") || null;
+
+  const records = devices.map((device) => ({
+    brand: device.brand,
+    model: device.model,
+    storage: device.storage || null,
+    color: device.color || null,
+    imei: device.imei || null,
+    serial_number: device.serialNumber || null,
+    condition: device.condition || null,
+    cosmetic_notes: device.notes || null,
+    acquisition_source: "wholesale_supplier",
+    acquisition_date: supplier.date,
+    acquisition_payment_method: supplier.paymentMethod,
+    cost: supplier.perUnitCost / 100,
+    seller_full_name: supplier.name, // supplier business name
+    supplier_notes: supplierNotes,
+    imei_verification_status: device.imeiVerificationStatus,
+    is_clean_imei: device.isCleanImei,
+    status: "received",
+    testing_status: "not_started",
+    hold_period_days: holdPeriodDays,
+    hold_until_date: holdUntilStr,
+    seller_declaration_signed: false,
+    created_by: profile.id,
+    updated_by: profile.id,
+  }));
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await admin.from("device_intakes").insert(records as any).select("id");
+  if (error) return { error: error.message };
+
+  await writeAuditLog({
+    action: "create",
+    table_name: "device_intakes",
+    record_id: data[0]?.id ?? "batch",
+    new_values: { batch_size: devices.length, supplier: supplier.name, acquisition_source: "wholesale_supplier" },
+  });
+
+  revalidatePath("/admin/intakes");
+  return { count: data.length };
+}
+
 // ─── Update status ────────────────────────────────────────────────────────────
 
 const VALID_INTAKE_TRANSITIONS: Partial<Record<string, string[]>> = {
