@@ -38,6 +38,8 @@ const schema = z.object({
   condition: z.string().optional(),
   imei: z.string().optional(),
   serial_number: z.string().optional(),
+  imei_verification_status: z.enum(["not_checked", "passed", "failed", "needs_review"]).default("not_checked"),
+  is_clean_imei: z.boolean().nullable().default(null),
   battery_health: z.coerce.number().min(0).max(100).optional().nullable(),
   battery_cycle_count: z.coerce.number().min(0).optional().nullable(),
   included_accessories: z.string().optional(),
@@ -138,6 +140,7 @@ export default function NewIntakePage() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
+  const [scannerVisible, setScannerVisible] = useState(true);
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -161,7 +164,18 @@ export default function NewIntakePage() {
     if (result.brand) setValue("brand", result.brand);
     if (result.model) setValue("model", result.model);
     if (result.storage) setValue("storage", result.storage);
+    if (result.color) setValue("color", result.color);
     if (result.carrier) setValue("carrier", result.carrier as FormValues["carrier"]);
+    if (result.serialNumber) setValue("serial_number", result.serialNumber);
+    // Wire IMEI verification result — allows intake of blacklisted devices with proper status
+    if (result.blacklistStatus !== undefined) {
+      const isClean = result.blacklistStatus === "clean";
+      setValue("is_clean_imei", isClean);
+      setValue(
+        "imei_verification_status",
+        result.blacklistStatus === "unknown" ? "needs_review" : isClean ? "passed" : "failed",
+      );
+    }
   }
 
   function onSubmit(data: FormValues) {
@@ -204,8 +218,17 @@ export default function NewIntakePage() {
 
         {/* Device */}
         <div className="rounded-xl border border-border bg-card p-6 shadow-sm space-y-4">
-          <SectionTitle>Device Details</SectionTitle>
-          <ImeiScannerInput onResult={handleImeiResult} />
+          <div className="flex items-center justify-between">
+            <SectionTitle>Device Details</SectionTitle>
+            <button
+              type="button"
+              onClick={() => setScannerVisible((v) => !v)}
+              className="text-xs font-medium text-primary hover:underline"
+            >
+              {scannerVisible ? "Enter manually instead" : "Scan IMEI instead"}
+            </button>
+          </div>
+          {scannerVisible && <ImeiScannerInput onResult={handleImeiResult} />}
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Brand *" error={errors.brand?.message}>
               <Input {...register("brand")} placeholder="Apple" />

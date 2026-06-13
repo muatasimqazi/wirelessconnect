@@ -124,7 +124,7 @@ export function ImeiScannerInput({ onResult }: ImeiScannerInputProps) {
             </div>
           )}
 
-          {/* Success */}
+          {/* Device result — shown for any valid IMEI, clean or not */}
           {result.valid && !result.error && (
             <div className="space-y-2">
               {/* Device identity */}
@@ -132,9 +132,9 @@ export function ImeiScannerInput({ onResult }: ImeiScannerInputProps) {
                 <div>
                   <p className="font-semibold text-foreground">
                     {[result.brand, result.model].filter(Boolean).join(" ") || "Unknown device"}
-                    {result.storage && (
+                    {(result.storage || result.color) && (
                       <span className="ml-1 font-normal text-muted-foreground">
-                        · {result.storage}
+                        · {[result.storage, result.color].filter(Boolean).join(" · ")}
                       </span>
                     )}
                   </p>
@@ -168,9 +168,24 @@ export function ImeiScannerInput({ onResult }: ImeiScannerInputProps) {
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
                 {result.carrier && <span>Carrier: {result.carrier}</span>}
                 {result.simLock && <span>SIM lock: {result.simLock}</span>}
+                {result.serialNumber && <span>S/N: {result.serialNumber}</span>}
+                {result.fmiOn === true && (
+                  <span className="font-semibold text-amber-700">⚠ Find My is ON</span>
+                )}
+                {result.fmiOn === false && (
+                  <span className="text-green-700">Find My: Off</span>
+                )}
               </div>
 
-              {/* Fill form button */}
+              {/* Blacklisted warning — intake still allowed (e.g. buying for parts) */}
+              {result.blacklistStatus === "blacklisted" && (
+                <p className="rounded bg-destructive/10 px-2 py-1 text-xs text-destructive">
+                  ⚠ Blacklisted IMEI — you can still intake for parts or further review.
+                  Verification status will be recorded as failed.
+                </p>
+              )}
+
+              {/* Fill form button — always shown regardless of blacklist status */}
               <button
                 type="button"
                 onClick={handleFill}
