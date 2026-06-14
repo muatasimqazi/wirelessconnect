@@ -275,6 +275,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             size="lg"
             label={t("addToCart")}
             outOfStockLabel={t("outOfStock")}
+            showCheckoutCTA
           />
 
           {/* Fulfillment options */}

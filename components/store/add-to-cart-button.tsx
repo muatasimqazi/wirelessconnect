@@ -3,11 +3,12 @@
 /**
  * AddToCartButton — client component.
  *
- * Three visible states:
- *  1. Normal         — "Add to Cart" with cart icon
- *  2. Loading        — spinner while the server action is in flight (local to this button only)
- *  3. In Cart        — green "In Cart ✓" (disabled) once the product is already in the cart
- *  4. Out of Stock   — grey disabled button
+ * Visible states:
+ *  1. Normal            — "Add to Cart" with cart icon
+ *  2. Loading           — spinner while the server action is in flight
+ *  3. In Cart (compact) — green "In Cart ✓" (disabled); used on product cards
+ *  4. In Cart + CTA     — "In Cart ✓" + "Continue to Checkout →" row; used on detail page (showCheckoutCTA)
+ *  5. Out of Stock      — grey disabled button
  *
  * Uses its own `isLoading` state rather than the global `isPending` from CartContext,
  * so that clicking one button does NOT disable every other button on the page.
@@ -19,8 +20,9 @@
 
 import { useState } from "react";
 import { useCart } from "@/context/cart-context";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import { ShoppingCartIcon, CheckIcon, LoaderCircleIcon } from "lucide-react";
+import { ShoppingCartIcon, CheckIcon, LoaderCircleIcon, ArrowRightIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface AddToCartButtonProps {
@@ -32,6 +34,12 @@ interface AddToCartButtonProps {
   className?: string;
   label?: string;
   outOfStockLabel?: string;
+  /**
+   * When true (product detail page), shows "In Cart ✓" + "Continue to Checkout →"
+   * side by side once the item is in the cart.
+   * Omit or false on product cards where space is limited.
+   */
+  showCheckoutCTA?: boolean;
 }
 
 export function AddToCartButton({
@@ -42,6 +50,7 @@ export function AddToCartButton({
   className,
   label = "Add to Cart",
   outOfStockLabel = "Out of Stock",
+  showCheckoutCTA = false,
 }: AddToCartButtonProps) {
   const { addToCart, cart } = useCart();
   // Local loading state — does NOT affect other buttons on the page
@@ -76,6 +85,31 @@ export function AddToCartButton({
 
   // ── Already in cart ──────────────────────────────────────────────────────────
   if (inCart) {
+    // Detail page: two-button row — "In Cart ✓" (secondary) + "Continue to Checkout" (primary)
+    if (showCheckoutCTA) {
+      return (
+        <div className={cn("flex w-full gap-3", className)}>
+          <Button
+            size={size}
+            variant="outline"
+            className="flex-1 border-green-200 bg-green-50 text-green-700 hover:bg-green-50 focus-visible:ring-green-600"
+            disabled
+            aria-label="Item already in your cart"
+          >
+            <CheckIcon className="me-2 h-4 w-4" aria-hidden="true" />
+            In Cart
+          </Button>
+          <Button size={size} className="flex-1" asChild>
+            <Link href="/cart">
+              Continue to Checkout
+              <ArrowRightIcon className="ms-2 h-4 w-4" aria-hidden="true" />
+            </Link>
+          </Button>
+        </div>
+      );
+    }
+
+    // Card / compact: single disabled "In Cart ✓" button
     return (
       <Button
         size={size}

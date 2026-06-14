@@ -45,6 +45,8 @@ interface CartContextValue {
   updateItem: (itemId: string, quantity: number) => Promise<string | null>;
   /** Remove an item from cart. Returns error string or null. */
   removeItem: (itemId: string) => Promise<string | null>;
+  /** Reset client-side cart state to empty. Call after a successful order. */
+  clearCartState: () => void;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -134,9 +136,13 @@ export function CartProvider({ children, initialCart }: CartProviderProps) {
     [updateItem],
   );
 
+  const clearCartState = useCallback(() => {
+    setCart((prev) => (prev ? { ...prev, items: [], itemCount: 0, subtotal: 0 } : null));
+  }, []);
+
   return (
     <CartContext.Provider
-      value={{ cart, itemCount, isPending, addToCart, updateItem, removeItem }}
+      value={{ cart, itemCount, isPending, addToCart, updateItem, removeItem, clearCartState }}
     >
       {children}
     </CartContext.Provider>

@@ -13,6 +13,8 @@ import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { lookupGuestOrder } from "@/features/orders/queries";
+import { clearCart } from "@/lib/cart/cart-actions";
+import { CartClearer } from "@/components/store/cart-clearer";
 import { formatMoney } from "@/lib/utils/format-money";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -38,6 +40,12 @@ export default async function OrderConfirmationPage({
 
   const order = token ? await lookupGuestOrder(token) : null;
 
+  // Clear the cart now that payment is confirmed. Non-fatal — badge resets
+  // client-side via <CartClearer /> even if the DB call partially fails.
+  if (order?.payment_status === "paid") {
+    await clearCart();
+  }
+
   // ── Token missing or invalid ────────────────────────────────────────────────
   if (!order) {
     return (
@@ -57,6 +65,9 @@ export default async function OrderConfirmationPage({
 
   return (
     <div className="mx-auto max-w-container px-4 py-8 sm:px-6 lg:px-8">
+      {/* Resets cart badge to 0 in the header immediately on mount */}
+      <CartClearer />
+
       <div className="mx-auto max-w-2xl">
 
         {/* Header */}
