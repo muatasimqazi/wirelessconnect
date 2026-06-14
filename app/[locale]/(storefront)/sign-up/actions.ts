@@ -18,6 +18,8 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { headers } from "next/headers";
+import { sendEmail } from "@/lib/email/send";
+import { buildWelcomeEmail } from "@/lib/email/templates/welcome";
 
 interface SignUpResult {
   error?: string;
@@ -27,6 +29,7 @@ export async function signUpAction(
   fullName: string,
   email: string,
   password: string,
+  locale = "en",
 ): Promise<SignUpResult | void> {
   const supabase = await createClient();
   const headerStore = await headers();
@@ -55,5 +58,12 @@ export async function signUpAction(
     return { error: "unknown" };
   }
 
-  // Void on success — caller shows confirmation UI
+  // Send welcome email — non-fatal if it fails
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wirelessconnectstore.com";
+  try {
+    const { subject, html } = buildWelcomeEmail({ locale, customerName: fullName, siteUrl });
+    await sendEmail({ to: email, subject, html });
+  } catch {
+    // Non-fatal — signup still succeeds even if welcome email fails
+  }
 }

@@ -7,6 +7,9 @@ import { requireStaff } from "@/lib/utils/permissions";
 import { writeAuditLog } from "@/lib/admin/audit";
 import { sendEmail } from "@/lib/email/send";
 import { buildOrderCancellationEmail } from "@/lib/email/templates/order-cancellation";
+import { buildOrderShippedEmail } from "@/lib/email/templates/order-shipped";
+import { buildOrderPickupReadyEmail } from "@/lib/email/templates/order-pickup-ready";
+import { getStoreSettings } from "@/lib/data/settings";
 import type { Database } from "@/types/database.types";
 
 type OrderStatus = Database["public"]["Enums"]["order_status"];
@@ -34,7 +37,7 @@ export async function updateOrderStatus(
 
   const { data: order } = await admin
     .from("orders")
-    .select("status, fulfillment_method, tracking_number, customer_locale, order_number, customer_email, customer_name")
+    .select("status, fulfillment_method, tracking_number, shipping_carrier, customer_locale, order_number, customer_email, customer_name")
     .eq("id", orderId)
     .single();
 
@@ -79,15 +82,46 @@ export async function updateOrderStatus(
     new_values: { status: newStatus },
   });
 
-  // Send cancellation email when admin cancels an order (Sprint 4 DoD)
-  if (newStatus === "cancelled" && order.customer_email) {
-    const { subject, html } = buildOrderCancellationEmail({
-      locale: order.customer_locale ?? "en",
-      orderNumber: order.order_number ?? orderId,
-      customerName: order.customer_name ?? "Customer",
-      customerEmail: order.customer_email,
-    });
-    await sendEmail({ to: order.customer_email, subject, html });
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wirelessconnectstore.com";
+  const locale = order.customer_locale ?? "en";
+  const orderNumber = order.order_number ?? orderId;
+  const customerName = order.customer_name ?? "Customer";
+
+  if (order.customer_email) {
+    if (newStatus === "shipped" && order.tracking_number) {
+      const { subject, html } = buildOrderShippedEmail({
+        locale,
+        orderNumber,
+        customerName,
+        trackingNumber: order.tracking_number,
+        carrier: order.shipping_carrier ?? "Carrier",
+        siteUrl,
+      });
+      await sendEmail({ to: order.customer_email, subject, html });
+    }
+
+    if (newStatus === "ready_for_pickup") {
+      const settings = await getStoreSettings();
+      const { subject, html } = buildOrderPickupReadyEmail({
+        locale,
+        orderNumber,
+        customerName,
+        storeAddress: settings.store_address ?? "14723 Aurora Ave N, Shoreline, WA 98133",
+        storePhone: settings.store_phone ?? "",
+        siteUrl,
+      });
+      await sendEmail({ to: order.customer_email, subject, html });
+    }
+
+    if (newStatus === "cancelled") {
+      const { subject, html } = buildOrderCancellationEmail({
+        locale,
+        orderNumber,
+        customerName,
+        customerEmail: order.customer_email,
+      });
+      await sendEmail({ to: order.customer_email, subject, html });
+    }
   }
 
   revalidatePath("/admin/orders");

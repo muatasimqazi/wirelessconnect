@@ -42,7 +42,7 @@ export default async function SignUpPage({ params }: SignUpPageProps) {
           <h1 className="mt-2 text-2xl font-bold text-foreground">{t("signUp")}</h1>
         </div>
 
-        <SignUpForm />
+        <SignUpForm locale={locale} />
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           {t("hasAccount")}{" "}

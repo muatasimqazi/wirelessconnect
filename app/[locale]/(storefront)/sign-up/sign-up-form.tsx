@@ -36,7 +36,7 @@ const SignUpSchema = z
 
 type SignUpFormValues = z.infer<typeof SignUpSchema>;
 
-export function SignUpForm() {
+export function SignUpForm({ locale = "en" }: { locale?: string }) {
   const t = useTranslations("auth");
   const [isPending, startTransition] = useTransition();
   const [submitted, setSubmitted] = useState(false);
@@ -52,7 +52,7 @@ export function SignUpForm() {
 
   function onSubmit(values: SignUpFormValues) {
     startTransition(async () => {
-      const result = await signUpAction(values.fullName, values.email, values.password);
+      const result = await signUpAction(values.fullName, values.email, values.password, locale);
 
       if (result?.error) {
         setError("root", {
