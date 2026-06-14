@@ -197,6 +197,10 @@ export async function createWholesaleBatch(
     hold_period_days: holdPeriodDays,
     hold_until_date: holdUntilStr,
     seller_declaration_signed: false,
+    // Wholesale purchases from licensed businesses are exempt from RCW 19.60
+    // individual-seller hold period requirements
+    hold_period_waived: true,
+    hold_period_waived_reason: "Wholesale purchase from licensed business — hold period not applicable",
     created_by: profile.id,
     updated_by: profile.id,
   }));
