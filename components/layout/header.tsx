@@ -8,7 +8,6 @@
  *  Category bar: Quick links to shop categories (desktop + mobile scroll)
  *
  * White background, Back Market-inspired minimal design.
- * Logo placeholder uses WiFi icon + text — replace with <Image> when file arrives.
  */
 
 import { useState } from "react";
@@ -40,10 +39,9 @@ const CATEGORY_LINKS = [
 ];
 
 // ─── Logo ─────────────────────────────────────────────────────────────────────
-// Uses /public/logo.png when present; falls back to icon + text placeholder.
-// To activate: copy your logo PNG to public/logo.png
+// Uses /public/logo.png; set to "" to force the icon+text fallback.
 
-const LOGO_FILE = "/logo.png"; // set to empty string "" to force text fallback
+const LOGO_FILE = "/logo.png";
 
 function Logo({ onClick }: { onClick?: () => void }) {
   return (
@@ -57,9 +55,9 @@ function Logo({ onClick }: { onClick?: () => void }) {
         <Image
           src={LOGO_FILE}
           alt="Wireless Connect"
-          width={140}
-          height={40}
-          className="h-10 w-auto object-contain"
+          width={1597}
+          height={985}
+          className="h-14 w-auto object-contain"
           priority
         />
       ) : (
@@ -79,7 +77,7 @@ function Logo({ onClick }: { onClick?: () => void }) {
 
 // ─── Header ───────────────────────────────────────────────────────────────────
 
-export function Header() {
+export function Header({ isStaff = false }: { isStaff?: boolean }) {
   const t = useTranslations("navigation");
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -117,6 +115,18 @@ export function Header() {
                 {t(labelKey)}
               </Link>
             ))}
+            {isStaff && (
+              <a
+                href="/admin"
+                className={cn(
+                  "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                  "hover:bg-gray-50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                  "text-foreground/70",
+                )}
+              >
+                Admin
+              </a>
+            )}
           </nav>
 
           {/* Actions */}
@@ -168,7 +178,7 @@ export function Header() {
                     <XIcon className="h-5 w-5" aria-hidden="true" />
                   </Button>
                 </SheetHeader>
-                <MobileNav t={t} onClose={() => setMobileOpen(false)} cartCount={cartCount} />
+                <MobileNav t={t} onClose={() => setMobileOpen(false)} cartCount={cartCount} isStaff={isStaff} />
               </SheetContent>
             </Sheet>
           </div>
@@ -229,7 +239,7 @@ function CartButton({ cartCount, label }: { cartCount: number; label: string }) 
 
 type TFn = ReturnType<typeof useTranslations<"navigation">>;
 
-function MobileNav({ t, onClose, cartCount }: { t: TFn; onClose: () => void; cartCount: number }) {
+function MobileNav({ t, onClose, cartCount, isStaff }: { t: TFn; onClose: () => void; cartCount: number; isStaff: boolean }) {
   return (
     <div className="flex flex-col">
       {/* Main nav */}
@@ -244,6 +254,14 @@ function MobileNav({ t, onClose, cartCount }: { t: TFn; onClose: () => void; car
             {t(labelKey)}
           </Link>
         ))}
+        {isStaff && (
+          <a
+            href="/admin"
+            className="flex items-center px-4 py-3 text-sm font-medium text-foreground/80 transition-colors hover:bg-gray-50 hover:text-foreground"
+          >
+            Admin
+          </a>
+        )}
       </nav>
 
       {/* Categories */}

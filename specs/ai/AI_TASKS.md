@@ -9,7 +9,6 @@
 
 | # | Task | File | Notes |
 |---|------|------|-------|
-| 1 | Add logo to header | `public/logo.png` + `components/layout/header.tsx` | Drop PNG at `public/logo.png`. Header auto-loads it via `LOGO_FILE = "/logo.png"` constant. Set `LOGO_FILE = ""` to force text fallback. |
 | 2 | Add Vercel env vars | Vercel dashboard | Add: `IMEICHECK_APPLE_SERVICE_ID=1`, `IMEICHECK_BLACKLIST_SERVICE_ID=5`. Redeploy after. |
 
 ### P2 — Feature Completion
@@ -43,6 +42,8 @@
 
 | Task | Completed |
 |------|-----------|
+| Logo in header | ✅ June 2026 — `public/logo.png` + fixed intrinsic dims in `components/layout/header.tsx` |
+| Admin nav link in storefront header | ✅ June 2026 — shown for staff/admin; fetched via `getCurrentProfile()` in storefront layout; plain `<a href="/admin">` (no locale prefix) |
 | Shipping confirmation email | ✅ June 2026 — `order-shipped.ts`, triggered on `→ shipped` |
 | Pickup ready email | ✅ June 2026 — `order-pickup-ready.ts`, triggered on `→ ready_for_pickup` |
 | Welcome email | ✅ June 2026 — `welcome.ts`, sent in `signUpAction()` |

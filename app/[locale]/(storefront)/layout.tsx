@@ -13,19 +13,19 @@ import { getCart } from "@/lib/cart/cart-queries";
 import { CartProvider } from "@/context/cart-context";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { getCurrentProfile, isStaffOrAdmin } from "@/lib/utils/permissions";
 
 interface StorefrontLayoutProps {
   children: React.ReactNode;
 }
 
 export default async function StorefrontLayout({ children }: StorefrontLayoutProps) {
-  // Fetch cart server-side — null for new visitors (no cookie yet)
-  const cart = await getCart();
+  const [cart, profile] = await Promise.all([getCart(), getCurrentProfile()]);
 
   return (
     <CartProvider initialCart={cart}>
       <div className="flex min-h-screen flex-col">
-        <Header />
+        <Header isStaff={isStaffOrAdmin(profile)} />
 
         <main id="main-content" className="flex-1" tabIndex={-1}>
           {children}
