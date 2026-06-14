@@ -14,6 +14,7 @@ import {
   LayoutDashboardIcon,
   SmartphoneIcon,
   ShoppingBagIcon,
+  ShoppingCartIcon,
   UsersIcon,
   UserCogIcon,
   ClipboardListIcon,
@@ -52,6 +53,7 @@ const navGroups = [
     label: "Commerce",
     items: [
       { href: "/admin/orders", label: "Orders", icon: ShoppingBagIcon },
+      { href: "/admin/abandoned-carts", label: "Abandoned Carts", icon: ShoppingCartIcon },
       { href: "/admin/warranties", label: "Warranties", icon: ShieldIcon },
       { href: "/admin/coupons", label: "Coupons", icon: TagIcon },
     ],
