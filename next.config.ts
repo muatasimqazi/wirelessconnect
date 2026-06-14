@@ -22,7 +22,7 @@ const securityHeaders = [
     value: [
       "default-src 'self'",
       "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com https://cdn.vercel-insights.com https://us.posthog.com https://us-assets.i.posthog.com",
-      "frame-src https://js.stripe.com",
+      "frame-src https://js.stripe.com https://www.google.com https://maps.google.com https://www.google.com/maps",
       "connect-src 'self' https://api.stripe.com https://*.supabase.co wss://*.supabase.co https://us.posthog.com https://us-assets.i.posthog.com https://us.i.posthog.com",
       "img-src 'self' data: blob: https://*.supabase.co https://picsum.photos https://fastly.picsum.photos https://fonts.gstatic.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",

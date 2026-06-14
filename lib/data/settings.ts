@@ -21,10 +21,18 @@ export interface StoreSettings {
   shipping_insurance_threshold?: number;
   /** Shipping insurance fee in cents. Default: 499 ($4.99) */
   shipping_insurance_amount?: number;
+  /** Store display name */
+  store_name?: string;
+  /** Store street address */
+  store_address?: string;
   /** Store contact phone */
   store_phone?: string;
   /** Store contact email */
   store_email?: string;
+  /** Store hours keyed by lowercase day name, value "HH:MM-HH:MM" or "closed" */
+  store_hours?: Record<string, string>;
+  /** WhatsApp enabled */
+  whatsapp_enabled?: boolean;
   /** WhatsApp number */
   whatsapp_number?: string;
   /** Default warranty days when not set on product */
@@ -38,8 +46,16 @@ const DEFAULTS: Required<StoreSettings> = {
   stripe_tax_enabled: true,
   shipping_insurance_threshold: 50000,
   shipping_insurance_amount: 499,
+  store_name: "Wireless Connect",
+  store_address: "14723 Aurora Ave N, Shoreline, WA 98133",
   store_phone: "",
   store_email: "",
+  store_hours: {
+    monday: "10:00-19:00", tuesday: "10:00-19:00", wednesday: "10:00-19:00",
+    thursday: "10:00-19:00", friday: "10:00-19:00",
+    saturday: "10:00-18:00", sunday: "closed",
+  },
+  whatsapp_enabled: false,
   whatsapp_number: "",
   default_warranty_days: 30,
 };
