@@ -13,6 +13,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
+import NextLink from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
@@ -116,7 +117,7 @@ export function Header({ isStaff = false }: { isStaff?: boolean }) {
               </Link>
             ))}
             {isStaff && (
-              <a
+              <NextLink
                 href="/admin"
                 className={cn(
                   "rounded-md px-3 py-2 text-sm font-medium transition-colors",
@@ -125,7 +126,7 @@ export function Header({ isStaff = false }: { isStaff?: boolean }) {
                 )}
               >
                 Admin
-              </a>
+              </NextLink>
             )}
           </nav>
 
@@ -255,12 +256,12 @@ function MobileNav({ t, onClose, cartCount, isStaff }: { t: TFn; onClose: () => 
           </Link>
         ))}
         {isStaff && (
-          <a
+          <NextLink
             href="/admin"
             className="flex items-center px-4 py-3 text-sm font-medium text-foreground/80 transition-colors hover:bg-gray-50 hover:text-foreground"
           >
             Admin
-          </a>
+          </NextLink>
         )}
       </nav>
 
