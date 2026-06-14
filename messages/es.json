@@ -36,10 +36,29 @@
       "cleanImei": "IMEI Limpio",
       "testedDevices": "Dispositivos Probados",
       "warranty": "Garantía de 30 Días",
-      "shipsNationwide": "Envíos a Todo EE.UU."
+      "shipsNationwide": "Envíos a Todo EE.UU.",
+      "locallyOwned": "Local Desde 2010"
     },
     "featuredCategories": "Categorías Destacadas",
-    "featuredProducts": "Productos Destacados"
+    "featuredProducts": "Productos Destacados",
+    "stats": {
+      "years": "15+",
+      "yearsLabel": "Años en el Negocio",
+      "customers": "500+",
+      "customersLabel": "Clientes Satisfechos",
+      "locallyOwned": "Local",
+      "locallyOwnedLabel": "Shoreline, WA",
+      "area": "4 Ciudades",
+      "areaLabel": "Área de Seattle"
+    },
+    "inStore": {
+      "heading": "Más Que Una Tienda en Línea",
+      "body": "Somos una tienda física en Shoreline, WA. Además de vender teléfonos usados certificados en línea, ofrecemos reparaciones en tienda: reparación de teléfonos, cambio de pantalla de iPhone y reparación de computadoras. Visítanos o llámanos.",
+      "serviceArea": "Atendemos Seattle, Lynnwood, Shoreline y Edmonds, WA",
+      "repair": "Reservar Reparación",
+      "visit": "Cómo Llegar",
+      "callNow": "Llamar Ahora"
+    }
   },
   "shop": {
     "title": "Tienda",
@@ -172,25 +191,6 @@
     "title": "Mi Cuenta",
     "orders": "Pedidos",
     "warranty": "Garantías",
-    "profile": "Perfil",
-    "addresses": "Direcciones",
-    "signOut": "Cerrar Sesión",
-    "noOrders": "Aún no hay pedidos.",
-    "browseDevices": "Ver dispositivos",
-    "preferredLanguage": "Idioma Preferido",
-    "nav": {
-      "overview": "Resumen"
-    },
-    "overview": {
-      "welcome": "¡Bienvenido de vuelta, {name}!",
-      "totalOrders": "Total de pedidos realizados",
-      "activeWarranties": "Garantías activas",
-      "personalInfo": "Nombre, teléfono, idioma",
-      "savedAddresses": "Direcciones de envío guardadas",
-      "noOrdersDesc": "Aún no ha realizado ningún pedido.",
-      "notSet": "No definido",
-      "manage": "Administrar"
-    },
     "profile": {
       "fullName": "Nombre Completo",
       "phone": "Número de Teléfono",
@@ -216,6 +216,23 @@
       "save": "Guardar Dirección",
       "saving": "Guardando…",
       "cancel": "Cancelar"
+    },
+    "signOut": "Cerrar Sesión",
+    "noOrders": "Aún no hay pedidos.",
+    "browseDevices": "Ver dispositivos",
+    "preferredLanguage": "Idioma Preferido",
+    "nav": {
+      "overview": "Resumen"
+    },
+    "overview": {
+      "welcome": "¡Bienvenido de vuelta, {name}!",
+      "totalOrders": "Total de pedidos realizados",
+      "activeWarranties": "Garantías activas",
+      "personalInfo": "Nombre, teléfono, idioma",
+      "savedAddresses": "Direcciones de envío guardadas",
+      "noOrdersDesc": "Aún no ha realizado ningún pedido.",
+      "notSet": "No definido",
+      "manage": "Administrar"
     }
   },
   "warranty": {
@@ -272,13 +289,13 @@
     },
     "hero": {
       "headline": "Sobre Wireless Connect",
-      "subheadline": "Tu fuente confiable de smartphones usados certificados en el noroeste del Pacífico."
+      "subheadline": "Local, de confianza en Shoreline, WA desde 2010."
     },
     "story": {
       "title": "Nuestra Historia",
-      "p1": "Wireless Connect es una tienda de teléfonos y dispositivos de propiedad local con sede en Shoreline, Washington. Nos especializamos en smartphones, tablets, laptops y accesorios usados certificados.",
-      "p2": "Cada dispositivo que vendemos pasa por un exhaustivo proceso de pruebas: verificamos la calidad de la pantalla, el estado de la batería, el estado del IMEI y todas las funciones de hardware antes de enviarlo.",
-      "p3": "Ya sea que seas un cliente local que quiere recoger en tienda o un comprador en cualquier parte de los Estados Unidos, enviamos a todo el país para que puedas obtener un excelente dispositivo a un precio justo."
+      "p1": "Bienvenido a Wireless Connect, tu destino para todas tus necesidades tecnológicas. Desde 2010, estamos comprometidos a brindar servicios y productos de primera calidad que te mantengan conectado.",
+      "p2": "Cada dispositivo pasa por un proceso de prueba de 14 puntos — verificamos la pantalla, la batería, el estado del IMEI y todas las funciones antes de listarlo. Respaldamos nuestros productos con una garantía de 30 días.",
+      "p3": "Ya sea que seas un cliente local o compres en línea desde cualquier lugar de EE.UU., enviamos a los 50 estados. También ofrecemos reparaciones en tienda para el área de Seattle."
     },
     "trust": {
       "title": "Por Qué los Clientes Confían en Nosotros",
@@ -303,6 +320,43 @@
       "description": "Explora nuestro inventario actual de dispositivos usados certificados.",
       "shop": "Ver Teléfonos",
       "contact": "Contáctenos"
+    },
+    "mission": {
+      "title": "Nuestra Misión",
+      "body": "En Wireless Connect, nuestra misión es brindar soluciones tecnológicas confiables que empoderen a nuestros clientes con calidad, honestidad y precios justos."
+    },
+    "stats": {
+      "title": "Wireless Connect en Números",
+      "years": "15+",
+      "yearsLabel": "Años en el Negocio",
+      "customers": "500+",
+      "customersLabel": "Clientes Satisfechos",
+      "devices": "450+",
+      "devicesLabel": "Dispositivos Procesados",
+      "team": "5",
+      "teamLabel": "Equipo Profesional"
+    },
+    "whyUs": {
+      "title": "¿Por Qué Elegirnos?",
+      "expertise": "Experiencia",
+      "expertiseBody": "Nuestro equipo tiene años de experiencia práctica. Cada dispositivo es probado por un técnico capacitado.",
+      "quality": "Calidad",
+      "qualityBody": "IMEI limpio, batería verificada y garantía de 30 días en cada dispositivo elegible.",
+      "customerFocus": "Enfoque en el Cliente",
+      "customerFocusBody": "Tu satisfacción es nuestra prioridad. Somos un negocio local — puedes visitarnos y lo resolveremos."
+    },
+    "services": {
+      "title": "Lo Que Ofrecemos",
+      "preOwned": "Teléfonos y Laptops Usados",
+      "preOwnedBody": "Teléfonos y laptops usados, probados y certificados a precios justos.",
+      "repair": "Reparación de Teléfonos y Computadoras",
+      "repairBody": "Reparación de teléfonos, cambio de pantalla iPhone, reparación de computadoras e instalación de Windows.",
+      "accessories": "Accesorios",
+      "accessoriesBody": "Cargadores, fundas, protectores de pantalla, audífonos, tarjetas SIM y más."
+    },
+    "area": {
+      "title": "Área de Servicio",
+      "body": "Atendemos clientes en Seattle, Lynnwood, Shoreline y Edmonds, WA — y enviamos a todos los estados."
     }
   },
   "contact": {
@@ -312,7 +366,7 @@
     },
     "hero": {
       "headline": "Contáctenos",
-      "subheadline": "Estamos aquí para ayudar. Escríbanos en cualquier momento."
+      "subheadline": "Visítanos en Shoreline, WA o escríbenos. Estamos aquí para ayudar."
     },
     "info": {
       "title": "Información de la Tienda",
@@ -320,7 +374,9 @@
       "getDirections": "Obtener indicaciones",
       "phone": "Teléfono",
       "email": "Correo",
-      "hours": "Horario de Atención"
+      "hours": "Horario de Atención",
+      "serviceArea": "Área de Servicio",
+      "serviceAreaDetail": "Atendemos Seattle, Lynnwood, Shoreline y Edmonds, WA"
     },
     "form": {
       "title": "Envíenos un Mensaje",
@@ -332,7 +388,10 @@
       "sending": "Enviando…",
       "successTitle": "¡Mensaje Enviado!",
       "successMessage": "Gracias por comunicarse. Le responderemos dentro de 1 día hábil."
-    }
+    },
+    "callNow": "Llamar Ahora",
+    "inStoreRepairs": "Reparaciones en Tienda Disponibles",
+    "inStoreRepairsDetail": "Reparación de teléfonos, cambio de pantalla iPhone, reparación de computadoras e instalación de Windows."
   },
   "tradeIn": {
     "meta": {

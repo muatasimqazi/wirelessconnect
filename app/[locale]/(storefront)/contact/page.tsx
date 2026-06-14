@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { useTranslations } from "next-intl";
 import { ContactForm } from "@/components/store/contact-form";
-import { MapPinIcon, PhoneIcon, MailIcon, ClockIcon } from "lucide-react";
+import { MapPinIcon, PhoneIcon, MailIcon, ClockIcon, WrenchIcon, NavigationIcon } from "lucide-react";
 
 interface ContactPageProps {
   params: Promise<{ locale: string }>;
@@ -104,6 +104,37 @@ function ContactContent() {
                 </div>
               </div>
             </div>
+
+            {/* Service area */}
+            <div className="rounded-lg border border-border bg-surface p-4">
+              <div className="flex items-start gap-3">
+                <NavigationIcon className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+                <div>
+                  <p className="font-medium">{t("info.serviceArea")}</p>
+                  <p className="text-sm text-muted-foreground">{t("info.serviceAreaDetail")}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* In-store repairs */}
+            <div className="rounded-lg border border-border bg-surface p-4">
+              <div className="flex items-start gap-3">
+                <WrenchIcon className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+                <div>
+                  <p className="font-medium">{t("inStoreRepairs")}</p>
+                  <p className="text-sm text-muted-foreground">{t("inStoreRepairsDetail")}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Call now CTA */}
+            <a
+              href="tel:+12064232965"
+              className="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
+            >
+              <PhoneIcon className="h-4 w-4" aria-hidden="true" />
+              {t("callNow")} — (206) 423-2965
+            </a>
 
             {/* Google Maps embed */}
             <div className="overflow-hidden rounded-xl border border-border">

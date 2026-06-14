@@ -36,10 +36,29 @@
       "cleanImei": "Clean IMEI",
       "testedDevices": "Tested Devices",
       "warranty": "30-Day Warranty",
-      "shipsNationwide": "Ships Anywhere in the U.S."
+      "shipsNationwide": "Ships Anywhere in the U.S.",
+      "locallyOwned": "Locally Owned Since 2010"
     },
     "featuredCategories": "Featured Categories",
-    "featuredProducts": "Featured Products"
+    "featuredProducts": "Featured Products",
+    "stats": {
+      "years": "15+",
+      "yearsLabel": "Years in Business",
+      "customers": "500+",
+      "customersLabel": "Happy Customers",
+      "locallyOwned": "Locally Owned",
+      "locallyOwnedLabel": "Shoreline, WA",
+      "area": "4 Cities",
+      "areaLabel": "Serving Greater Seattle"
+    },
+    "inStore": {
+      "heading": "More Than Just an Online Store",
+      "body": "We're a real brick-and-mortar shop in Shoreline, WA. In addition to selling certified pre-owned phones online, we offer in-store repair services including mobile phone repair, iPhone screen replacement, and computer repair. Come visit us or give us a call.",
+      "serviceArea": "Serving Seattle, Lynnwood, Shoreline, and Edmonds, WA",
+      "repair": "Book a Repair",
+      "visit": "Get Directions",
+      "callNow": "Call Now"
+    }
   },
   "shop": {
     "title": "Shop",
@@ -172,25 +191,6 @@
     "title": "My Account",
     "orders": "Orders",
     "warranty": "Warranty Claims",
-    "profile": "Profile",
-    "addresses": "Addresses",
-    "signOut": "Sign Out",
-    "noOrders": "No orders yet.",
-    "browseDevices": "Browse devices",
-    "preferredLanguage": "Preferred Language",
-    "nav": {
-      "overview": "Overview"
-    },
-    "overview": {
-      "welcome": "Welcome back, {name}!",
-      "totalOrders": "Total orders placed",
-      "activeWarranties": "Active warranty records",
-      "personalInfo": "Name, phone, language",
-      "savedAddresses": "Saved shipping addresses",
-      "noOrdersDesc": "You haven't placed any orders yet.",
-      "notSet": "Not set",
-      "manage": "Manage"
-    },
     "profile": {
       "fullName": "Full Name",
       "phone": "Phone Number",
@@ -216,6 +216,23 @@
       "save": "Save Address",
       "saving": "Saving…",
       "cancel": "Cancel"
+    },
+    "signOut": "Sign Out",
+    "noOrders": "No orders yet.",
+    "browseDevices": "Browse devices",
+    "preferredLanguage": "Preferred Language",
+    "nav": {
+      "overview": "Overview"
+    },
+    "overview": {
+      "welcome": "Welcome back, {name}!",
+      "totalOrders": "Total orders placed",
+      "activeWarranties": "Active warranty records",
+      "personalInfo": "Name, phone, language",
+      "savedAddresses": "Saved shipping addresses",
+      "noOrdersDesc": "You haven't placed any orders yet.",
+      "notSet": "Not set",
+      "manage": "Manage"
     }
   },
   "warranty": {
@@ -272,13 +289,13 @@
     },
     "hero": {
       "headline": "About Wireless Connect",
-      "subheadline": "Your trusted source for certified pre-owned smartphones in the Pacific Northwest."
+      "subheadline": "Locally owned and operated in Shoreline, WA since 2010."
     },
     "story": {
       "title": "Our Story",
-      "p1": "Wireless Connect is a locally owned phone and device shop based in Shoreline, Washington. We specialize in certified pre-owned smartphones, tablets, laptops, and accessories.",
-      "p2": "Every device we sell goes through a thorough testing process — we check screen quality, battery health, IMEI status, and all hardware functions before it goes out the door. We stand behind our products with a 30-day warranty on every eligible device.",
-      "p3": "Whether you're a local customer looking to pick up in-store or a buyer anywhere in the United States, we ship nationwide so you can get a great device at a fair price."
+      "p1": "Welcome to Wireless Connect — your go-to destination for all your technology needs. Since 2010, we have been committed to providing top-notch services and products that keep you connected and your devices performing at their best.",
+      "p2": "Every device we sell goes through a thorough 14-point testing process — we check screen quality, battery health, IMEI status, and all hardware functions before it goes out the door. We stand behind our products with a 30-day warranty on every eligible device.",
+      "p3": "Whether you're a local customer looking to pick up in-store or a buyer anywhere in the United States, we ship nationwide so you can get a great device at a fair price. We also offer in-store phone and computer repair services for the greater Seattle area."
     },
     "trust": {
       "title": "Why Customers Trust Us",
@@ -303,6 +320,43 @@
       "description": "Browse our current inventory of certified pre-owned devices.",
       "shop": "Shop Phones",
       "contact": "Contact Us"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "body": "At Wireless Connect, our mission is to deliver innovative and reliable technology solutions that empower our customers. We aim to set the standard for quality, affordability, and honest service in the pre-owned device market."
+    },
+    "stats": {
+      "title": "Wireless Connect by the Numbers",
+      "years": "15+",
+      "yearsLabel": "Years in Business",
+      "customers": "500+",
+      "customersLabel": "Satisfied Customers",
+      "devices": "450+",
+      "devicesLabel": "Devices Processed",
+      "team": "5",
+      "teamLabel": "Professional Team"
+    },
+    "whyUs": {
+      "title": "Why Choose Us",
+      "expertise": "Expertise",
+      "expertiseBody": "Our team brings years of hands-on experience and a deep understanding of the latest mobile technology. Every device is tested by a trained technician before it's listed for sale.",
+      "quality": "Quality",
+      "qualityBody": "We are committed to top-notch products that meet the highest standards of quality and performance. Clean IMEI, verified battery health, and a 30-day warranty on every eligible device.",
+      "customerFocus": "Customer Focus",
+      "customerFocusBody": "Your satisfaction is our priority. We're a locally owned business — you can walk in, talk to us, and we'll make it right. That's the local difference."
+    },
+    "services": {
+      "title": "What We Offer",
+      "preOwned": "Pre-Owned Phones & Laptops",
+      "preOwnedBody": "Thoroughly tested and certified pre-owned smartphones and laptops at honest prices.",
+      "repair": "Phone & Computer Repair",
+      "repairBody": "Mobile phone repair, iPhone screen replacement, computer repair, and Windows installation.",
+      "accessories": "Accessories",
+      "accessoriesBody": "Chargers, cases, screen protectors, earpieces, SIM cards, and more."
+    },
+    "area": {
+      "title": "Serving the Greater Seattle Area",
+      "body": "Serving customers in Seattle, Lynnwood, Shoreline, and Edmonds, WA — and shipping to all 50 states."
     }
   },
   "contact": {
@@ -312,7 +366,7 @@
     },
     "hero": {
       "headline": "Contact Us",
-      "subheadline": "We're here to help. Reach out anytime."
+      "subheadline": "Visit us in Shoreline, WA or reach out anytime. We're happy to help."
     },
     "info": {
       "title": "Store Information",
@@ -320,7 +374,9 @@
       "getDirections": "Get directions",
       "phone": "Phone",
       "email": "Email",
-      "hours": "Store Hours"
+      "hours": "Store Hours",
+      "serviceArea": "Service Area",
+      "serviceAreaDetail": "Serving Seattle, Lynnwood, Shoreline, and Edmonds, WA"
     },
     "form": {
       "title": "Send Us a Message",
@@ -332,7 +388,10 @@
       "sending": "Sending…",
       "successTitle": "Message Sent!",
       "successMessage": "Thanks for reaching out. We'll get back to you within 1 business day."
-    }
+    },
+    "callNow": "Call Now",
+    "inStoreRepairs": "In-Store Repairs Available",
+    "inStoreRepairsDetail": "Mobile phone repair, iPhone screen replacement, computer repair, and Windows installation."
   },
   "tradeIn": {
     "meta": {

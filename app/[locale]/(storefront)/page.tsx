@@ -25,6 +25,10 @@ import {
   WrenchIcon,
   CheckCircleIcon,
   TruckIcon,
+  HomeIcon,
+  PhoneIcon,
+  StarIcon,
+  UsersIcon,
 } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
 
@@ -158,7 +162,25 @@ function HomePageContent({
           <TrustItem icon={WrenchIcon} label={t("trustBar.testedDevices")} />
           <TrustItem icon={CheckCircleIcon} label={t("trustBar.warranty")} />
           <TrustItem icon={TruckIcon} label={t("trustBar.shipsNationwide")} />
+          <TrustItem icon={HomeIcon} label={t("trustBar.locallyOwned")} />
         </ul>
+      </section>
+
+      {/* ── Stats strip ──────────────────────────────────────────────────── */}
+      <section className="bg-secondary px-4 py-10 text-white">
+        <dl className="mx-auto grid max-w-content grid-cols-2 gap-8 sm:grid-cols-4">
+          {[
+            { value: t("stats.years"), label: t("stats.yearsLabel") },
+            { value: t("stats.customers"), label: t("stats.customersLabel") },
+            { value: t("stats.locallyOwned"), label: t("stats.locallyOwnedLabel") },
+            { value: t("stats.area"), label: t("stats.areaLabel") },
+          ].map(({ value, label }) => (
+            <div key={label} className="text-center">
+              <dt className="text-3xl font-bold text-primary">{value}</dt>
+              <dd className="mt-1 text-sm text-white/70">{label}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
 
       {/* ── Featured categories ───────────────────────────────────────────── */}
@@ -228,6 +250,54 @@ function HomePageContent({
               })}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* ── In-store section ─────────────────────────────────────────────── */}
+      <section className="px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-content">
+          <div className="overflow-hidden rounded-2xl bg-secondary text-white">
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              {/* Left: copy */}
+              <div className="px-8 py-12 lg:px-12">
+                <h2 className="text-2xl font-bold md:text-3xl">{t("inStore.heading")}</h2>
+                <p className="mt-4 text-white/80">{t("inStore.body")}</p>
+                <p className="mt-3 text-sm font-medium text-primary">{t("inStore.serviceArea")}</p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <Button asChild>
+                    <Link href="/repairs">{t("inStore.repair")}</Link>
+                  </Button>
+                  <Button variant="outline" className="border-white/40 bg-white/10 text-white hover:bg-white/20 hover:text-white" asChild>
+                    <Link href="/contact">{t("inStore.visit")}</Link>
+                  </Button>
+                  <a
+                    href="tel:+12064232965"
+                    className="inline-flex items-center gap-2 rounded-md border border-white/40 bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/20"
+                  >
+                    <PhoneIcon className="h-4 w-4" aria-hidden="true" />
+                    {t("inStore.callNow")}
+                  </a>
+                </div>
+              </div>
+
+              {/* Right: service highlights */}
+              <div className="border-t border-white/10 px-8 py-12 lg:border-l lg:border-t-0 lg:px-12">
+                <ul className="space-y-4">
+                  {[
+                    { icon: PhoneIcon, text: "Mobile Phone Repair & Battery Replacement" },
+                    { icon: StarIcon, text: "iPhone Screen Replacement" },
+                    { icon: WrenchIcon, text: "Computer Repair & Upgrades" },
+                    { icon: UsersIcon, text: "Pre-Owned Phones, Laptops & Accessories" },
+                  ].map(({ icon: Icon, text }) => (
+                    <li key={text} className="flex items-start gap-3">
+                      <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+                      <span className="text-sm text-white/80">{text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
