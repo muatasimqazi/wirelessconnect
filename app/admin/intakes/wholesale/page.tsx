@@ -3,10 +3,15 @@
 /**
  * Wholesale Batch Intake — /admin/intakes/wholesale
  *
- * Captures supplier info once, then staff scans IMEIs one by one.
- * Each scan auto-fills device details and adds a row to the batch.
- * The IMEI input auto-refocuses after each scan for fast back-to-back scanning.
- * Submit creates all intake records at once.
+ * Supplier info captured once at the top.
+ * Staff scans IMEIs one by one — each adds a device row.
+ * IMEI input auto-refocuses after each scan for back-to-back scanning.
+ *
+ * API Lookup toggle:
+ *  ON  — calls IMEICheck.com ($0.03–0.04/device) to auto-fill brand/model/blacklist
+ *  OFF — Luhn validates the IMEI locally (free), device fields filled manually
+ *
+ * Submit creates all intake records in one DB insert.
  */
 
 import { useState, useTransition, useRef, useCallback } from "react";
@@ -18,17 +23,28 @@ import type { WholesaleDevice, WholesaleSupplier } from "@/features/admin/intake
 import type { ImeiLookupResult } from "@/lib/imei/lookup";
 import {
   ScanBarcodeIcon, LoaderIcon, XIcon, CheckCircleIcon,
-  XCircleIcon, AlertCircleIcon, PackageIcon,
+  XCircleIcon, AlertCircleIcon, PackageIcon, ZapIcon, ZapOffIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+// ─── Local Luhn check (no API cost) ──────────────────────────────────────────
+
+function isValidImei(imei: string): boolean {
+  if (imei.length !== 15) return false;
+  let sum = 0;
+  for (let i = 0; i < 15; i++) {
+    let d = parseInt(imei[i], 10);
+    if (i % 2 === 1) { d *= 2; if (d > 9) d -= 9; }
+    sum += d;
+  }
+  return sum % 10 === 0;
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface BatchRow extends WholesaleDevice {
   _key: string;
-  _brand: string;
-  _model: string;
-  blacklistStatus: "clean" | "blacklisted" | "unknown";
+  blacklistStatus: "clean" | "blacklisted" | "unknown" | "not_checked";
   fmiOn?: boolean;
 }
 
@@ -39,44 +55,81 @@ const CONDITIONS = [
   { value: "fair", label: "Fair" },
 ];
 
-// ─── Scanner input (inline, auto-refocuses after each scan) ──────────────────
+// ─── Scanner ──────────────────────────────────────────────────────────────────
 
 function BatchScanner({
   onAdd,
   existingImeis,
+  apiEnabled,
 }: {
   onAdd: (row: BatchRow) => void;
   existingImeis: Set<string>;
+  apiEnabled: boolean;
 }) {
   const [value, setValue] = useState("");
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const refocus = useCallback(() => setTimeout(() => inputRef.current?.focus(), 50), []);
+
+  const addManual = useCallback(
+    (cleaned: string) => {
+      const row: BatchRow = {
+        _key: `${cleaned}-${Date.now()}`,
+        imei: cleaned,
+        brand: "",
+        model: "",
+        storage: "",
+        color: "",
+        serialNumber: "",
+        condition: "good",
+        imeiVerificationStatus: "not_checked",
+        isCleanImei: null,
+        notes: "",
+        blacklistStatus: "not_checked",
+      };
+      onAdd(row);
+      setValue("");
+      refocus();
+    },
+    [onAdd, refocus],
+  );
+
   const runLookup = useCallback(
     (imei: string) => {
       const cleaned = imei.replace(/\D/g, "");
       if (!cleaned) return;
+
       if (existingImeis.has(cleaned)) {
         setError(`IMEI ${cleaned} already added.`);
         setValue("");
-        inputRef.current?.focus();
+        refocus();
         return;
       }
+
+      if (!isValidImei(cleaned)) {
+        setError("Invalid IMEI — check the number and try again.");
+        return;
+      }
+
       setError(null);
+
+      if (!apiEnabled) {
+        addManual(cleaned);
+        return;
+      }
+
       startTransition(async () => {
         const result: ImeiLookupResult = await imeiLookupAction(cleaned);
         if (!result.valid) {
           setError(result.error ?? "Invalid IMEI");
           setValue("");
-          inputRef.current?.focus();
+          refocus();
           return;
         }
-
         const row: BatchRow = {
           _key: `${cleaned}-${Date.now()}`,
-          _brand: result.brand ?? "",
-          _model: result.model ?? "",
           imei: cleaned,
           brand: result.brand ?? "",
           model: result.model ?? "",
@@ -96,11 +149,10 @@ function BatchScanner({
         };
         onAdd(row);
         setValue("");
-        // Auto-refocus for next scan
-        setTimeout(() => inputRef.current?.focus(), 50);
+        refocus();
       });
     },
-    [existingImeis, onAdd],
+    [existingImeis, apiEnabled, addManual, refocus],
   );
 
   return (
@@ -125,9 +177,7 @@ function BatchScanner({
           disabled={isPending || !value.trim()}
           className="inline-flex h-10 items-center gap-1.5 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
         >
-          {isPending
-            ? <LoaderIcon className="h-4 w-4 animate-spin" />
-            : <ScanBarcodeIcon className="h-4 w-4" />}
+          {isPending ? <LoaderIcon className="h-4 w-4 animate-spin" /> : <ScanBarcodeIcon className="h-4 w-4" />}
           {isPending ? "Checking…" : "Add"}
         </button>
       </div>
@@ -141,7 +191,7 @@ function BatchScanner({
   );
 }
 
-// ─── Device row ───────────────────────────────────────────────────────────────
+// ─── Device row (all fields editable) ────────────────────────────────────────
 
 function DeviceRow({
   row,
@@ -154,45 +204,73 @@ function DeviceRow({
   onChange: (key: string, field: keyof BatchRow, value: string) => void;
   onRemove: (key: string) => void;
 }) {
-  return (
-    <tr className="border-b border-border last:border-0 hover:bg-muted/20">
-      <td className="px-3 py-2.5 text-sm text-muted-foreground">{index + 1}</td>
+  const cell = "h-8 w-full rounded border border-input bg-background px-2 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
 
-      {/* Device identity */}
-      <td className="px-3 py-2.5">
-        <div className="flex items-center gap-2">
-          {row.blacklistStatus === "clean" && (
-            <CheckCircleIcon className="h-4 w-4 shrink-0 text-green-600" />
-          )}
-          {row.blacklistStatus === "blacklisted" && (
-            <XCircleIcon className="h-4 w-4 shrink-0 text-destructive" />
-          )}
-          {row.blacklistStatus === "unknown" && (
-            <AlertCircleIcon className="h-4 w-4 shrink-0 text-amber-500" />
-          )}
-          <div>
-            <p className="font-medium text-foreground">
-              {[row.brand, row.model].filter(Boolean).join(" ") || "Unknown"}
-              {row.storage && <span className="ml-1 text-muted-foreground font-normal">{row.storage}</span>}
-              {row.color && <span className="ml-1 text-muted-foreground font-normal">· {row.color}</span>}
-            </p>
-            <p className="font-mono text-xs text-muted-foreground">{row.imei}</p>
-          </div>
-        </div>
+  return (
+    <tr className="border-b border-border last:border-0 hover:bg-muted/20 align-top">
+      <td className="px-3 py-3 text-sm text-muted-foreground">{index + 1}</td>
+
+      {/* IMEI + status */}
+      <td className="px-3 py-3 min-w-[140px]">
+        <p className="font-mono text-xs text-foreground">{row.imei}</p>
+        <span className={cn(
+          "mt-1 inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-semibold",
+          row.blacklistStatus === "clean" && "bg-green-100 text-green-800",
+          row.blacklistStatus === "blacklisted" && "bg-red-100 text-red-800",
+          row.blacklistStatus === "unknown" && "bg-amber-100 text-amber-800",
+          row.blacklistStatus === "not_checked" && "bg-muted text-muted-foreground",
+        )}>
+          {row.blacklistStatus === "clean" && <CheckCircleIcon className="h-2.5 w-2.5" />}
+          {row.blacklistStatus === "blacklisted" && <XCircleIcon className="h-2.5 w-2.5" />}
+          {row.blacklistStatus === "clean" ? "Clean"
+            : row.blacklistStatus === "blacklisted" ? "Blacklisted"
+            : row.blacklistStatus === "unknown" ? "Unknown"
+            : "Not checked"}
+        </span>
         {row.fmiOn === true && (
-          <p className="mt-0.5 text-xs font-semibold text-amber-700">⚠ Find My is ON</p>
-        )}
-        {row.blacklistStatus === "blacklisted" && (
-          <p className="mt-0.5 text-xs font-semibold text-destructive">Blacklisted — intake for review/parts</p>
+          <p className="mt-0.5 text-[10px] font-semibold text-amber-700">⚠ FMI ON</p>
         )}
       </td>
 
+      {/* Brand */}
+      <td className="px-3 py-3 min-w-[100px]">
+        <input
+          type="text"
+          value={row.brand}
+          onChange={(e) => onChange(row._key, "brand", e.target.value)}
+          placeholder="Apple"
+          className={cell}
+        />
+      </td>
+
+      {/* Model */}
+      <td className="px-3 py-3 min-w-[160px]">
+        <input
+          type="text"
+          value={row.model}
+          onChange={(e) => onChange(row._key, "model", e.target.value)}
+          placeholder="iPhone 15 Pro"
+          className={cell}
+        />
+      </td>
+
+      {/* Storage */}
+      <td className="px-3 py-3 min-w-[80px]">
+        <input
+          type="text"
+          value={row.storage}
+          onChange={(e) => onChange(row._key, "storage", e.target.value)}
+          placeholder="256GB"
+          className={cell}
+        />
+      </td>
+
       {/* Condition */}
-      <td className="px-3 py-2.5">
+      <td className="px-3 py-3">
         <select
           value={row.condition}
           onChange={(e) => onChange(row._key, "condition", e.target.value)}
-          className="h-8 rounded border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className={cell}
         >
           {CONDITIONS.map((c) => (
             <option key={c.value} value={c.value}>{c.label}</option>
@@ -201,18 +279,18 @@ function DeviceRow({
       </td>
 
       {/* Notes */}
-      <td className="px-3 py-2.5">
+      <td className="px-3 py-3 min-w-[140px]">
         <input
           type="text"
           value={row.notes}
           onChange={(e) => onChange(row._key, "notes", e.target.value)}
-          placeholder="Optional notes…"
-          className="h-8 w-full min-w-[140px] rounded border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          placeholder="Optional…"
+          className={cell}
         />
       </td>
 
       {/* Remove */}
-      <td className="px-3 py-2.5">
+      <td className="px-3 py-3">
         <button
           type="button"
           onClick={() => onRemove(row._key)}
@@ -232,8 +310,8 @@ export default function WholesaleBatchPage() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
+  const [apiEnabled, setApiEnabled] = useState(true);
 
-  // Supplier form
   const [supplier, setSupplier] = useState<WholesaleSupplier>({
     name: "",
     invoice: "",
@@ -243,34 +321,20 @@ export default function WholesaleBatchPage() {
     notes: "",
   });
 
-  // Device batch
   const [devices, setDevices] = useState<BatchRow[]>([]);
-
   const existingImeis = new Set(devices.map((d) => d.imei));
 
-  function addDevice(row: BatchRow) {
-    setDevices((prev) => [...prev, row]);
-  }
-
   function updateDevice(key: string, field: keyof BatchRow, value: string) {
-    setDevices((prev) =>
-      prev.map((d) => (d._key === key ? { ...d, [field]: value } : d)),
-    );
+    setDevices((prev) => prev.map((d) => (d._key === key ? { ...d, [field]: value } : d)));
   }
 
   function removeDevice(key: string) {
     setDevices((prev) => prev.filter((d) => d._key !== key));
   }
 
-  function handleSupplierCost(raw: string) {
-    const dollars = parseFloat(raw) || 0;
-    setSupplier((s) => ({ ...s, perUnitCost: Math.round(dollars * 100) }));
-  }
-
   function handleSubmit() {
     if (!supplier.name.trim()) { setServerError("Supplier name is required."); return; }
     if (devices.length === 0) { setServerError("Add at least one device."); return; }
-
     setServerError(null);
     startTransition(async () => {
       const result = await createWholesaleBatch(supplier, devices);
@@ -285,7 +349,6 @@ export default function WholesaleBatchPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <nav className="flex items-center gap-2 text-sm text-muted-foreground">
         <Link href="/admin/intakes" className="hover:text-foreground">Intakes</Link>
         <span>/</span>
@@ -362,7 +425,7 @@ export default function WholesaleBatchPage() {
               min="0"
               step="0.01"
               defaultValue=""
-              onChange={(e) => handleSupplierCost(e.target.value)}
+              onChange={(e) => setSupplier((s) => ({ ...s, perUnitCost: Math.round((parseFloat(e.target.value) || 0) * 100) }))}
               placeholder="0.00"
               className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             />
@@ -373,54 +436,73 @@ export default function WholesaleBatchPage() {
               type="text"
               value={supplier.notes}
               onChange={(e) => setSupplier((s) => ({ ...s, notes: e.target.value }))}
-              placeholder="Optional notes…"
+              placeholder="Optional…"
               className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             />
           </div>
         </div>
       </div>
 
-      {/* ── Scanner + Device list ─────────────────────────────────────────── */}
+      {/* ── Scanner + Devices ─────────────────────────────────────────────── */}
       <div className="rounded-xl border border-border bg-card p-6 shadow-sm space-y-4">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-          Devices — scan or type each IMEI
-        </h2>
+        {/* Section header + API toggle */}
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            Devices
+          </h2>
+          <button
+            type="button"
+            onClick={() => setApiEnabled((v) => !v)}
+            className={cn(
+              "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold transition-colors",
+              apiEnabled
+                ? "bg-primary/10 text-primary hover:bg-primary/20"
+                : "bg-muted text-muted-foreground hover:bg-muted/80",
+            )}
+          >
+            {apiEnabled
+              ? <><ZapIcon className="h-3.5 w-3.5" /> IMEI Lookup ON</>
+              : <><ZapOffIcon className="h-3.5 w-3.5" /> IMEI Lookup OFF</>}
+          </button>
+        </div>
 
-        <BatchScanner onAdd={addDevice} existingImeis={existingImeis} />
+        {!apiEnabled && (
+          <p className="rounded-md bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+            Lookup is off — IMEIs are validated locally only (free). Fill brand, model, and storage manually in each row.
+          </p>
+        )}
+
+        <BatchScanner
+          onAdd={(row) => setDevices((prev) => [...prev, row])}
+          existingImeis={existingImeis}
+          apiEnabled={apiEnabled}
+        />
 
         {devices.length === 0 ? (
           <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed border-border py-12 text-center">
             <PackageIcon className="h-8 w-8 text-muted-foreground/40" />
-            <p className="text-sm text-muted-foreground">No devices added yet — scan the first IMEI above.</p>
+            <p className="text-sm text-muted-foreground">No devices yet — scan the first IMEI above.</p>
           </div>
         ) : (
           <>
-            {/* Summary bar */}
+            {/* Summary */}
             <div className="flex flex-wrap items-center gap-4 rounded-lg bg-muted/40 px-4 py-2 text-sm">
               <span className="font-semibold">{devices.length} device{devices.length !== 1 ? "s" : ""}</span>
-              {supplier.perUnitCost > 0 && (
-                <span className="text-muted-foreground">
-                  Total: ${totalCost.toFixed(2)}
-                </span>
-              )}
-              {blacklisted > 0 && (
-                <span className="font-medium text-destructive">{blacklisted} blacklisted</span>
-              )}
-              {fmiOn > 0 && (
-                <span className="font-medium text-amber-700">⚠ {fmiOn} FMI on</span>
-              )}
+              {supplier.perUnitCost > 0 && <span className="text-muted-foreground">Total: ${totalCost.toFixed(2)}</span>}
+              {blacklisted > 0 && <span className="font-medium text-destructive">{blacklisted} blacklisted</span>}
+              {fmiOn > 0 && <span className="font-medium text-amber-700">⚠ {fmiOn} FMI on</span>}
             </div>
 
-            {/* Device table */}
+            {/* Table */}
             <div className="overflow-x-auto rounded-lg border border-border">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-muted/40">
-                    <th className="px-3 py-2 text-start text-xs font-semibold uppercase tracking-wider text-muted-foreground w-8">#</th>
-                    <th className="px-3 py-2 text-start text-xs font-semibold uppercase tracking-wider text-muted-foreground">Device</th>
-                    <th className="px-3 py-2 text-start text-xs font-semibold uppercase tracking-wider text-muted-foreground">Condition</th>
-                    <th className="px-3 py-2 text-start text-xs font-semibold uppercase tracking-wider text-muted-foreground">Notes</th>
-                    <th className="px-3 py-2 w-8" />
+                    {["#", "IMEI / Status", "Brand", "Model", "Storage", "Condition", "Notes", ""].map((h) => (
+                      <th key={h} className="px-3 py-2 text-start text-xs font-semibold uppercase tracking-wider text-muted-foreground whitespace-nowrap">
+                        {h}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
@@ -442,25 +524,17 @@ export default function WholesaleBatchPage() {
 
       {/* ── Actions ───────────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between">
-        <Link
-          href="/admin/intakes"
-          className="text-sm text-muted-foreground hover:text-foreground"
-        >
+        <Link href="/admin/intakes" className="text-sm text-muted-foreground hover:text-foreground">
           ← Cancel
         </Link>
         <button
           type="button"
           onClick={handleSubmit}
           disabled={isPending || devices.length === 0}
-          className={cn(
-            "inline-flex items-center gap-2 rounded-md px-6 py-2.5 text-sm font-semibold text-white transition-colors disabled:opacity-50",
-            "bg-primary hover:bg-primary/90",
-          )}
+          className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 disabled:opacity-50"
         >
           {isPending && <LoaderIcon className="h-4 w-4 animate-spin" />}
-          {isPending
-            ? "Creating records…"
-            : `Submit ${devices.length > 0 ? `${devices.length} ` : ""}Intake${devices.length !== 1 ? "s" : ""}`}
+          {isPending ? "Creating records…" : `Submit ${devices.length > 0 ? `${devices.length} ` : ""}Intake${devices.length !== 1 ? "s" : ""}`}
         </button>
       </div>
     </div>
