@@ -1,25 +1,20 @@
 /**
- * ProductCard — server component.
+ * ProductCard — Back Market-inspired minimal vertical card.
  *
- * Mobile layout  (< sm): horizontal row — image left (112px), content right.
- * Desktop layout (sm+):  vertical card  — image top, content below.
+ * Always vertical (image top, content below) — no horizontal mobile layout.
+ * Grid handles columns: 2-col mobile, 3-col md, 4-col xl.
  *
- * This avoids the cramped 2-column mobile grid where vertical cards pack
- * too much content into ~175px-wide cells.
+ * Shows: image, condition badge, title, storage·color, price, star rating.
+ * Battery health and trust indicators are on the detail page, not the card.
  */
 
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { ConditionBadge } from "@/components/store/condition-badge";
-import { BatteryHealthIndicator } from "@/components/store/battery-health-indicator";
-import { PriceDisplay } from "@/components/store/price-display";
 import { AddToCartButton } from "@/components/store/add-to-cart-button";
-import { ShieldCheckIcon, WrenchIcon, CheckCircleIcon } from "lucide-react";
+import { StarDisplay } from "@/components/store/star-display";
 import { cn } from "@/lib/utils";
 import { resolveLocalizedField } from "@/lib/i18n/resolve-localized-field";
-import { StarDisplay } from "@/components/store/star-display";
 import type { ProductWithImage } from "@/lib/data/products";
 import type { Locale } from "@/i18n/routing";
 
@@ -29,11 +24,28 @@ interface ProductCardProps {
   className?: string;
   avgRating?: number;
   reviewCount?: number;
-  /** Set true for the first card in the grid — marks its image as LCP priority */
   imagePriority?: boolean;
 }
 
-export function ProductCard({ product, locale, className, avgRating, reviewCount, imagePriority }: ProductCardProps) {
+const CONDITION_STYLES: Record<string, { label: string; className: string }> = {
+  like_new:  { label: "Like New",  className: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
+  excellent: { label: "Excellent", className: "bg-blue-50 text-blue-700 border border-blue-200" },
+  good:      { label: "Good",      className: "bg-amber-50 text-amber-700 border border-amber-200" },
+  fair:      { label: "Fair",      className: "bg-gray-100 text-gray-600 border border-gray-200" },
+};
+
+function formatPrice(cents: number) {
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(cents / 100);
+}
+
+export function ProductCard({
+  product,
+  locale,
+  className,
+  avgRating,
+  reviewCount,
+  imagePriority,
+}: ProductCardProps) {
   const t = useTranslations("product");
 
   const title = resolveLocalizedField(
@@ -43,143 +55,114 @@ export function ProductCard({ product, locale, className, avgRating, reviewCount
     locale,
   ) ?? product.title ?? "Untitled Product";
 
-  const imageUrl: string | null = product.primaryImageUrl ?? null;
-  const isPhone = product.category_type === "phone";
+  const imageUrl = product.primaryImageUrl ?? null;
+  const condition = product.condition ? CONDITION_STYLES[product.condition] : null;
+  const outOfStock = (product.quantity ?? 0) === 0;
+  const hasDiscount = product.compare_at_price && product.compare_at_price > (product.price ?? 0);
+  const savings = hasDiscount ? product.compare_at_price! - (product.price ?? 0) : 0;
 
   return (
-    <Card
+    <div
       className={cn(
-        // Mobile: horizontal row. sm+: vertical column.
-        "group relative flex flex-row sm:flex-col overflow-hidden transition-shadow hover:shadow-md",
-        product.quantity === 0 && "opacity-60",
+        "group flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white transition-shadow hover:shadow-md",
+        outOfStock && "opacity-60",
         className,
       )}
     >
       {/* ── Image ─────────────────────────────────────────────────────────── */}
-      {/* Mobile: fixed 112px wide, full height (flex-stretch).              */}
-      {/* sm+: full width, 1:1 aspect ratio.                                 */}
       <Link
         href={`/product/${product.slug}`}
-        className="relative block w-28 shrink-0 sm:w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+        className="relative block overflow-hidden bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
         aria-label={`View ${title}`}
         tabIndex={0}
       >
-        <div className="relative h-full overflow-hidden bg-muted sm:aspect-square">
+        <div className="aspect-square">
           {imageUrl ? (
             <Image
               src={imageUrl}
               alt={title}
               fill
-              sizes="(max-width: 640px) 112px, (max-width: 1024px) 33vw, 25vw"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
               priority={imagePriority}
             />
           ) : (
-            <div
-              className="flex h-full w-full items-center justify-center bg-gradient-to-br from-muted to-accent"
-              aria-hidden="true"
-            >
-              <span className="text-3xl text-muted-foreground/30 sm:text-4xl">📱</span>
-            </div>
-          )}
-
-          {/* Out-of-stock overlay */}
-          {product.quantity === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center bg-background/80">
-              <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground sm:px-3 sm:py-1 sm:text-sm">
-                {t("outOfStock")}
-              </span>
+            <div className="flex h-full w-full items-center justify-center bg-gray-100">
+              <span className="text-4xl" aria-hidden="true">📱</span>
             </div>
           )}
         </div>
+
+        {/* Discount badge */}
+        {hasDiscount && savings > 0 && (
+          <span className="absolute left-2 top-2 rounded-full bg-primary px-2 py-0.5 text-[11px] font-bold text-white">
+            Save {formatPrice(savings)}
+          </span>
+        )}
+
+        {/* Out-of-stock overlay */}
+        {outOfStock && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white/70">
+            <span className="rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-600">
+              {t("outOfStock")}
+            </span>
+          </div>
+        )}
       </Link>
 
-      {/* ── Content + footer column ────────────────────────────────────────── */}
-      {/* Wraps both so they stack vertically inside the flex-row card.       */}
-      <div className="flex min-w-0 flex-1 flex-col">
-        <CardContent className="flex flex-1 flex-col gap-1.5 p-2.5 sm:gap-2 sm:p-3">
-          {/* Condition badge */}
-          {product.condition && (
-            <ConditionBadge condition={product.condition} />
-          )}
+      {/* ── Content ───────────────────────────────────────────────────────── */}
+      <div className="flex flex-1 flex-col gap-2 p-3">
+        {/* Condition badge */}
+        {condition && (
+          <span className={cn("w-fit rounded-full px-2 py-0.5 text-[11px] font-semibold", condition.className)}>
+            {condition.label}
+          </span>
+        )}
 
-          {/* Title */}
-          <Link
-            href={`/product/${product.slug}`}
-            className="line-clamp-2 text-xs font-medium leading-snug text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:text-sm"
-          >
-            {title}
-          </Link>
+        {/* Title */}
+        <Link
+          href={`/product/${product.slug}`}
+          className="line-clamp-2 text-sm font-medium leading-snug text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          {title}
+        </Link>
 
-          {/* Star rating — only shown if reviews exist */}
-          {avgRating != null && reviewCount != null && reviewCount > 0 && (
-            <StarDisplay rating={avgRating} count={reviewCount} size="sm" />
-          )}
+        {/* Storage · Color */}
+        {(product.storage || product.color) && (
+          <p className="text-xs text-gray-400">
+            {[product.storage, product.color].filter(Boolean).join(" · ")}
+          </p>
+        )}
 
-          {/* Storage · Color — visible at all sizes */}
-          {(product.storage || product.color) && (
-            <p className="text-[10px] text-muted-foreground sm:text-xs">
-              {[product.storage, product.color].filter(Boolean).join(" · ")}
-            </p>
-          )}
+        {/* Stars */}
+        {avgRating != null && reviewCount != null && reviewCount > 0 && (
+          <StarDisplay rating={avgRating} count={reviewCount} size="sm" />
+        )}
 
-          {/* Battery — hidden on mobile (shown on detail page) */}
-          {isPhone && product.battery_health !== null && (
-            <div className="hidden sm:block">
-              <BatteryHealthIndicator health={product.battery_health} />
-            </div>
-          )}
-
-          {/* Price */}
-          <PriceDisplay
-            price={product.price ?? 0}
-            compareAtPrice={product.compare_at_price}
-            size="sm"
-            className="mt-auto pt-1"
-          />
-
-          {/* Trust indicators — hidden on mobile, shown sm+ */}
-          <div className="hidden flex-wrap gap-1 pt-1 sm:flex">
-            {product.is_clean_imei && (
-              <span
-                className="flex items-center gap-0.5 text-[10px] font-medium text-green-700"
-                title={t("trustIndicators.cleanImei")}
-              >
-                <ShieldCheckIcon className="h-3 w-3" aria-hidden="true" />
-                <span className="sr-only">{t("trustIndicators.cleanImei")}</span>
-              </span>
-            )}
-            {product.is_tested && (
-              <span
-                className="flex items-center gap-0.5 text-[10px] font-medium text-green-700"
-                title={t("trustIndicators.tested")}
-              >
-                <WrenchIcon className="h-3 w-3" aria-hidden="true" />
-                <span className="sr-only">{t("trustIndicators.tested")}</span>
-              </span>
-            )}
-            {product.warranty_days != null && product.warranty_days > 0 && (
-              <span
-                className="flex items-center gap-0.5 text-[10px] font-medium text-green-700"
-                title={t("warrantyDays", { days: product.warranty_days })}
-              >
-                <CheckCircleIcon className="h-3 w-3" aria-hidden="true" />
-                <span className="text-[10px]">{product.warranty_days}d</span>
+        {/* Price row — pushed to bottom */}
+        <div className="mt-auto">
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-base font-bold text-foreground">
+              {formatPrice(product.price ?? 0)}
+            </span>
+            {hasDiscount && (
+              <span className="text-xs text-gray-400 line-through">
+                {formatPrice(product.compare_at_price!)}
               </span>
             )}
           </div>
-        </CardContent>
+        </div>
 
-        <CardFooter className="p-2.5 pt-0 sm:p-3 sm:pt-0">
-          <AddToCartButton
-            productId={product.id ?? ""}
-            outOfStock={(product.quantity ?? 0) === 0}
-            size="sm"
-            label={t("addToCart")}
-            outOfStockLabel={t("outOfStock")}
-          />
-        </CardFooter>
+        {/* Add to cart */}
+        <AddToCartButton
+          productId={product.id ?? ""}
+          outOfStock={outOfStock}
+          size="sm"
+          label={t("addToCart")}
+          outOfStockLabel={t("outOfStock")}
+          className="w-full"
+        />
       </div>
-    </Card>
+    </div>
   );
 }

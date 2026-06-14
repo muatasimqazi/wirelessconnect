@@ -18,10 +18,9 @@ import { getProducts, getAvailableBrands, getAvailableStorageSizes } from "@/lib
 import { getCategories } from "@/lib/data/categories";
 import { getReviewSummaries } from "@/features/reviews/actions";
 import { ProductGrid } from "@/components/store/product-grid";
-import { ShopFilters } from "@/components/store/shop-filters";
+import { ShopFilterBar } from "@/components/store/shop-filter-bar";
 import { ShopSort } from "@/components/store/shop-sort";
 import { ShopPagination } from "@/components/store/shop-pagination";
-import { PageHeader } from "@/components/store/page-header";
 import { ProductGridSkeleton } from "@/components/store/loading-skeleton";
 import { MobileFilterDrawer } from "@/components/store/mobile-filter-drawer";
 import type { Locale } from "@/i18n/routing";
@@ -124,60 +123,54 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
   // Count active filters for the mobile filter badge
   const activeFilterCount = [sp.brand, sp.storage, sp.carrier, sp.condition, sp.category, sp.min_price, sp.max_price, sp.pickup, sp.shipping, sp.q].filter(Boolean).length;
 
-  return (
-    <div className="mx-auto max-w-container px-4 py-8 sm:px-6 lg:px-8">
-      <PageHeader
-        title={t("title")}
-        description={`${total} ${total === 1 ? "product" : "products"}`}
-        className="mb-6"
-      />
+  const currentFilters = {
+    brand: sp.brand,
+    storage: sp.storage,
+    carrier: sp.carrier,
+    condition: sp.condition,
+    category: sp.category,
+    minPrice: sp.min_price,
+    maxPrice: sp.max_price,
+    pickup: sp.pickup,
+    shipping: sp.shipping,
+    q: sp.q,
+  };
 
-      <div className="flex gap-8">
-        {/* Filter sidebar */}
-        <aside className="hidden w-56 shrink-0 lg:block" aria-label="Product filters">
-          <ShopFilters
+  return (
+    <div className="mx-auto max-w-[1280px] px-4 py-8 sm:px-6 lg:px-8">
+      {/* Page title + count */}
+      <div className="mb-5 flex items-baseline justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">{t("title")}</h1>
+          <p className="mt-0.5 text-sm text-muted-foreground">
+            {total} {total === 1 ? "product" : "products"}
+          </p>
+        </div>
+        <ShopSort currentSort={sort} />
+      </div>
+
+      {/* Horizontal filter chips + advanced filters button */}
+      <div className="mb-6 space-y-2">
+        <div className="flex items-start gap-2">
+          <div className="flex-1 overflow-hidden">
+            <ShopFilterBar
+              categories={categories}
+              currentFilters={currentFilters}
+              activeFilterCount={activeFilterCount}
+              onOpenAdvanced={() => {}}
+            />
+          </div>
+          <MobileFilterDrawer
             brands={brands}
             storageSizes={storageSizes}
             categories={categories}
-            currentFilters={{
-              brand: sp.brand,
-              storage: sp.storage,
-              carrier: sp.carrier,
-              condition: sp.condition,
-              category: sp.category,
-              minPrice: sp.min_price,
-              maxPrice: sp.max_price,
-              pickup: sp.pickup,
-              shipping: sp.shipping,
-              q: sp.q,
-            }}
+            currentFilters={currentFilters}
+            activeFilterCount={0}
           />
-        </aside>
+        </div>
+      </div>
 
-        {/* Main content */}
-        <div className="flex-1 min-w-0">
-          {/* Sort + mobile filter trigger */}
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <MobileFilterDrawer
-              brands={brands}
-              storageSizes={storageSizes}
-              categories={categories}
-              currentFilters={{
-                brand: sp.brand,
-                storage: sp.storage,
-                carrier: sp.carrier,
-                condition: sp.condition,
-                category: sp.category,
-                minPrice: sp.min_price,
-                maxPrice: sp.max_price,
-                pickup: sp.pickup,
-                shipping: sp.shipping,
-                q: sp.q,
-              }}
-              activeFilterCount={activeFilterCount}
-            />
-            <ShopSort currentSort={sort} />
-          </div>
+      <div className="min-w-0">
 
           {/* Product grid */}
           <Suspense fallback={<ProductGridSkeleton count={PAGE_SIZE} />}>
@@ -197,7 +190,14 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
               className="mt-8"
             />
           )}
-        </div>
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <ShopPagination
+            page={page}
+            totalPages={totalPages}
+            className="mt-8"
+          />
+        )}
       </div>
     </div>
   );
