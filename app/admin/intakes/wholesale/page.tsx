@@ -46,6 +46,7 @@ interface BatchRow extends WholesaleDevice {
   _key: string;
   blacklistStatus: "clean" | "blacklisted" | "unknown" | "not_checked";
   fmiOn?: boolean;
+  // cost is in WholesaleDevice (cents), initialized from supplier default
 }
 
 const CONDITIONS = [
@@ -61,10 +62,12 @@ function BatchScanner({
   onAdd,
   existingImeis,
   apiEnabled,
+  defaultCost,
 }: {
   onAdd: (row: BatchRow) => void;
   existingImeis: Set<string>;
   apiEnabled: boolean;
+  defaultCost: number; // cents
 }) {
   const [value, setValue] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -87,13 +90,14 @@ function BatchScanner({
         imeiVerificationStatus: "not_checked",
         isCleanImei: null,
         notes: "",
+        cost: defaultCost,
         blacklistStatus: "not_checked",
       };
       onAdd(row);
       setValue("");
       refocus();
     },
-    [onAdd, refocus],
+    [onAdd, refocus, defaultCost],
   );
 
   const runLookup = useCallback(
@@ -144,6 +148,7 @@ function BatchScanner({
             result.blacklistStatus === "clean" ? true
             : result.blacklistStatus === "blacklisted" ? false : null,
           notes: "",
+          cost: defaultCost,
           blacklistStatus: result.blacklistStatus ?? "unknown",
           fmiOn: result.fmiOn,
         };
@@ -152,7 +157,7 @@ function BatchScanner({
         refocus();
       });
     },
-    [existingImeis, apiEnabled, addManual, refocus],
+    [existingImeis, apiEnabled, addManual, refocus, defaultCost],
   );
 
   return (
@@ -278,6 +283,22 @@ function DeviceRow({
         </select>
       </td>
 
+      {/* Cost */}
+      <td className="px-3 py-3 min-w-[90px]">
+        <div className="relative">
+          <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">$</span>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            value={row.cost > 0 ? (row.cost / 100).toFixed(2) : ""}
+            onChange={(e) => onChange(row._key, "cost", String(Math.round((parseFloat(e.target.value) || 0) * 100)))}
+            placeholder="0.00"
+            className={`${cell} pl-5`}
+          />
+        </div>
+      </td>
+
       {/* Notes */}
       <td className="px-3 py-3 min-w-[140px]">
         <input
@@ -343,7 +364,7 @@ export default function WholesaleBatchPage() {
     });
   }
 
-  const totalCost = (supplier.perUnitCost * devices.length) / 100;
+  const totalCost = devices.reduce((sum, d) => sum + d.cost, 0) / 100;
   const blacklisted = devices.filter((d) => d.blacklistStatus === "blacklisted").length;
   const fmiOn = devices.filter((d) => d.fmiOn === true).length;
 
@@ -476,6 +497,7 @@ export default function WholesaleBatchPage() {
           onAdd={(row) => setDevices((prev) => [...prev, row])}
           existingImeis={existingImeis}
           apiEnabled={apiEnabled}
+          defaultCost={supplier.perUnitCost}
         />
 
         {devices.length === 0 ? (
@@ -498,7 +520,7 @@ export default function WholesaleBatchPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-muted/40">
-                    {["#", "IMEI / Status", "Brand", "Model", "Storage", "Condition", "Notes", ""].map((h) => (
+                    {["#", "IMEI / Status", "Brand", "Model", "Storage", "Condition", "Cost", "Notes", ""].map((h) => (
                       <th key={h} className="px-3 py-2 text-start text-xs font-semibold uppercase tracking-wider text-muted-foreground whitespace-nowrap">
                         {h}
                       </th>

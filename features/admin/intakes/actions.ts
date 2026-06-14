@@ -151,6 +151,7 @@ export interface WholesaleDevice {
   imeiVerificationStatus: "not_checked" | "passed" | "failed" | "needs_review";
   isCleanImei: boolean | null;
   notes: string;
+  cost: number; // cents — overrides supplier perUnitCost per device
 }
 
 export async function createWholesaleBatch(
@@ -186,7 +187,7 @@ export async function createWholesaleBatch(
     acquisition_source: "wholesale_supplier",
     acquisition_date: supplier.date,
     acquisition_payment_method: supplier.paymentMethod,
-    cost: supplier.perUnitCost / 100,
+    cost: device.cost / 100,
     seller_full_name: supplier.name, // supplier business name
     supplier_notes: supplierNotes,
     imei_verification_status: device.imeiVerificationStatus,
