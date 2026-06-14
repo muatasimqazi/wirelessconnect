@@ -157,7 +157,6 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
               categories={categories}
               currentFilters={currentFilters}
               activeFilterCount={activeFilterCount}
-              onOpenAdvanced={() => {}}
             />
           </div>
           <MobileFilterDrawer

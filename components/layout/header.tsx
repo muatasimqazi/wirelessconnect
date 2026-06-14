@@ -17,6 +17,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import Image from "next/image";
 import { MenuIcon, ShoppingCartIcon, UserIcon, XIcon, WifiIcon, SmartphoneIcon, TabletIcon, HeadphonesIcon, LaptopIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
@@ -39,7 +40,10 @@ const CATEGORY_LINKS = [
 ];
 
 // ─── Logo ─────────────────────────────────────────────────────────────────────
-// Replace this component body with <Image> once the logo file is provided.
+// Uses /public/logo.png when present; falls back to icon + text placeholder.
+// To activate: copy your logo PNG to public/logo.png
+
+const LOGO_FILE = "/logo.png"; // set to empty string "" to force text fallback
 
 function Logo({ onClick }: { onClick?: () => void }) {
   return (
@@ -49,13 +53,26 @@ function Logo({ onClick }: { onClick?: () => void }) {
       className="flex shrink-0 items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
       aria-label="Wireless Connect — Home"
     >
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
-        <WifiIcon className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
-      </div>
-      <div className="leading-tight">
-        <p className="text-sm font-bold text-foreground">Wireless Connect</p>
-        <p className="hidden text-[10px] font-medium text-muted-foreground sm:block">Since 2010</p>
-      </div>
+      {LOGO_FILE ? (
+        <Image
+          src={LOGO_FILE}
+          alt="Wireless Connect"
+          width={140}
+          height={40}
+          className="h-10 w-auto object-contain"
+          priority
+        />
+      ) : (
+        <>
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
+            <WifiIcon className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
+          </div>
+          <div className="leading-tight">
+            <p className="text-sm font-bold text-foreground">Wireless Connect</p>
+            <p className="hidden text-[10px] font-medium text-muted-foreground sm:block">Since 2010</p>
+          </div>
+        </>
+      )}
     </Link>
   );
 }

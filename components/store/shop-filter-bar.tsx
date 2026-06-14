@@ -11,7 +11,7 @@ import { useRouter, usePathname } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { SlidersHorizontalIcon, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import type { Category } from "@/lib/data/categories";
 
 interface CurrentFilters {
@@ -31,7 +31,6 @@ interface ShopFilterBarProps {
   categories: Category[];
   currentFilters: CurrentFilters;
   activeFilterCount: number;
-  onOpenAdvanced: () => void;
 }
 
 const CONDITIONS = [
@@ -45,7 +44,6 @@ export function ShopFilterBar({
   categories,
   currentFilters,
   activeFilterCount,
-  onOpenAdvanced,
 }: ShopFilterBarProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -114,18 +112,6 @@ export function ShopFilterBar({
           </button>
         ))}
 
-        {/* More filters button */}
-        <button
-          onClick={onOpenAdvanced}
-          className={cn(
-            chipBase,
-            "ml-auto shrink-0 gap-1.5",
-            activeFilterCount > 0 ? chipActive : chipInactive,
-          )}
-        >
-          <SlidersHorizontalIcon className="h-3.5 w-3.5" aria-hidden="true" />
-          {activeFilterCount > 0 ? `Filters (${activeFilterCount})` : "Filters"}
-        </button>
       </div>
 
       {/* Active filter tags */}
