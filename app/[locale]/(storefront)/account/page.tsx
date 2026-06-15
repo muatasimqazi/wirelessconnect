@@ -61,14 +61,14 @@ function AccountOverview({
       href: "/account/warranty",
     },
     {
-      title: t("profile"),
+      title: t("profile.title"),
       value: profile?.full_name ?? t("overview.notSet"),
       description: t("overview.personalInfo"),
       icon: UserIcon,
       href: "/account/profile",
     },
     {
-      title: t("addresses"),
+      title: t("addresses.title"),
       value: null,
       description: t("overview.savedAddresses"),
       icon: MapPinIcon,

@@ -33,8 +33,8 @@ export default async function AccountLayout({ children, params }: AccountLayoutP
   const navItems = [
     { href: "/account", label: t("nav.overview"), exact: true },
     { href: "/account/orders", label: t("orders") },
-    { href: "/account/profile", label: t("profile") },
-    { href: "/account/addresses", label: t("addresses") },
+    { href: "/account/profile", label: t("profile.title") },
+    { href: "/account/addresses", label: t("addresses.title") },
     { href: "/account/warranty", label: t("warranty") },
   ];
 

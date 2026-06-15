@@ -197,7 +197,8 @@
       "phoneHint": "Usado para actualizaciones de pedidos y notificaciones de recogida.",
       "save": "Guardar Cambios",
       "saving": "Guardando…",
-      "saved": "¡Cambios guardados!"
+      "saved": "¡Cambios guardados!",
+      "title": "Perfil"
     },
     "addresses": {
       "add": "Agregar Dirección",
@@ -215,7 +216,8 @@
       "setDefault": "Establecer como dirección de envío predeterminada",
       "save": "Guardar Dirección",
       "saving": "Guardando…",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "title": "Direcciones"
     },
     "signOut": "Cerrar Sesión",
     "noOrders": "Aún no hay pedidos.",

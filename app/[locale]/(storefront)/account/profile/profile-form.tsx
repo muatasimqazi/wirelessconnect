@@ -48,7 +48,7 @@ export function ProfileForm({ profile }: { profile: CustomerProfile | null }) {
   return (
     <div className="max-w-md space-y-6">
       <div>
-        <h2 className="text-lg font-semibold">{t("profile")}</h2>
+        <h2 className="text-lg font-semibold">{t("profile.title")}</h2>
         <p className="text-sm text-muted-foreground">{profile?.email}</p>
       </div>
 

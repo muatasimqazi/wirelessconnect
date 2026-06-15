@@ -261,7 +261,7 @@ export function AddressesManager({ addresses: initial, locale: _locale }: Addres
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">{t("addresses")}</h2>
+        <h2 className="text-lg font-semibold">{t("addresses.title")}</h2>
         {!showAdd && !editingId && (
           <Button variant="outline" size="sm" onClick={openAdd}>
             <PlusIcon className="mr-1 h-4 w-4" aria-hidden="true" />

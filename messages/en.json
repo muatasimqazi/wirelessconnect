@@ -197,7 +197,8 @@
       "phoneHint": "Used for order updates and pickup notifications.",
       "save": "Save Changes",
       "saving": "Saving…",
-      "saved": "Changes saved!"
+      "saved": "Changes saved!",
+      "title": "Profile"
     },
     "addresses": {
       "add": "Add Address",
@@ -215,7 +216,8 @@
       "setDefault": "Set as default shipping address",
       "save": "Save Address",
       "saving": "Saving…",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "title": "Addresses"
     },
     "signOut": "Sign Out",
     "noOrders": "No orders yet.",
