@@ -1,5 +1,5 @@
 # AI_CONTEXT.md
-> Master index for this project. Last updated: June 2026.
+> Master index for this project. Last updated: June 14 2026.
 > Reader is a coding agent — no marketing language, no prose padding.
 
 ---
@@ -31,6 +31,8 @@ Wireless Connect — full-stack e-commerce platform for a physical phone/repair 
 | Checkout + Stripe Tax + webhook | ✅ live keys |
 | Customer accounts (orders, addresses, warranty) | ✅ |
 | Admin dashboard (products, orders, intakes, warranties, coupons, settings) | ✅ |
+| Abandoned carts admin page (/admin/abandoned-carts) | ✅ |
+| Customer filter on admin orders page (?customer=email) | ✅ |
 | Device intake — individual (RCW 19.60) | ✅ |
 | Device intake — wholesale batch | ✅ |
 | IMEI scanner (IMEICheck.com + Zebra) | ✅ |
@@ -49,7 +51,7 @@ Wireless Connect — full-stack e-commerce platform for a physical phone/repair 
 | Footer reads store settings dynamically | ✅ |
 | Design overhaul (Back Market-inspired white/minimal) | ✅ |
 | Homepage hero slider | ⏳ planned |
-| Logo in header | ⏳ drop PNG at public/logo.png |
+| Logo in header | ✅ public/logo.png present |
 | WhatsApp link on product detail | ⏳ not started |
 | Plain-language tooltips on product detail | ⏳ not started |
 | Public warranty lookup (/warranty no-auth) | ⏳ not started |
@@ -85,6 +87,8 @@ Wireless Connect — full-stack e-commerce platform for a physical phone/repair 
 | IMEI services 11 + 5 + 1 ($0.03–0.04/device) | Service 47 ($0.75, overkill) |
 | Migration 018 required for hold_period_waived to take effect | App-level only |
 | Product cards vertical everywhere (Back Market style) | Horizontal mobile layout |
+| i18n namespaces that are objects need a `.title` sub-key; never call `t("profile")` when `profile` is an object | next-intl throws INSUFFICIENT_PATH |
+| `?customer=email` on `/admin/orders` filters by `customer_email`; status pills preserve the param | Separate customer orders page |
 
 ---
 
@@ -98,6 +102,8 @@ Wireless Connect — full-stack e-commerce platform for a physical phone/repair 
 | Google Maps embed blocked by CSP | Added `https://www.google.com` to `frame-src` in next.config.ts |
 | IMEICheck.com 404 | Switched to `GET https://alpha.imeicheck.com/api/php-api/create` |
 | imagePriority not wired to next/image | Now destructured and passed as `priority={imagePriority}` |
+| `t("profile")` / `t("addresses")` INSUFFICIENT_PATH error | Added `title` string under each namespace in en.json+es.json; all call sites use `t("profile.title")` / `t("addresses.title")` |
+| Admin orders page ignores `?customer=` param | `getAdminOrders` now accepts `customer?` option; orders page reads and passes it; banner + "Clear filter" shown when active |
 
 ---
 

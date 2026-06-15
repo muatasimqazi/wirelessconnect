@@ -72,6 +72,8 @@ app/
     intakes/wholesale/    # Batch intake (supplier once, scan many IMEIs)
     intakes/[id]/         # Intake detail + 14-point testing + publishing gates
     users/                # Admin-only: role management UI
+    abandoned-carts/      # Authenticated customers with items but no checkout; ?hours= filter; mailto outreach link
+    customers/            # Customer list with order count + total spent; "Orders →" links to /admin/orders?customer=
     products/, orders/, warranties/, coupons/, settings/
     repairs/, trade-ins/, reviews/
   api/stripe/webhook/     # Stripe event handler (verify sig → idempotency → process)
@@ -114,8 +116,9 @@ lib/
 supabase/migrations/      # 001–018 applied in sequence
 messages/en.json          # All EN i18n strings
 messages/es.json          # All ES i18n strings
-public/logo.png           # PENDING — drop logo PNG here to activate in header
-spec/ai/                  # This directory — AI session context files
+public/logo.png           # Present — loaded via LOGO_FILE="/logo.png" in components/layout/header.tsx
+specs/ai/                 # AI session context files (AI_CONTEXT, AI_ARCHITECTURE, AI_SCHEMA, AI_API, AI_TASKS)
+specs/docs/               # 13 original spec documents (PRD, design guidelines, etc.)
 ```
 
 ---

@@ -113,6 +113,22 @@ File: `features/admin/intakes/actions.ts` — requireStaff.
 
 ---
 
+## ADMIN — CUSTOMERS & CARTS
+
+### `getAdminCustomers(): Promise<AdminCustomer[]>`
+File: `features/admin/customers/queries.ts` — requireStaff.
+Returns all registered customers with `orderCount`, `totalSpent`, `lastOrderAt`, `joinedAt`. Customers page links to `/admin/orders?customer={email}`.
+
+### `getAbandonedCarts(hours: number): Promise<AbandonedCart[]>`
+File: `features/admin/abandoned-carts/queries.ts` — requireStaff.
+Returns authenticated customers (no guests — no email) with carts updated more than `hours` ago and no completed order. Includes `cartId`, `email`, `fullName`, `itemCount`, `items[]`, `estimatedValue`, `lastActivity`. Page has `?hours=` filter (1/6/24/48/168). Outreach via `mailto:` link (pre-filled subject + body).
+
+### `getAdminOrders(opts?: { status?, customer?, limit? })`
+File: `features/admin/orders/queries.ts`.
+`customer` filters by `customer_email` exact match. When active, orders page shows a banner with "Clear filter ×". Status pills preserve `?customer=` when toggling status.
+
+---
+
 ## ADMIN — ORDERS
 
 ### `updateOrderStatus(orderId, newStatus): Promise<OrderActionResult>`

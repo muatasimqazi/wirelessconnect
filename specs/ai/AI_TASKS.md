@@ -5,12 +5,6 @@
 
 ## OPEN TASKS
 
-### P1 — High Impact / Quick
-
-| # | Task | File | Notes |
-|---|------|------|-------|
-| 2 | Add Vercel env vars | Vercel dashboard | Add: `IMEICHECK_APPLE_SERVICE_ID=1`, `IMEICHECK_BLACKLIST_SERVICE_ID=5`. Redeploy after. |
-
 ### P2 — Feature Completion
 
 | # | Task | Location | Details |
@@ -43,6 +37,10 @@
 | Task | Completed |
 |------|-----------|
 | Logo in header | ✅ June 2026 — `public/logo.png` + fixed intrinsic dims in `components/layout/header.tsx` |
+| Abandoned carts admin page | ✅ June 2026 — `/admin/abandoned-carts`, `?hours=` filter, authenticated-only, mailto outreach |
+| Customer filter on orders page | ✅ June 2026 — `?customer=email` on `/admin/orders`; customers page links use it; status pills preserve param; banner with clear link |
+| IMEICHECK env vars all set | ✅ June 2026 — `IMEICHECK_SERVICE_ID=11`, `IMEICHECK_BLACKLIST_SERVICE_ID=5`, `IMEICHECK_APPLE_SERVICE_ID=1` in .env.local + Vercel |
+| next-intl i18n fix (account namespace) | ✅ June 2026 — `account.profile.title` + `account.addresses.title` added to en.json+es.json; 4 call sites updated |
 | Admin nav link in storefront header | ✅ June 2026 — shown for staff/admin; fetched via `getCurrentProfile()` in storefront layout; plain `<a href="/admin">` (no locale prefix) |
 | Shipping confirmation email | ✅ June 2026 — `order-shipped.ts`, triggered on `→ shipped` |
 | Pickup ready email | ✅ June 2026 — `order-pickup-ready.ts`, triggered on `→ ready_for_pickup` |
