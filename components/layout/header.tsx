@@ -13,14 +13,16 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 import NextLink from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import Image from "next/image";
-import { MenuIcon, ShoppingCartIcon, UserIcon, XIcon, WifiIcon, SmartphoneIcon, TabletIcon, HeadphonesIcon, LaptopIcon } from "lucide-react";
+import { MenuIcon, ShoppingCartIcon, UserIcon, XIcon, WifiIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
+import type { Category } from "@/lib/data/categories";
 
 const NAV_LINKS = [
   { href: "/shop", labelKey: "shop" },
@@ -29,15 +31,6 @@ const NAV_LINKS = [
   { href: "/about", labelKey: "about" },
   { href: "/contact", labelKey: "contact" },
 ] as const;
-
-const CATEGORY_LINKS = [
-  { href: "/shop?category=iphones", label: "iPhones", icon: SmartphoneIcon },
-  { href: "/shop?category=samsung-phones", label: "Samsung", icon: SmartphoneIcon },
-  { href: "/shop?category=google-pixel", label: "Google Pixel", icon: SmartphoneIcon },
-  { href: "/shop?category=tablets", label: "Tablets", icon: TabletIcon },
-  { href: "/shop?category=laptops", label: "Laptops", icon: LaptopIcon },
-  { href: "/shop?category=accessories", label: "Accessories", icon: HeadphonesIcon },
-];
 
 // ─── Logo ─────────────────────────────────────────────────────────────────────
 // Uses /public/logo.png; set to "" to force the icon+text fallback.
@@ -78,9 +71,11 @@ function Logo({ onClick }: { onClick?: () => void }) {
 
 // ─── Header ───────────────────────────────────────────────────────────────────
 
-export function Header({ isStaff = false }: { isStaff?: boolean }) {
+export function Header({ isStaff = false, categories = [] }: { isStaff?: boolean; categories?: Category[] }) {
   const t = useTranslations("navigation");
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const activeCategory = searchParams.get("category");
   const [mobileOpen, setMobileOpen] = useState(false);
   const { itemCount: cartCount } = useCart();
 
@@ -179,7 +174,7 @@ export function Header({ isStaff = false }: { isStaff?: boolean }) {
                     <XIcon className="h-5 w-5" aria-hidden="true" />
                   </Button>
                 </SheetHeader>
-                <MobileNav t={t} onClose={() => setMobileOpen(false)} cartCount={cartCount} isStaff={isStaff} />
+                <MobileNav t={t} onClose={() => setMobileOpen(false)} cartCount={cartCount} isStaff={isStaff} categories={categories} />
               </SheetContent>
             </Sheet>
           </div>
@@ -189,19 +184,19 @@ export function Header({ isStaff = false }: { isStaff?: boolean }) {
       {/* ── Category bar ────────────────────────────────────────────────────── */}
       <div className="overflow-x-auto border-b border-gray-100 bg-white scrollbar-hide">
         <div className="mx-auto flex max-w-[1280px] items-center gap-1 px-4 sm:px-6 lg:px-8">
-          {CATEGORY_LINKS.map(({ href, label }) => (
+          {categories.map((cat) => (
             <Link
-              key={href}
-              href={href}
+              key={cat.slug}
+              href={`/shop?category=${cat.slug}`}
               className={cn(
                 "flex shrink-0 items-center gap-1.5 whitespace-nowrap px-3 py-2.5 text-sm font-medium transition-colors",
                 "border-b-2 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                pathname.includes(href.split("?")[1] ?? "__none__")
+                pathname === "/shop" && activeCategory === cat.slug
                   ? "border-primary text-primary"
                   : "border-transparent text-foreground/70 hover:border-gray-200",
               )}
             >
-              {label}
+              {cat.name}
             </Link>
           ))}
         </div>
@@ -240,7 +235,7 @@ function CartButton({ cartCount, label }: { cartCount: number; label: string }) 
 
 type TFn = ReturnType<typeof useTranslations<"navigation">>;
 
-function MobileNav({ t, onClose, cartCount, isStaff }: { t: TFn; onClose: () => void; cartCount: number; isStaff: boolean }) {
+function MobileNav({ t, onClose, cartCount, isStaff, categories }: { t: TFn; onClose: () => void; cartCount: number; isStaff: boolean; categories: Category[] }) {
   return (
     <div className="flex flex-col">
       {/* Main nav */}
@@ -270,14 +265,14 @@ function MobileNav({ t, onClose, cartCount, isStaff }: { t: TFn; onClose: () => 
         <p className="px-4 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
           Shop by Category
         </p>
-        {CATEGORY_LINKS.map(({ href, label }) => (
+        {categories.map((cat) => (
           <Link
-            key={href}
-            href={href}
+            key={cat.slug}
+            href={`/shop?category=${cat.slug}`}
             onClick={onClose}
             className="flex items-center px-4 py-2.5 text-sm text-foreground/80 hover:bg-gray-50"
           >
-            {label}
+            {cat.name}
           </Link>
         ))}
       </div>

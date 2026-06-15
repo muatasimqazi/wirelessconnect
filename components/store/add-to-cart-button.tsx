@@ -50,7 +50,7 @@ export function AddToCartButton({
   className,
   label = "Add to Cart",
   outOfStockLabel = "Out of Stock",
-  showCheckoutCTA = false,
+  showCheckoutCTA = true,
 }: AddToCartButtonProps) {
   const { addToCart, cart } = useCart();
   // Local loading state — does NOT affect other buttons on the page

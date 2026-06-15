@@ -10,6 +10,7 @@
  */
 
 import { getCart } from "@/lib/cart/cart-queries";
+import { getCategories } from "@/lib/data/categories";
 import { CartProvider } from "@/context/cart-context";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -20,12 +21,12 @@ interface StorefrontLayoutProps {
 }
 
 export default async function StorefrontLayout({ children }: StorefrontLayoutProps) {
-  const [cart, profile] = await Promise.all([getCart(), getCurrentProfile()]);
+  const [cart, profile, categories] = await Promise.all([getCart(), getCurrentProfile(), getCategories()]);
 
   return (
     <CartProvider initialCart={cart}>
       <div className="flex min-h-screen flex-col">
-        <Header isStaff={isStaffOrAdmin(profile)} />
+        <Header isStaff={isStaffOrAdmin(profile)} categories={categories} />
 
         <main id="main-content" className="flex-1" tabIndex={-1}>
           {children}
