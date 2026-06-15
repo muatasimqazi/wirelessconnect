@@ -55,7 +55,7 @@ function formatDate(iso: string) {
 }
 
 interface PageProps {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; customer?: string }>;
 }
 
 const STATUS_FILTERS = [
@@ -71,9 +71,9 @@ const STATUS_FILTERS = [
 
 export default async function AdminOrdersPage({ searchParams }: PageProps) {
   await requireStaff();
-  const { status } = await searchParams;
+  const { status, customer } = await searchParams;
 
-  const orders = await getAdminOrders({ status, limit: 200 });
+  const orders = await getAdminOrders({ status, customer, limit: 200 });
 
   return (
     <div className="space-y-6">
@@ -83,17 +83,36 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
         <p className="mt-1 text-sm text-muted-foreground">
           {orders.length} order{orders.length !== 1 ? "s" : ""}
           {status ? ` · ${ORDER_STATUS_LABELS[status] ?? status}` : ""}
+          {customer ? ` · ${customer}` : ""}
         </p>
       </div>
+
+      {/* Customer filter banner */}
+      {customer && (
+        <div className="flex items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm">
+          <span className="text-muted-foreground">Showing orders for</span>
+          <span className="font-medium text-foreground">{customer}</span>
+          <Link
+            href="/admin/orders"
+            className="ms-auto text-xs font-medium text-primary hover:underline"
+          >
+            Clear filter ×
+          </Link>
+        </div>
+      )}
 
       {/* Status filters */}
       <div className="flex flex-wrap gap-2">
         {STATUS_FILTERS.map((f) => {
           const active = (status ?? "") === f.value;
+          const params = new URLSearchParams();
+          if (f.value) params.set("status", f.value);
+          if (customer) params.set("customer", customer);
+          const href = params.size ? `/admin/orders?${params.toString()}` : "/admin/orders";
           return (
             <Link
               key={f.value}
-              href={f.value ? `/admin/orders?status=${f.value}` : "/admin/orders"}
+              href={href}
               className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
                 active
                   ? "border-primary bg-primary text-primary-foreground"

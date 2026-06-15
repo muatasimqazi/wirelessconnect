@@ -62,6 +62,7 @@ export interface CancellationRequest {
 
 export async function getAdminOrders(opts?: {
   status?: string;
+  customer?: string;
   limit?: number;
 }): Promise<AdminOrderListItem[]> {
   const admin = supabaseAdmin();
@@ -75,6 +76,7 @@ export async function getAdminOrders(opts?: {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (opts?.status) query = query.eq("status", opts.status as any);
+  if (opts?.customer) query = query.eq("customer_email", opts.customer);
 
   const { data } = await query;
   return (data ?? []).map((o) => ({
