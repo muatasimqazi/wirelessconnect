@@ -68,7 +68,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "home.hero" });
-  const description = t("subheadline");
+  const description = t("metaDescription");
   // Use NEXT_PUBLIC_SITE_URL so this works on Vercel preview + custom domain
   const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://wirelessconnectstore.com").replace(/\/$/, "");
   const ogImageUrl = `${siteUrl}/opengraph-image`;

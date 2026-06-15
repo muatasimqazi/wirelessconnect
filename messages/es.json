@@ -28,19 +28,94 @@
   },
   "home": {
     "hero": {
-      "headline": "Teléfonos Certificados de Segunda Mano",
-      "subheadline": "Probados Profesionalmente. Recogida Local Disponible. Garantía de 30 Días Incluida.",
-      "cta": "Ver Teléfonos"
+      "metaDescription": "Probados Profesionalmente. Recogida Local Disponible. Garantía de 30 Días Incluida.",
+      "slides": [
+        {
+          "eyebrow": "Certificados de Segunda Mano",
+          "headlineTop": "Teléfonos Certificados",
+          "headlineAccent": "de Segunda Mano.",
+          "subheadline": "Probados profesionalmente, desbloqueados y respaldados por una garantía de 30 días.",
+          "cta": "Ver Teléfonos",
+          "secondaryCta": "Saber Más",
+          "trust": [
+            "IMEI Limpio",
+            "Garantía de 30 Días",
+            "Recogida Local Gratis"
+          ],
+          "badge": {
+            "top": "Desde",
+            "value": "$199"
+          },
+          "pill": "Garantía de 30 Días"
+        },
+        {
+          "eyebrow": "Servicio Experto",
+          "headlineTop": "¿Pantalla Rota?",
+          "headlineAccent": "La Arreglamos.",
+          "subheadline": "Reparaciones rápidas y accesibles para teléfonos, tabletas y laptops — hechas bien en Shoreline.",
+          "cta": "Reservar Reparación",
+          "secondaryCta": "Llamar Ahora",
+          "trust": [
+            "Servicio el Mismo Día",
+            "Piezas de Calidad OEM",
+            "Sin Cita Previa"
+          ],
+          "badge": {
+            "top": "Reparaciones desde",
+            "value": "$39"
+          },
+          "pill": "Servicio el Mismo Día"
+        },
+        {
+          "eyebrow": "Programa de Recompra",
+          "headlineTop": "¿Tienes un Dispositivo Viejo?",
+          "headlineAccent": "Te Pagamos.",
+          "subheadline": "Cambia tu teléfono o laptop usado por efectivo o crédito hacia tu próxima compra.",
+          "cta": "Obtener Cotización",
+          "secondaryCta": "Ver Teléfonos",
+          "trust": [
+            "Cotización Instantánea",
+            "Sin Compromiso",
+            "Efectivo o Crédito"
+          ],
+          "badge": {
+            "top": "Hasta",
+            "value": "$320"
+          },
+          "pill": "Cotización Instantánea"
+        },
+        {
+          "eyebrow": "Visítanos",
+          "headlineTop": "Tu Tienda de",
+          "headlineAccent": "Tecnología Local.",
+          "subheadline": "Visita nuestra tienda en Shoreline — explora en persona, obtén reparaciones el mismo día y habla con una persona real.",
+          "cta": "Cómo Llegar",
+          "secondaryCta": "Llamar Ahora",
+          "trust": [
+            "15+ Años en el Negocio",
+            "1,000+ Clientes",
+            "Shoreline, WA"
+          ],
+          "badge": {
+            "top": "Calificación de Google",
+            "value": "4.9 ★"
+          },
+          "pill": "Desde 2010"
+        }
+      ]
     },
     "trustBar": {
       "cleanImei": "IMEI Limpio",
       "testedDevices": "Dispositivos Probados",
       "warranty": "Garantía de 30 Días",
       "shipsNationwide": "Envíos a Todo EE.UU.",
-      "locallyOwned": "Local Desde 2010"
+      "locallyOwned": "Local Desde 2010",
+      "securePayment": "Pago Seguro"
     },
     "featuredCategories": "Categorías Destacadas",
-    "featuredProducts": "Productos Destacados",
+    "featuredProducts": "Lo Más Destacado Ahora",
+    "featuredProductsSubtitle": "Ofertas seleccionadas, totalmente probadas y listas para enviar.",
+    "viewAll": "Ver Todo",
     "stats": {
       "years": "15+",
       "yearsLabel": "Años en el Negocio",
@@ -51,13 +126,47 @@
       "area": "4 Ciudades",
       "areaLabel": "Área de Seattle"
     },
-    "inStore": {
+    "repairServices": {
+      "heading": "Servicios de Reparación Expertos",
+      "subheading": "Técnicos certificados, piezas originales y entrega rápida — aquí mismo en Shoreline.",
+      "items": [
+        {
+          "title": "Reparación de Teléfonos",
+          "description": "Pantalla, batería, puerto de carga y más para todas las marcas principales."
+        },
+        {
+          "title": "Cambio de Pantalla",
+          "description": "¿Pantalla rota o que no responde? La dejamos como nueva."
+        },
+        {
+          "title": "Cambio de Batería",
+          "description": "Recupera la duración de batería con un reemplazo original."
+        },
+        {
+          "title": "Recuperación de Datos",
+          "description": "Recupera fotos, contactos y archivos de dispositivos dañados."
+        },
+        {
+          "title": "Evaluación de Recompra",
+          "description": "Obtén una cotización gratis para tu teléfono, tableta o laptop usado."
+        }
+      ],
+      "cta": "Ver Todos los Servicios"
+    },
+    "localAdvantage": {
+      "badge": "Por Qué Comprar Local",
       "heading": "Más Que Una Tienda en Línea",
       "body": "Somos una tienda física en Shoreline, WA. Además de vender teléfonos usados certificados en línea, ofrecemos reparaciones en tienda: reparación de teléfonos, cambio de pantalla de iPhone y reparación de computadoras. Visítanos o llámanos.",
       "serviceArea": "Atendemos Seattle, Lynnwood, Shoreline y Edmonds, WA",
       "repair": "Reservar Reparación",
       "visit": "Cómo Llegar",
-      "callNow": "Llamar Ahora"
+      "callNow": "Llamar Ahora",
+      "checklist": [
+        "Cada dispositivo inspeccionado y probado por nuestros técnicos internos",
+        "Apoya a un negocio local — orgullosamente de Shoreline desde 2010",
+        "Visítanos o llama — habla con una persona real, no un centro de llamadas",
+        "Recogida local gratuita, sin esperar envíos"
+      ]
     }
   },
   "shop": {

@@ -34,6 +34,9 @@ const config: Config = {
         },
         background: "#FFFFFF",
         surface: "#F8FAFC",
+        // Figma reference accent (theme.css --wc-blue) — used for icon/badge
+        // accents on the homepage. Additive only; does not replace `primary`.
+        "wc-blue": "#00AEEF",
         // shadcn/ui compatible tokens
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -106,10 +109,15 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "hero-progress": {
+          from: { width: "0%" },
+          to: { width: "100%" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "hero-progress": "hero-progress 5.5s linear forwards",
       },
     },
   },

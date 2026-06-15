@@ -28,19 +28,94 @@
   },
   "home": {
     "hero": {
-      "headline": "Certified Pre-Owned Phones",
-      "subheadline": "Professionally Tested. Local Pickup Available. 30-Day Warranty Included.",
-      "cta": "Shop Phones"
+      "metaDescription": "Professionally Tested. Local Pickup Available. 30-Day Warranty Included.",
+      "slides": [
+        {
+          "eyebrow": "Certified Pre-Owned",
+          "headlineTop": "Certified Pre-Owned",
+          "headlineAccent": "Phones.",
+          "subheadline": "Professionally tested, unlocked, and backed by a 30-day warranty.",
+          "cta": "Shop Phones",
+          "secondaryCta": "Learn More",
+          "trust": [
+            "Clean IMEI",
+            "30-Day Warranty",
+            "Free Local Pickup"
+          ],
+          "badge": {
+            "top": "Starting from",
+            "value": "$199"
+          },
+          "pill": "30-Day Warranty"
+        },
+        {
+          "eyebrow": "Expert Service",
+          "headlineTop": "Screen Cracked?",
+          "headlineAccent": "We Fix That.",
+          "subheadline": "Fast, affordable repairs for phones, tablets, and laptops — done right in Shoreline.",
+          "cta": "Book a Repair",
+          "secondaryCta": "Call Now",
+          "trust": [
+            "Same-Day Service",
+            "OEM-Quality Parts",
+            "Walk-Ins Welcome"
+          ],
+          "badge": {
+            "top": "Repairs from",
+            "value": "$39"
+          },
+          "pill": "Same-Day Service"
+        },
+        {
+          "eyebrow": "Trade-In Program",
+          "headlineTop": "Got an Old Device?",
+          "headlineAccent": "Get Paid.",
+          "subheadline": "Trade in your used phone or laptop for cash or credit toward your next upgrade.",
+          "cta": "Get a Quote",
+          "secondaryCta": "Shop Phones",
+          "trust": [
+            "Instant Quote",
+            "No Obligation",
+            "Cash or Store Credit"
+          ],
+          "badge": {
+            "top": "Up to",
+            "value": "$320"
+          },
+          "pill": "Instant Quote"
+        },
+        {
+          "eyebrow": "Visit Us",
+          "headlineTop": "Your Neighborhood",
+          "headlineAccent": "Tech Shop.",
+          "subheadline": "Stop by our Shoreline store — browse in person, get same-day repairs, and talk to a real human.",
+          "cta": "Get Directions",
+          "secondaryCta": "Call Now",
+          "trust": [
+            "15+ Years in Business",
+            "1,000+ Customers",
+            "Shoreline, WA"
+          ],
+          "badge": {
+            "top": "Google Rating",
+            "value": "4.9 ★"
+          },
+          "pill": "Since 2010"
+        }
+      ]
     },
     "trustBar": {
       "cleanImei": "Clean IMEI",
       "testedDevices": "Tested Devices",
       "warranty": "30-Day Warranty",
       "shipsNationwide": "Ships Anywhere in the U.S.",
-      "locallyOwned": "Locally Owned Since 2010"
+      "locallyOwned": "Locally Owned Since 2010",
+      "securePayment": "Secure Checkout"
     },
     "featuredCategories": "Featured Categories",
-    "featuredProducts": "Featured Products",
+    "featuredProducts": "Top Picks Right Now",
+    "featuredProductsSubtitle": "Hand-picked deals, fully tested and ready to ship.",
+    "viewAll": "View All",
     "stats": {
       "years": "15+",
       "yearsLabel": "Years in Business",
@@ -51,13 +126,47 @@
       "area": "4 Cities",
       "areaLabel": "Serving Greater Seattle"
     },
-    "inStore": {
+    "repairServices": {
+      "heading": "Expert Repair Services",
+      "subheading": "Certified technicians, genuine parts, and fast turnaround — right here in Shoreline.",
+      "items": [
+        {
+          "title": "Phone Repair",
+          "description": "Screen, battery, charging port, and more for all major brands."
+        },
+        {
+          "title": "Screen Replacement",
+          "description": "Cracked or unresponsive display? We'll have it looking new again."
+        },
+        {
+          "title": "Battery Replacement",
+          "description": "Restore all-day battery life with a genuine replacement."
+        },
+        {
+          "title": "Data Recovery",
+          "description": "Recover photos, contacts, and files from damaged devices."
+        },
+        {
+          "title": "Trade-In Evaluation",
+          "description": "Get a free quote for your old phone, tablet, or laptop."
+        }
+      ],
+      "cta": "View All Services"
+    },
+    "localAdvantage": {
+      "badge": "Why Shop Local",
       "heading": "More Than Just an Online Store",
       "body": "We're a real brick-and-mortar shop in Shoreline, WA. In addition to selling certified pre-owned phones online, we offer in-store repair services including mobile phone repair, iPhone screen replacement, and computer repair. Come visit us or give us a call.",
       "serviceArea": "Serving Seattle, Lynnwood, Shoreline, and Edmonds, WA",
       "repair": "Book a Repair",
       "visit": "Get Directions",
-      "callNow": "Call Now"
+      "callNow": "Call Now",
+      "checklist": [
+        "Every device inspected and tested by our in-house technicians",
+        "Support a small business — proudly Shoreline-owned since 2010",
+        "Walk in or call — talk to a real person, not a call center",
+        "Free local pickup, no shipping wait"
+      ]
     }
   },
   "shop": {

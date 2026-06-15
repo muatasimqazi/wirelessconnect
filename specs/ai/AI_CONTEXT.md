@@ -50,7 +50,8 @@ Wireless Connect — full-stack e-commerce platform for a physical phone/repair 
 | Domain wirelessconnectstore.com live on Vercel | ✅ |
 | Footer reads store settings dynamically | ✅ |
 | Design overhaul (Back Market-inspired white/minimal) | ✅ |
-| Homepage hero slider | ⏳ planned |
+| Homepage redesign (Figma Make reference) + hero slider | ✅ — `HeroCarousel`, 4 slides, color-matched to Figma (white bg, navy CTA, per-slide accent), real `next/image` photography (1 placeholder pending — see AI_TASKS #13) |
+| Admin customer management (/admin/customers) | ✅ |
 | Logo in header | ✅ public/logo.png present |
 | WhatsApp link on product detail | ⏳ not started |
 | Plain-language tooltips on product detail | ⏳ not started |
@@ -89,6 +90,10 @@ Wireless Connect — full-stack e-commerce platform for a physical phone/repair 
 | Product cards vertical everywhere (Back Market style) | Horizontal mobile layout |
 | i18n namespaces that are objects need a `.title` sub-key; never call `t("profile")` when `profile` is an object | next-intl throws INSUFFICIENT_PATH |
 | `?customer=email` on `/admin/orders` filters by `customer_email`; status pills preserve the param | Separate customer orders page |
+| `wc-blue: #00AEEF` added to `tailwind.config.ts` as an additive token (Figma reference's `--wc-blue` accent) for homepage color-fidelity | Changing global `primary`/`secondary`/`accent` tokens (used site-wide in cart/checkout/admin) |
+| Figma reference's `primary`/`secondary`/`accent` role names do NOT map 1:1 to this codebase's tokens — Figma `primary` (navy `#0F172A`) ≈ our `secondary`; Figma `secondary` (`#F8FAFC`) ≈ our `surface`; Figma `accent` (`#00AEEF`) = new `wc-blue` | Renaming/realigning global tokens |
+| `home.hero.slides[]` schema is `eyebrow`, `headlineTop`, `headlineAccent`, `subheadline`, `cta`, `secondaryCta`, `trust[3]`, `badge.{top,value}`, `pill` (per Figma `Hero.tsx`) | Old single `headline` string |
+| Each hero slide needs 3 images in `public/`: `<name>-01.jpg` (main, 400x800), `<name>-02.jpg`/`-03.jpg` (left/right, 340x680) | Single image per slide |
 
 ---
 

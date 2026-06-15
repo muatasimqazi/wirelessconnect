@@ -3,10 +3,13 @@
  *
  * Server Component. Fetches featured products and categories server-side.
  * Sections:
- *  1. Hero
- *  2. Trust bar (4 trust indicators)
- *  3. Featured categories (6 category tiles)
- *  4. Featured products grid (up to 8 products)
+ *  1. Hero carousel (4 auto-advancing slides — AI_TASKS P2-#3)
+ *  2. Trust bar (6 trust indicators)
+ *  3. Stats strip
+ *  4. Featured categories
+ *  5. Featured products grid
+ *  6. Repair services
+ *  7. Local advantage (in-store / why-shop-local split section)
  */
 
 import type { Metadata } from "next";
@@ -16,6 +19,7 @@ import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/store/product-card";
 import { EmptyState } from "@/components/store/empty-state";
+import { HeroCarousel, type HeroSlideContent } from "@/components/store/hero-carousel";
 import { getFeaturedProducts } from "@/lib/data/products";
 import { getReviewSummaries } from "@/features/reviews/actions";
 import { getCategories } from "@/lib/data/categories";
@@ -27,8 +31,14 @@ import {
   TruckIcon,
   HomeIcon,
   PhoneIcon,
-  StarIcon,
+  LockIcon,
+  ClockIcon,
+  MapPinIcon,
   UsersIcon,
+  SmartphoneIcon,
+  BatteryIcon,
+  HardDriveIcon,
+  RefreshCwIcon,
 } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
 
@@ -41,7 +51,7 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
   const t = await getTranslations({ locale, namespace: "home" });
   return {
     title: "Wireless Connect — Certified Pre-Owned Phones",
-    description: t("hero.subheadline"),
+    description: t("hero.metaDescription"),
   };
 }
 
@@ -132,60 +142,54 @@ function HomePageContent({
   ratingMap: Map<string, { avgRating: number; reviewCount: number }>;
 }) {
   const t = useTranslations("home");
+  const heroSlides = t.raw("hero.slides") as HeroSlideContent[];
+  const repairItems = t.raw("repairServices.items") as { title: string; description: string }[];
+  const checklist = t.raw("localAdvantage.checklist") as string[];
+
+  const STAT_ICONS = [ClockIcon, UsersIcon, HomeIcon, MapPinIcon];
+  const REPAIR_ICONS = [SmartphoneIcon, WrenchIcon, BatteryIcon, HardDriveIcon, RefreshCwIcon];
 
   return (
     <main className="min-h-screen">
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-secondary px-4 py-20 text-white">
-        <div className="mx-auto flex max-w-content flex-col items-center gap-6 text-center">
-          <h1 className="text-h1-mobile font-bold md:text-h1-desktop">
-            {t("hero.headline")}
-          </h1>
-          <p className="max-w-xl text-lg text-white/80">
-            {t("hero.subheadline")}
-          </p>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button size="lg" asChild>
-              <Link href="/shop">{t("hero.cta")}</Link>
-            </Button>
-            <Button size="lg" variant="outline" className="border-white/60 bg-white/10 text-white hover:bg-white/20 hover:text-white" asChild>
-              <Link href="/about" aria-label="Learn more about Wireless Connect">Learn More</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      {/* ── Hero carousel ────────────────────────────────────────────────── */}
+      <HeroCarousel slides={heroSlides} />
 
       {/* ── Trust bar ────────────────────────────────────────────────────── */}
-      <section className="border-b border-gray-100 bg-white px-4 py-5">
+      <section className="border-b border-gray-100 bg-surface px-4 py-5">
         <ul className="mx-auto flex max-w-content flex-wrap justify-center gap-6 text-sm font-medium text-foreground/70">
           <TrustItem icon={ShieldCheckIcon} label={t("trustBar.cleanImei")} />
           <TrustItem icon={WrenchIcon} label={t("trustBar.testedDevices")} />
           <TrustItem icon={CheckCircleIcon} label={t("trustBar.warranty")} />
           <TrustItem icon={TruckIcon} label={t("trustBar.shipsNationwide")} />
           <TrustItem icon={HomeIcon} label={t("trustBar.locallyOwned")} />
+          <TrustItem icon={LockIcon} label={t("trustBar.securePayment")} />
         </ul>
       </section>
 
       {/* ── Stats strip ──────────────────────────────────────────────────── */}
       <section className="border-b border-gray-100 bg-white px-4 py-10">
-        <dl className="mx-auto grid max-w-content grid-cols-2 gap-8 sm:grid-cols-4">
+        <dl className="mx-auto grid max-w-content grid-cols-2 gap-4 sm:grid-cols-4">
           {[
             { value: t("stats.years"), label: t("stats.yearsLabel") },
             { value: t("stats.customers"), label: t("stats.customersLabel") },
             { value: t("stats.locallyOwned"), label: t("stats.locallyOwnedLabel") },
             { value: t("stats.area"), label: t("stats.areaLabel") },
-          ].map(({ value, label }) => (
-            <div key={label} className="text-center">
-              <dt className="text-3xl font-bold text-primary">{value}</dt>
-              <dd className="mt-1 text-sm text-muted-foreground">{label}</dd>
-            </div>
-          ))}
+          ].map(({ value, label }, i) => {
+            const Icon = STAT_ICONS[i];
+            return (
+              <div key={label} className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-surface px-4 py-6 text-center">
+                <Icon className="h-5 w-5 text-wc-blue" aria-hidden="true" />
+                <dt className="text-2xl font-bold text-foreground sm:text-3xl">{value}</dt>
+                <dd className="text-sm text-muted-foreground">{label}</dd>
+              </div>
+            );
+          })}
         </dl>
       </section>
 
       {/* ── Featured categories ───────────────────────────────────────────── */}
       {categories.length > 0 && (
-        <section className="px-4 py-12 sm:px-6 lg:px-8">
+        <section className="bg-surface px-4 py-12 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-content">
             <h2 className="mb-6 text-h2-mobile font-bold md:text-h2-desktop">
               {t("featuredCategories")}
@@ -203,9 +207,9 @@ function HomePageContent({
                   <Link
                     key={cat.id}
                     href={`/shop?category=${cat.slug}`}
-                    className="flex flex-col items-center gap-2 rounded-xl border border-border bg-surface px-4 py-6 text-center transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    className="group flex flex-col items-center gap-2 rounded-xl border border-border bg-white px-4 py-6 text-center shadow-sm transition-colors hover:border-secondary hover:bg-secondary hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                   >
-                    <span className="text-3xl" aria-hidden="true">
+                    <span className="text-3xl transition-transform group-hover:scale-110" aria-hidden="true">
                       {CATEGORY_EMOJI[cat.slug] ?? "📦"}
                     </span>
                     <span className="text-sm font-semibold">{name}</span>
@@ -218,14 +222,17 @@ function HomePageContent({
       )}
 
       {/* ── Featured products ─────────────────────────────────────────────── */}
-      <section className="bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+      <section className="bg-surface px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-content">
-          <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-h2-mobile font-bold md:text-h2-desktop">
-              {t("featuredProducts")}
-            </h2>
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/shop">View All</Link>
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-h2-mobile font-bold md:text-h2-desktop">
+                {t("featuredProducts")}
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">{t("featuredProductsSubtitle")}</p>
+            </div>
+            <Button variant="outline" size="sm" asChild className="shrink-0">
+              <Link href="/shop">{t("viewAll")}</Link>
             </Button>
           </div>
 
@@ -253,48 +260,76 @@ function HomePageContent({
         </div>
       </section>
 
-      {/* ── In-store section ─────────────────────────────────────────────── */}
-      <section className="border-t border-gray-100 bg-gray-50 px-4 py-16 sm:px-6 lg:px-8">
+      {/* ── Repair services ──────────────────────────────────────────────── */}
+      <section className="border-t border-gray-100 bg-white px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-content">
+          <div className="mb-8 max-w-2xl">
+            <h2 className="text-h2-mobile font-bold md:text-h2-desktop">{t("repairServices.heading")}</h2>
+            <p className="mt-2 text-muted-foreground">{t("repairServices.subheading")}</p>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {repairItems.map((item, i) => {
+              const Icon = REPAIR_ICONS[i];
+              const href = i === 4 ? "/trade-in" : "/repairs";
+              return (
+                <Link
+                  key={item.title}
+                  href={href}
+                  className="group flex flex-col gap-3 rounded-xl border border-border bg-surface p-5 transition-colors hover:border-secondary hover:bg-secondary hover:text-white"
+                >
+                  <Icon className="h-6 w-6 text-slate-600 group-hover:text-wc-blue" aria-hidden="true" />
+                  <span className="text-sm font-semibold">{item.title}</span>
+                  <span className="text-xs text-muted-foreground group-hover:text-white/70">{item.description}</span>
+                </Link>
+              );
+            })}
+          </div>
+          <div className="mt-6">
+            <Button variant="outline" asChild>
+              <Link href="/repairs">{t("repairServices.cta")}</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Local advantage ──────────────────────────────────────────────── */}
+      <section className="border-t border-gray-100 bg-surface px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-content">
           <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
             <div className="grid grid-cols-1 lg:grid-cols-2">
               {/* Left: copy */}
               <div className="px-8 py-12 lg:px-12">
-                <h2 className="text-2xl font-bold text-foreground md:text-3xl">{t("inStore.heading")}</h2>
-                <p className="mt-4 text-muted-foreground">{t("inStore.body")}</p>
-                <p className="mt-3 text-sm font-semibold text-primary">{t("inStore.serviceArea")}</p>
+                <span className="text-xs font-semibold uppercase tracking-wide text-wc-blue">
+                  {t("localAdvantage.badge")}
+                </span>
+                <h2 className="mt-2 text-2xl font-bold text-foreground md:text-3xl">{t("localAdvantage.heading")}</h2>
+                <p className="mt-4 text-muted-foreground">{t("localAdvantage.body")}</p>
+                <p className="mt-3 text-sm font-semibold text-wc-blue">{t("localAdvantage.serviceArea")}</p>
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <Button asChild>
-                    <Link href="/repairs">{t("inStore.repair")}</Link>
+                  <Button variant="secondary" asChild>
+                    <Link href="/repairs">{t("localAdvantage.repair")}</Link>
                   </Button>
                   <Button variant="outline" asChild>
-                    <Link href="/contact">{t("inStore.visit")}</Link>
+                    <Link href="/contact">{t("localAdvantage.visit")}</Link>
                   </Button>
                   <a
                     href="tel:+12064232965"
                     className="inline-flex items-center gap-2 rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-gray-50"
                   >
-                    <PhoneIcon className="h-4 w-4 text-primary" aria-hidden="true" />
-                    {t("inStore.callNow")}
+                    <PhoneIcon className="h-4 w-4 text-wc-blue" aria-hidden="true" />
+                    {t("localAdvantage.callNow")}
                   </a>
                 </div>
               </div>
 
-              {/* Right: service highlights */}
-              <div className="border-t border-gray-100 bg-gray-50 px-8 py-12 lg:border-l lg:border-t-0 lg:px-12">
-                <ul className="space-y-4">
-                  {[
-                    { icon: PhoneIcon, text: "Mobile Phone Repair & Battery Replacement" },
-                    { icon: StarIcon, text: "iPhone Screen Replacement" },
-                    { icon: WrenchIcon, text: "Computer Repair & Upgrades" },
-                    { icon: UsersIcon, text: "Pre-Owned Phones, Laptops & Accessories" },
-                  ].map(({ icon: Icon, text }) => (
-                    <li key={text} className="flex items-start gap-3">
-                      <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
-                      <span className="text-sm text-muted-foreground">{text}</span>
-                    </li>
-                  ))}
-                </ul>
+              {/* Right: why-shop-local checklist */}
+              <div className="flex flex-col justify-center gap-4 bg-secondary px-8 py-12 text-white lg:px-12">
+                {checklist.map((item) => (
+                  <div key={item} className="flex items-start gap-3">
+                    <CheckCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-white/80" aria-hidden="true" />
+                    <span className="text-sm text-white/90">{item}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -309,7 +344,7 @@ function HomePageContent({
 function TrustItem({ icon: Icon, label }: { icon: React.ElementType; label: string }) {
   return (
     <li className="flex items-center gap-2">
-      <Icon className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+      <Icon className="h-4 w-4 shrink-0 text-wc-blue" aria-hidden="true" />
       <span>{label}</span>
     </li>
   );
